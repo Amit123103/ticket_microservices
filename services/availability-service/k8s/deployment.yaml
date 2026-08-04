@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: availability-service
+  labels:
+    app: availability-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: availability-service
+  template:
+    metadata:
+      labels:
+        app: availability-service
+    spec:
+      containers:
+        - name: availability-service
+          image: ghcr.io/example/availability-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: availability-service
+          readinessProbe:
+            httpGet:
+              path: /availability/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /availability/healthz
+              port: 8000
+            initialDelaySeconds: 10

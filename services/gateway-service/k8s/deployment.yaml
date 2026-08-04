@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service
+  labels:
+    app: gateway-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+        - name: gateway-service
+          image: ghcr.io/example/gateway-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: gateway-service
+          readinessProbe:
+            httpGet:
+              path: /gateway/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /gateway/healthz
+              port: 8000
+            initialDelaySeconds: 10

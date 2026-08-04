@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: train-service
+  labels:
+    app: train-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: train-service
+  template:
+    metadata:
+      labels:
+        app: train-service
+    spec:
+      containers:
+        - name: train-service
+          image: ghcr.io/example/train-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: train-service
+          readinessProbe:
+            httpGet:
+              path: /train/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /train/healthz
+              port: 8000
+            initialDelaySeconds: 10

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-service
+  labels:
+    app: audit-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: audit-service
+  template:
+    metadata:
+      labels:
+        app: audit-service
+    spec:
+      containers:
+        - name: audit-service
+          image: ghcr.io/example/audit-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: audit-service
+          readinessProbe:
+            httpGet:
+              path: /audit/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /audit/healthz
+              port: 8000
+            initialDelaySeconds: 10

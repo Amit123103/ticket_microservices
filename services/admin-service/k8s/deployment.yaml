@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-service
+  labels:
+    app: admin-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: admin-service
+  template:
+    metadata:
+      labels:
+        app: admin-service
+    spec:
+      containers:
+        - name: admin-service
+          image: ghcr.io/example/admin-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: admin-service
+          readinessProbe:
+            httpGet:
+              path: /admin/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /admin/healthz
+              port: 8000
+            initialDelaySeconds: 10

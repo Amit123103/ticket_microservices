@@ -1,0 +1,31 @@
+services:
+    logging-service:
+        build:
+            context: ../..
+            dockerfile: services/logging-service/Dockerfile
+        ports:
+            - "8125:8000"
+        environment:
+            SERVICE_NAME: logging-service
+            DATABASE_URL: postgresql+asyncpg://platform:platform@postgres:5432/logging_service
+            REDIS_URL: redis://redis:6379/0
+        depends_on:
+            postgres:
+                condition: service_healthy
+            redis:
+                condition: service_started
+
+    postgres:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_USER: platform
+            POSTGRES_PASSWORD: platform
+            POSTGRES_DB: logging_service
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U platform -d logging_service"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    redis:
+        image: redis:7-alpine

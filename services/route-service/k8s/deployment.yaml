@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: route-service
+  labels:
+    app: route-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: route-service
+  template:
+    metadata:
+      labels:
+        app: route-service
+    spec:
+      containers:
+        - name: route-service
+          image: ghcr.io/example/route-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: route-service
+          readinessProbe:
+            httpGet:
+              path: /route/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /route/healthz
+              port: 8000
+            initialDelaySeconds: 10

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommendation-service
+spec:
+  selector:
+    app: recommendation-service
+  ports:
+    - port: 80
+      targetPort: 8000

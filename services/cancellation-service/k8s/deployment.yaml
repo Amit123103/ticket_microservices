@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cancellation-service
+  labels:
+    app: cancellation-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cancellation-service
+  template:
+    metadata:
+      labels:
+        app: cancellation-service
+    spec:
+      containers:
+        - name: cancellation-service
+          image: ghcr.io/example/cancellation-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: cancellation-service
+          readinessProbe:
+            httpGet:
+              path: /cancellation/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /cancellation/healthz
+              port: 8000
+            initialDelaySeconds: 10

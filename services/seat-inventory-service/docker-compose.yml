@@ -1,0 +1,31 @@
+services:
+    seat-inventory-service:
+        build:
+            context: ../..
+            dockerfile: services/seat-inventory-service/Dockerfile
+        ports:
+            - "8108:8000"
+        environment:
+            SERVICE_NAME: seat-inventory-service
+            DATABASE_URL: postgresql+asyncpg://platform:platform@postgres:5432/seat_inventory_service
+            REDIS_URL: redis://redis:6379/0
+        depends_on:
+            postgres:
+                condition: service_healthy
+            redis:
+                condition: service_started
+
+    postgres:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_USER: platform
+            POSTGRES_PASSWORD: platform
+            POSTGRES_DB: seat_inventory_service
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U platform -d seat_inventory_service"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    redis:
+        image: redis:7-alpine

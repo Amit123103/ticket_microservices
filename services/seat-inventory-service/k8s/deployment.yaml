@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seat-inventory-service
+  labels:
+    app: seat-inventory-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: seat-inventory-service
+  template:
+    metadata:
+      labels:
+        app: seat-inventory-service
+    spec:
+      containers:
+        - name: seat-inventory-service
+          image: ghcr.io/example/seat-inventory-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: seat-inventory-service
+          readinessProbe:
+            httpGet:
+              path: /seat_inventory/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /seat_inventory/healthz
+              port: 8000
+            initialDelaySeconds: 10

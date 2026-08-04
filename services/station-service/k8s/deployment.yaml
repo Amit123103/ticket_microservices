@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: station-service
+  labels:
+    app: station-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: station-service
+  template:
+    metadata:
+      labels:
+        app: station-service
+    spec:
+      containers:
+        - name: station-service
+          image: ghcr.io/example/station-service:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVICE_NAME
+              value: station-service
+          readinessProbe:
+            httpGet:
+              path: /station/readyz
+              port: 8000
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /station/healthz
+              port: 8000
+            initialDelaySeconds: 10
