@@ -40,6 +40,9 @@ class FakePaymentRepository:
     async def get_payment_by_provider_reference(self, provider_reference: str):
         return self.payments_by_provider_reference.get(provider_reference)
 
+
+    async def get_webhook_event_by_id(self, event_id: str):
+        return next((event for event in self.webhooks if event.event_id == event_id), None)
     async def create_payment(self, payment: PaymentTransaction):
         self.payments_by_idempotency[payment.idempotency_key] = payment
         self.payments_by_id[payment.payment_id] = payment
@@ -166,3 +169,38 @@ def test_payment_requires_idempotency_key() -> None:
 
     assert asyncio.run(run_request()) == 400
     app.dependency_overrides.clear()
+
+def test_payment_rejects_over_refund_and_deduplicates_webhook() -> None:
+    repository = FakePaymentRepository()
+    service = PaymentService(repository, {"stripe": FakeProvider()})
+
+    async def run_flow() -> None:
+        payment = await service.initiate_payment(
+            PaymentInitiateCommand(
+                booking_id="booking_1",
+                amount=1200,
+                method="upi",
+                provider="stripe",
+                idempotency_key="idem-1",
+            )
+        )
+        event = {
+            "event_id": "evt_1",
+            "event_type": "payment.succeeded",
+            "provider_reference": payment["provider_reference"],
+        }
+        signature = __import__("hashlib").sha256(b"fake:payment.succeeded:evt_1").hexdigest()
+        await service.handle_webhook("stripe", event, signature)
+        await service.handle_webhook("stripe", event, signature)
+        assert len(repository.webhooks) == 1
+
+        try:
+            await service.refund_payment(
+                RefundCommand(payment_id=str(payment["payment_id"]), amount=1201, reason="customer_requested")
+            )
+        except ValueError as exc:
+            assert str(exc) == "refund_amount_exceeds_payment"
+        else:
+            raise AssertionError("expected an over-refund to be rejected")
+
+    asyncio.run(run_flow())

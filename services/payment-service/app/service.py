@@ -131,9 +131,16 @@ class PaymentService:
         provider = self._provider(provider_name)
         if not provider.verify_webhook(payload, signature):
             raise ValueError("invalid_signature")
+        event_id = payload.get("event_id")
+        if not isinstance(event_id, str) or not event_id:
+            raise ValueError("missing_event_id")
+        existing_event = await self._repository.get_webhook_event_by_id(event_id)
+        if existing_event is not None:
+            return {"status": "accepted", "event_type": existing_event.event_type, "provider": existing_event.provider}
+
         event = PaymentWebhookEvent(
-            event_id=f"evt_{uuid4().hex[:16]}",
             provider=provider_name,
+            event_id=event_id,
             event_type=str(payload.get("event_type", "unknown")),
             signature=signature,
             payload=payload,
@@ -155,6 +162,8 @@ class PaymentService:
         if payment is None:
             raise LookupError("payment not found")
         provider = self._provider(payment.provider)
+        if command.amount > payment.amount:
+            raise ValueError("refund_amount_exceeds_payment")
         provider_result = await provider.refund(payment, command)
         refund = PaymentRefund(
             refund_id=f"refund_{uuid4().hex[:16]}",

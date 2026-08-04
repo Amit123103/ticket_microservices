@@ -28,6 +28,12 @@ class PaymentRepository:
         )
         return result.scalar_one_or_none()
 
+    async def get_webhook_event_by_id(self, event_id: str) -> PaymentWebhookEvent | None:
+        result = await self._session.execute(
+            select(PaymentWebhookEvent).where(PaymentWebhookEvent.event_id == event_id)
+        )
+        return result.scalar_one_or_none()
+
     async def create_payment(self, payment: PaymentTransaction) -> PaymentTransaction:
         self._session.add(payment)
         await self._session.flush()

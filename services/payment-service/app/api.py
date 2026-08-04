@@ -19,14 +19,14 @@ router = APIRouter(prefix="/payments", tags=["payment-service"])
 
 class PaymentRequest(BaseModel):
     booking_id: str
-    amount: float = Field(gt=0)
+    amount: int = Field(gt=0, description="Amount in the currency's smallest unit (paise for INR).")
     method: str
     provider: str = Field(default="stripe")
 
 
 class RefundRequest(BaseModel):
     payment_id: str
-    amount: float = Field(gt=0)
+    amount: int = Field(gt=0, description="Amount in the currency's smallest unit (paise for INR).")
     reason: str = Field(min_length=3)
 
 
@@ -62,7 +62,7 @@ async def initiate(
         return await service.initiate_payment(
             PaymentInitiateCommand(
                 booking_id=payload.booking_id,
-                amount=int(payload.amount),
+                amount=payload.amount,
                 method=payload.method,
                 provider=payload.provider,
                 idempotency_key=idempotency_key,
@@ -89,7 +89,9 @@ async def webhook(
 async def refund(payload: RefundRequest, service: PaymentService = Depends(get_payment_service)) -> dict[str, object]:
     try:
         return await service.refund_payment(
-            RefundCommand(payment_id=payload.payment_id, amount=int(payload.amount), reason=payload.reason)
+            RefundCommand(payment_id=payload.payment_id, amount=payload.amount, reason=payload.reason)
         )
     except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
