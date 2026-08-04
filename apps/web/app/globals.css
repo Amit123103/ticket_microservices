@@ -2,9 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
+html,
+body {
   margin: 0;
-  background: #020617;
-  color: #f8fafc;
-  font-family: Inter, system-ui, sans-serif;
+  background: #f7f8fc;
+  color: #0f172a;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.hero-pattern {
+  background-image: radial-gradient(circle at 75% -20%, rgba(129, 140, 248, 0.5), transparent 35%), radial-gradient(circle at 95% 85%, rgba(59, 130, 246, 0.18), transparent 30%);
+}
+
+.field-label {
+  display: block;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.field-control {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.7rem 0.8rem;
+}
+
+.field-control:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  outline: none;
 }
