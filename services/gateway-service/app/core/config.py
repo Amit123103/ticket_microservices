@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://platform:platform@localhost:5432/gateway_service"
     redis_url: str = "redis://localhost:6379/0"
     kafka_bootstrap_servers: str = "localhost:9092"
+    search_service_url: str = "http://localhost:8106"
+    booking_service_url: str = "http://localhost:8109"
     auth_public_key: str = ""
     auth_private_key: str = ""
 
