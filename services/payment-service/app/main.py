@@ -2,7 +2,10 @@ from pathlib import Path
 import os
 import sys
 
-sys.path.append(str(Path(__file__).resolve().parents[3]))
+for project_root in Path(__file__).resolve().parents:
+    if (project_root / "shared").is_dir():
+        sys.path.append(str(project_root))
+        break
 
 from shared.runtime import build_app
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
