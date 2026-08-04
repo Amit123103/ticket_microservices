@@ -1,136 +1,41 @@
 'use client';
+import React from 'react';
+import { X, Wallet, Plus, ArrowUpDown, Sparkles } from 'lucide-react';
 
-import React, { useState } from 'react';
-import { Wallet, Plus, X, CheckCircle2, ArrowUpRight, ArrowDownLeft, ShieldCheck } from 'lucide-react';
-import { INITIAL_WALLET_TRANSACTIONS, WalletTransaction } from '../data/microservicesData';
-
-interface WalletModalProps {
-  onClose: () => void;
-}
+interface WalletModalProps { onClose: () => void; }
 
 export const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
-  const [balance, setBalance] = useState(2500);
-  const [transactions, setTransactions] = useState<WalletTransaction[]>(INITIAL_WALLET_TRANSACTIONS);
-  const [topUpAmount, setTopUpAmount] = useState('500');
-  const [isAdding, setIsAdding] = useState(false);
-
-  const handleTopUp = () => {
-    const amt = Number(topUpAmount) || 0;
-    if (amt <= 0) return;
-
-    setIsAdding(true);
-    setTimeout(() => {
-      setBalance((prev) => prev + amt);
-      setTransactions([
-        {
-          id: `TXN-${Math.floor(1000 + Math.random() * 9000)}`,
-          type: 'CREDIT',
-          amount: amt,
-          title: 'UPI Top-Up Added',
-          date: new Date().toISOString().replace('T', ' ').substring(0, 16),
-          referenceId: `UPI${Math.floor(100000 + Math.random() * 900000)}`,
-          status: 'SUCCESS',
-        },
-        ...transactions,
-      ]);
-      setIsAdding(false);
-    }, 1000);
-  };
-
+  const txns = [
+    { id: 1, type: 'Credit', amount: 2500, desc: 'Wallet Top-Up via UPI', date: '2026-08-04', time: '14:30' },
+    { id: 2, type: 'Debit', amount: -835, desc: 'Booking #TKT293847', date: '2026-08-03', time: '09:15' },
+    { id: 3, type: 'Credit', amount: 450, desc: 'Refund - PNR 7364829150', date: '2026-08-01', time: '11:45' },
+    { id: 4, type: 'Credit', amount: 1000, desc: 'Welcome Bonus', date: '2026-07-28', time: '10:00' },
+  ];
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-2xl rounded-3xl border border-slate-700 bg-slate-900 shadow-2xl overflow-hidden text-slate-100">
-        
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 bg-slate-950 px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-600/20 text-emerald-400 border border-emerald-500/30">
-              <Wallet className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="font-bold text-white text-lg">RailGo Fast-Pay Wallet</h3>
-              <p className="text-xs text-slate-400">wallet-service • Zero-fee instant checkout & refunds</p>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="rounded-full bg-slate-800 p-2 text-slate-400 hover:bg-slate-700 hover:text-white"
-          >
-            <X className="h-5 w-5" />
-          </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+      <div className="relative w-full max-w-lg rounded-3xl border border-slate-200 bg-white shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between border-b border-slate-100 bg-emerald-50 px-6 py-4">
+          <div className="flex items-center gap-2"><Wallet className="h-5 w-5 text-emerald-600" /><h3 className="font-bold text-slate-900 text-lg">RailGo Wallet</h3></div>
+          <button onClick={onClose} className="rounded-full bg-white p-2 text-slate-400 hover:text-slate-700 border border-slate-200"><X className="h-5 w-5" /></button>
         </div>
-
-        {/* Body */}
-        <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
-          
-          {/* Balance Banner */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-emerald-500/30 bg-emerald-950/30 p-6">
-            <div>
-              <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-400">Available Wallet Balance</span>
-              <h2 className="text-3xl font-black text-white mt-1">₹{balance.toLocaleString('en-IN')}</h2>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                value={topUpAmount}
-                onChange={(e) => setTopUpAmount(e.target.value)}
-                className="w-24 rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-xs font-bold text-white focus:outline-none"
-              />
-              <button
-                onClick={handleTopUp}
-                disabled={isAdding}
-                className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-emerald-400"
-              >
-                <Plus className="h-4 w-4 stroke-[3]" />
-                <span>{isAdding ? 'Adding...' : 'Top Up'}</span>
-              </button>
-            </div>
+        <div className="p-6 space-y-5">
+          <div className="rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 p-6 text-white shadow-lg shadow-emerald-200">
+            <span className="text-xs font-bold text-emerald-200 uppercase">Available Balance</span>
+            <p className="text-3xl font-black mt-1">₹2,500.00</p>
+            <button className="mt-3 flex items-center gap-1.5 rounded-xl bg-white/20 px-4 py-2 text-xs font-bold text-white hover:bg-white/30"><Plus className="h-3.5 w-3.5" /> Add Money</button>
           </div>
-
-          {/* Transactions Ledger */}
           <div>
-            <h4 className="mb-3 text-xs font-extrabold uppercase tracking-wider text-slate-400">
-              Transaction History & Instant Refunds:
-            </h4>
-
-            <div className="space-y-3">
-              {transactions.map((tx) => (
-                <div
-                  key={tx.id}
-                  className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 p-4"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`grid h-9 w-9 place-items-center rounded-xl font-bold ${
-                        tx.type === 'CREDIT' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
-                      }`}
-                    >
-                      {tx.type === 'CREDIT' ? <ArrowDownLeft className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
-                    </div>
-                    <div>
-                      <h5 className="font-bold text-white text-xs">{tx.title}</h5>
-                      <p className="text-[10px] text-slate-500">{tx.date} • Ref: {tx.referenceId}</p>
-                    </div>
-                  </div>
-
-                  <div className="text-right">
-                    <strong
-                      className={`block text-sm font-black ${
-                        tx.type === 'CREDIT' ? 'text-emerald-400' : 'text-slate-200'
-                      }`}
-                    >
-                      {tx.type === 'CREDIT' ? '+' : '-'}₹{tx.amount}
-                    </strong>
-                    <span className="text-[9px] font-bold text-emerald-400">{tx.status}</span>
-                  </div>
+            <h4 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2"><ArrowUpDown className="h-4 w-4 text-emerald-600" /> Recent Transactions</h4>
+            <div className="space-y-2">
+              {txns.map((t) => (
+                <div key={t.id} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-3 hover:border-emerald-200 transition">
+                  <div><p className="text-xs font-bold text-slate-800">{t.desc}</p><p className="text-[10px] text-slate-400">{t.date} • {t.time}</p></div>
+                  <span className={`text-sm font-bold ${t.amount > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{t.amount > 0 ? '+' : ''}₹{Math.abs(t.amount)}</span>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   );
