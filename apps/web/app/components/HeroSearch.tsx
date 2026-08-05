@@ -53,25 +53,25 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl lg:text-6xl" style={{ fontFamily: 'Outfit, sans-serif' }}>
             Book Train Tickets <span className="gradient-text">In Seconds</span>
           </h1>
-          <p className="mt-3 text-base sm:text-lg text-slate-300">
+          <p className="mt-3 text-base sm:text-lg text-slate-600">
             Authorized IRCTC booking partner. Real-time seat availability, live PNR tracking & instant refunds.
           </p>
         </div>
 
         {/* Search Form Card */}
-        <form onSubmit={onSearch} className="relative z-10 mt-8 card-elevated p-6 sm:p-8 border-orange-500/20">
+        <form onSubmit={onSearch} className="relative z-10 mt-8 card-elevated p-6 sm:p-8 border-orange-200">
           {/* Top Options */}
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b pb-4" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
             <div className="flex items-center gap-6">
-              <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-orange-400">
+              <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-orange-600">
                 <input type="radio" name="triptype" defaultChecked className="h-4 w-4 accent-orange-500" /> One Way
               </label>
-              <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-400 hover:text-slate-200">
+              <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-500 hover:text-slate-800">
                 <input type="radio" name="triptype" className="h-4 w-4 accent-orange-500" /> Round Trip
               </label>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Quota:</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Quota:</span>
               {['General', 'Tatkal', 'Ladies', 'Sr. Citizen'].map((q) => (
                 <button
                   type="button"
@@ -80,7 +80,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                   className={`rounded-md px-3.5 py-1 text-xs font-bold transition ${
                     quota === q
                       ? 'bg-gradient-to-r from-orange-500 to-purple-600 text-white shadow-sm'
-                      : 'btn-ghost text-slate-400'
+                      : 'btn-ghost text-slate-600'
                   }`}
                 >
                   {q}
@@ -92,10 +92,10 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           {/* Form Fields */}
           <div className="grid gap-4 lg:grid-cols-[1.1fr_44px_1.1fr_1fr_0.8fr_1fr]">
             {/* From */}
-            <div className="rounded-md border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-              <div className="flex items-center gap-2 text-orange-400">
+            <div className="rounded-md border border-slate-200 bg-white p-3 transition">
+              <div className="flex items-center gap-2 text-orange-600">
                 <MapPin className="h-4 w-4" />
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">From Station</span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">From Station</span>
               </div>
               <select
                 value={fromCode}

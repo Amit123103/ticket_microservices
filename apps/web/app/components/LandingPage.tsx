@@ -44,7 +44,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
 
   return (
-    <div className="min-h-screen" style={{ background: '#0a0812' }}>
+    <div className="min-h-screen bg-white text-slate-900" style={{ background: '#ffffff' }}>
 
       {/* ── Navbar ── */}
       <header className="sticky top-0 z-50 glass border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
@@ -93,7 +93,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             In Seconds.
           </h1>
 
-          <p className="animate-fade-in-up delay-100 mx-auto mb-10 max-w-2xl text-lg text-slate-300">
+          <p className="animate-fade-in-up delay-100 mx-auto mb-10 max-w-2xl text-lg text-slate-600">
             India's most advanced train booking platform — powered by 28 microservices.
             Real-time availability, live GPS tracking, instant refunds and AI assistance.
           </p>
@@ -103,7 +103,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
               <Ticket className="h-5 w-5" /> Book Tickets Now
             </button>
             <button onClick={onLogin} className="btn-ghost text-base px-8 py-4 sm:w-auto w-full">
-              <Radio className="h-5 w-5 text-purple-400" /> Check Live Status
+              <Radio className="h-5 w-5 text-purple-600" /> Check Live Status
             </button>
           </div>
 
@@ -112,8 +112,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
             <input
               type="email" value={email} onChange={e => setEmail(e.target.value)}
               placeholder="Enter your email to get started"
-              className="flex-1 bg-transparent px-3 py-2 text-sm font-medium outline-none placeholder:text-slate-500"
-              style={{ color: '#f8fafc' }}
+              className="flex-1 bg-transparent px-3 py-2 text-sm font-medium outline-none placeholder:text-slate-400"
+              style={{ color: '#0f172a' }}
             />
             <button onClick={onLogin} className="btn-brand px-4 py-2 text-sm rounded-md">
               Start Free
@@ -159,8 +159,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
                 <div className={`mb-4 grid h-11 w-11 place-items-center rounded-md bg-gradient-to-br ${color} text-white shadow-lg`}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mb-2 text-base font-bold" style={{ fontFamily: 'Outfit, sans-serif' }}>{title}</h3>
-                <p className="text-sm leading-relaxed text-slate-400">{desc}</p>
+                <h3 className="mb-2 text-base font-bold text-slate-900" style={{ fontFamily: 'Outfit, sans-serif' }}>{title}</h3>
+                <p className="text-sm leading-relaxed text-slate-600">{desc}</p>
               </div>
             ))}
           </div>

@@ -136,7 +136,7 @@ export default function Page() {
   // IF NOT LOGGED IN OR LANDING PAGE IS ACTIVE -> RENDER LANDING PAGE FIRST!
   if (showLandingPage || !isLoggedIn) {
     return (
-      <main className="min-h-screen" style={{ background: '#080c14' }}>
+      <main className="min-h-screen bg-white text-slate-900" style={{ background: '#ffffff' }}>
         <LandingPage
           onLogin={() => setShowAuthModal(true)}
         />
@@ -153,7 +153,7 @@ export default function Page() {
 
   // ONCE LOGGED IN -> RENDER FULL APP & TICKET BOOKING DASHBOARD
   return (
-    <main className="min-h-screen antialiased selection:bg-indigo-500 selection:text-white" style={{ background: '#080c14', color: '#f1f5f9' }}>
+    <main className="min-h-screen antialiased selection:bg-orange-500 selection:text-white bg-white text-slate-900" style={{ background: '#ffffff', color: '#0f172a' }}>
       {/* Top Navbar Header */}
       <Navbar
         activeTab={activeTab}

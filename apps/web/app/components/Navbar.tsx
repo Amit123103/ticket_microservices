@@ -56,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 glass border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 sm:px-6">
         
         {/* Brand Logo */}
@@ -69,10 +69,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <strong className="text-xl font-black tracking-tight text-slate-100" style={{ fontFamily: 'Outfit, sans-serif' }}>RailGo</strong>
+              <strong className="text-xl font-black tracking-tight text-slate-900" style={{ fontFamily: 'Outfit, sans-serif' }}>RailGo</strong>
               <span className="badge-brand text-[10px]">28 MESH</span>
             </div>
-            <p className="text-[10px] font-semibold text-slate-400">IRCTC Partner</p>
+            <p className="text-[10px] font-semibold text-slate-500">IRCTC Partner</p>
           </div>
         </button>
 
@@ -86,8 +86,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => setActiveTab(id)}
                 className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-bold whitespace-nowrap transition ${
                   isActive
-                    ? 'bg-gradient-to-r from-orange-500/20 to-purple-600/20 text-orange-400 border border-orange-500/40 shadow-sm'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+                    ? 'bg-orange-50 text-orange-600 border border-orange-200 shadow-sm'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
                 <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-orange-400' : ''}`} />
