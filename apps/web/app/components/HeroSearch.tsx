@@ -77,9 +77,9 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                   type="button"
                   key={q}
                   onClick={() => setQuota(q)}
-                  className={`rounded-xl px-3.5 py-1 text-xs font-bold transition ${
+                  className={`rounded-md px-3.5 py-1 text-xs font-bold transition ${
                     quota === q
-                      ? 'bg-indigo-600 text-white shadow-md'
+                      ? 'bg-indigo-600 text-white shadow-sm'
                       : 'btn-ghost text-slate-400'
                   }`}
                 >

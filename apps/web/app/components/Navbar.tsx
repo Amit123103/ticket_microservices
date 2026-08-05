@@ -84,9 +84,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition ${
+                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition ${
                   isActive
-                    ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
+                    ? 'bg-indigo-600/25 text-indigo-300 border border-indigo-500/40 shadow-sm'
                     : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
                 }`}
               >

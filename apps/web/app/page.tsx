@@ -34,15 +34,11 @@ import {
 } from './data/trainData';
 
 export default function Page() {
-  // Auth State
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [user, setUser] = useState<{ name: string; email: string; avatar: string } | null>({
-    name: 'Amit Kumar',
-    email: 'amit.kumar@gmail.com',
-    avatar: 'A',
-  });
+  // Auth State — DEFAULT TO NOT LOGGED IN SO LANDING PAGE OPENS FIRST!
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<{ name: string; email: string; avatar: string } | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showLandingPage, setShowLandingPage] = useState(false);
+  const [showLandingPage, setShowLandingPage] = useState(true);
 
   // Navigation Tab State
   const [activeTab, setActiveTab] = useState<NavTab>('search');
@@ -83,6 +79,10 @@ export default function Page() {
 
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (!isLoggedIn) {
+      setShowAuthModal(true);
+      return;
+    }
     setHasSearched(true);
     setActiveTab('search');
   };
@@ -126,32 +126,32 @@ export default function Page() {
   const handleLogout = () => {
     setUser(null);
     setIsLoggedIn(false);
+    setShowLandingPage(true);
   };
 
   const getStationCity = (code: string) => {
     return STATIONS.find((s) => s.code === code)?.city || code;
   };
 
-  // Render Landing Page if explicitly triggered or user chooses landing view
-  if (showLandingPage) {
+  // IF NOT LOGGED IN OR LANDING PAGE IS ACTIVE -> RENDER LANDING PAGE FIRST!
+  if (showLandingPage || !isLoggedIn) {
     return (
-      <>
+      <main className="min-h-screen" style={{ background: '#080c14' }}>
         <LandingPage
-          onLogin={() => {
-            setShowLandingPage(false);
-            setShowAuthModal(true);
-          }}
+          onLogin={() => setShowAuthModal(true)}
         />
+
         {showAuthModal && (
           <AuthModal
             onClose={() => setShowAuthModal(false)}
             onSuccess={handleLoginSuccess}
           />
         )}
-      </>
+      </main>
     );
   }
 
+  // ONCE LOGGED IN -> RENDER FULL APP & TICKET BOOKING DASHBOARD
   return (
     <main className="min-h-screen antialiased selection:bg-indigo-500 selection:text-white" style={{ background: '#080c14', color: '#f1f5f9' }}>
       {/* Top Navbar Header */}
