@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Search, Radio, MapPin, Clock, Activity, AlertCircle } from 'lucide-react';
-import { LIVE_TRAINS, LiveTrainStatus } from '../data/trainData';
+import { LIVE_TRAINS, LiveTrainStatus, LiveRouteStation } from '../data/trainData';
 
 export const LiveStatusView: React.FC = () => {
   const [trainNo, setTrainNo] = useState('12301');
@@ -64,7 +64,7 @@ export const LiveStatusView: React.FC = () => {
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
             <h4 className="font-bold text-slate-900 mb-4">Route Timeline</h4>
             <div className="space-y-4">
-              {result.stations.map((st, idx) => (
+              {result.stations.map((st: LiveRouteStation, idx: number) => (
                 <div key={idx} className="flex items-start gap-4">
                   {idx !== result.stations.length - 1 && <div className="absolute left-[15px] top-7 bottom-0 w-0.5 bg-emerald-200" />}
                   <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold ${st.isPassed ? 'bg-emerald-500 text-white' : 'bg-white text-slate-500 border-2 border-slate-300'}`}>{idx + 1}</div>

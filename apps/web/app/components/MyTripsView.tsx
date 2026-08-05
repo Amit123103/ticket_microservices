@@ -1,17 +1,20 @@
 'use client';
 import React, { useState } from 'react';
 import { Ticket, ArrowRight, XCircle, CheckCircle2, Eye, AlertTriangle } from 'lucide-react';
-import { USER_TRIPS, BookingTicket } from '../data/trainData';
+import { BookingTicket } from '../data/trainData';
 
-interface MyTripsViewProps { onOpenETicket: (ticket: BookingTicket) => void; }
+interface MyTripsViewProps {
+  trips: BookingTicket[];
+  onOpenETicket: (ticket: BookingTicket) => void;
+  onCancelTicket: (pnr: string) => void;
+}
 
-export const MyTripsView: React.FC<MyTripsViewProps> = ({ onOpenETicket }) => {
-  const [trips, setTrips] = useState(USER_TRIPS);
+export const MyTripsView: React.FC<MyTripsViewProps> = ({ trips, onOpenETicket, onCancelTicket }) => {
   const [confirmCancel, setConfirmCancel] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'cancelled'>('all');
 
-  const filtered = trips.filter((t) => filter === 'all' ? true : filter === 'upcoming' ? t.status === 'CONFIRMED' : t.status === 'CANCELLED');
-  const handleCancel = (id: string) => { setTrips(trips.map((t) => t.pnr === id ? { ...t, status: 'CANCELLED' as const } : t)); setConfirmCancel(null); };
+  const filtered = trips.filter((t: BookingTicket) => filter === 'all' ? true : filter === 'upcoming' ? t.status === 'CONFIRMED' : t.status === 'CANCELLED');
+  const handleCancel = (id: string) => { onCancelTicket(id); setConfirmCancel(null); };
 
   return (
     <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
@@ -28,7 +31,7 @@ export const MyTripsView: React.FC<MyTripsViewProps> = ({ onOpenETicket }) => {
       </div>
 
       <div className="space-y-5">
-        {filtered.map((trip) => (
+        {filtered.map((trip: BookingTicket) => (
           <article key={trip.pnr} className={`rounded-3xl border bg-white shadow-sm overflow-hidden transition hover:shadow-md ${trip.status==='CANCELLED'?'border-rose-200':'border-slate-200 hover:border-emerald-200'}`}>
             <div className={`flex items-center justify-between px-6 py-3 border-b ${trip.status==='CANCELLED'?'bg-rose-50 border-rose-100':'bg-emerald-50 border-slate-100'}`}>
               <div className="flex items-center gap-2">

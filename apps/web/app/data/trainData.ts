@@ -311,3 +311,88 @@ export const INITIAL_USER_TRIPS: BookingTicket[] = [
   MOCK_PNRS['8492049182'],
   MOCK_PNRS['2184910482'],
 ];
+
+/** Alias for backward-compat imports */
+export const USER_TRIPS = INITIAL_USER_TRIPS;
+
+export interface LiveRouteStation {
+  stationCode: string;
+  stationName: string;
+  arrivalTime: string;
+  departureTime: string;
+  isPassed: boolean;
+}
+
+export interface LiveTrainStatus {
+  trainNumber: string;
+  trainName: string;
+  fromCode: string;
+  toCode: string;
+  currentStation: string;
+  currentState: string;
+  speed: number;
+  delay: number;
+  lastUpdated: string;
+  nextStation: string;
+  stations: LiveRouteStation[];
+}
+
+export const LIVE_TRAINS: Record<string, LiveTrainStatus> = {
+  '12301': {
+    trainNumber: '12301',
+    trainName: 'Howrah Rajdhani Express',
+    fromCode: 'NDLS',
+    toCode: 'HWH',
+    currentStation: 'Mughal Sarai Junction',
+    currentState: 'Uttar Pradesh',
+    speed: 110,
+    delay: 15,
+    lastUpdated: '2 min ago',
+    nextStation: 'Patna Junction',
+    stations: [
+      { stationCode: 'NDLS', stationName: 'New Delhi', arrivalTime: '--', departureTime: '17:05', isPassed: true },
+      { stationCode: 'CNB', stationName: 'Kanpur Central', arrivalTime: '21:45', departureTime: '21:50', isPassed: true },
+      { stationCode: 'MGS', stationName: 'Mughal Sarai Jn', arrivalTime: '01:28', departureTime: '01:33', isPassed: false },
+      { stationCode: 'PNBE', stationName: 'Patna Junction', arrivalTime: '04:00', departureTime: '04:10', isPassed: false },
+      { stationCode: 'HWH', stationName: 'Howrah Junction', arrivalTime: '09:55', departureTime: '--', isPassed: false },
+    ],
+  },
+  '12951': {
+    trainNumber: '12951',
+    trainName: 'Mumbai Rajdhani Express',
+    fromCode: 'BCT',
+    toCode: 'NDLS',
+    currentStation: 'Kota Junction',
+    currentState: 'Rajasthan',
+    speed: 130,
+    delay: 0,
+    lastUpdated: '1 min ago',
+    nextStation: 'New Delhi',
+    stations: [
+      { stationCode: 'BCT', stationName: 'Mumbai Central', arrivalTime: '--', departureTime: '17:00', isPassed: true },
+      { stationCode: 'ST', stationName: 'Surat', arrivalTime: '19:43', departureTime: '19:48', isPassed: true },
+      { stationCode: 'BRC', stationName: 'Vadodara Junction', arrivalTime: '21:16', departureTime: '21:26', isPassed: true },
+      { stationCode: 'KOTA', stationName: 'Kota Junction', arrivalTime: '03:15', departureTime: '03:25', isPassed: false },
+      { stationCode: 'NDLS', stationName: 'New Delhi', arrivalTime: '08:32', departureTime: '--', isPassed: false },
+    ],
+  },
+  '20901': {
+    trainNumber: '20901',
+    trainName: 'Vande Bharat Express',
+    fromCode: 'BCT',
+    toCode: 'ADI',
+    currentStation: 'Surat',
+    currentState: 'Gujarat',
+    speed: 160,
+    delay: 0,
+    lastUpdated: 'Just now',
+    nextStation: 'Vadodara Junction',
+    stations: [
+      { stationCode: 'BCT', stationName: 'Mumbai Central', arrivalTime: '--', departureTime: '06:00', isPassed: true },
+      { stationCode: 'BVI', stationName: 'Borivali', arrivalTime: '06:23', departureTime: '06:25', isPassed: true },
+      { stationCode: 'ST', stationName: 'Surat', arrivalTime: '08:40', departureTime: '08:43', isPassed: false },
+      { stationCode: 'BRC', stationName: 'Vadodara Junction', arrivalTime: '10:00', departureTime: '10:05', isPassed: false },
+      { stationCode: 'ADI', stationName: 'Ahmedabad Junction', arrivalTime: '11:25', departureTime: '--', isPassed: false },
+    ],
+  },
+};

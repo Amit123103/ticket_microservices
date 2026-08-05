@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Activity, CheckCircle2, Server, Database, Shield, Zap, Globe, CreditCard, Mail, Bell, Users, Lock, Cloud, BarChart3, Settings, Wifi, MapPin, Utensils, ClipboardCheck, Truck, Calendar, Brain, ShieldCheck, Layers, MonitorSmart, ArrowUpDown, FileText, Headphones } from 'lucide-react';
+import { Activity, CheckCircle2, Server, Database, Shield, Zap, Globe, CreditCard, Mail, Bell, Users, Lock, Cloud, BarChart3, Settings, Wifi, MapPin, Utensils, ClipboardCheck, Truck, Calendar, Brain, ShieldCheck, Layers, Monitor, ArrowUpDown, FileText, Headphones } from 'lucide-react';
 
 interface Service { name: string; description: string; status: 'healthy' | 'degraded' | 'down'; latency: string; uptime: string; icon: any; category: string; }
 
@@ -28,7 +28,7 @@ const SERVICES: Service[] = [
   { name: 'Fraud Detection', description: 'Anomaly detection, payment fraud prevention', status: 'healthy', latency: '35ms', uptime: '99.99%', icon: ShieldCheck, category: 'Security' },
   { name: 'Config Service', description: 'Feature flags, A/B testing, dynamic config', status: 'healthy', latency: '10ms', uptime: '99.99%', icon: Settings, category: 'Infrastructure' },
   { name: 'RailAI Assistant', description: 'AI-powered travel recommendations, NLP chat', status: 'healthy', latency: '300ms', uptime: '99.88%', icon: Brain, category: 'AI' },
-  { name: 'Station Info Service', description: 'Station data, platform info, amenities', status: 'healthy', latency: '65ms', uptime: '99.97%', icon: MonitorSmart, category: 'Info' },
+  { name: 'Station Info Service', description: 'Station data, platform info, amenities', status: 'healthy', latency: '65ms', uptime: '99.97%', icon: Monitor, category: 'Info' },
   { name: 'Feedback Service', description: 'Ratings, reviews, complaint management', status: 'healthy', latency: '70ms', uptime: '99.96%', icon: Headphones, category: 'User' },
   { name: 'Cancellation Service', description: 'Ticket cancellation, refund calculation', status: 'healthy', latency: '130ms', uptime: '99.94%', icon: ClipboardCheck, category: 'Booking' },
   { name: 'Schedule Service', description: 'Timetable management, route data, updates', status: 'healthy', latency: '85ms', uptime: '99.97%', icon: Calendar, category: 'Core' },
