@@ -64,7 +64,7 @@ export const TrainList: React.FC<TrainListProps> = ({
 
           return (
             <article key={train.id}
-              className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md hover:border-emerald-200">
+              className="overflow-hidden rounded-3xl bg-white card transition hover:shadow-md hover:border-emerald-200">
               {/* Top Banner */}
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50 px-6 py-3">
                 <div className="flex flex-wrap items-center gap-3">
@@ -145,8 +145,8 @@ export const TrainList: React.FC<TrainListProps> = ({
                       <span className="text-[10px] font-bold text-emerald-600">Includes GST</span>
                     </div>
                     <button onClick={() => onSelectTrain(train, ccInfo)}
-                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/20 transition hover:scale-105 hover:brightness-110">
-                      <Sparkles className="h-4 w-4 text-emerald-200" /> Select & Choose Seat
+                      className="mt-4 flex w-full items-center justify-center gap-2 btn-primary">
+                      <Sparkles className="h-4 w-4 text-white/90" /> Select & Choose Seat
                     </button>
                   </div>
                 </div>

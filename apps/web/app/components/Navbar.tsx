@@ -25,7 +25,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         
         {/* Brand Logo */}
-        <button
+          <button
           onClick={() => setActiveTab('search')}
           className="flex items-center gap-3 text-left focus:outline-none"
         >

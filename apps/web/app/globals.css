@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,12 +8,33 @@
   html, body {
     margin: 0;
     padding: 0;
-    background-color: #f8fafc;
+    background: linear-gradient(180deg, #f8fafc 0%, #eefdf6 100%);
     color: #0f172a;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 }
+
+:root {
+  --color-brand-500: #059669;
+  --color-brand-600: #047857;
+  --color-brand-400: #10b981;
+  --color-surface: #ffffff;
+  --color-muted: #94a3b8;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 6px 18px rgba(2,132,106,0.04);
+  --shadow-lg: 0 12px 30px rgba(16,185,129,0.14);
+  --max-content-width: 1120px;
+}
+
+/* Utility wrappers that use variables */
+.card { border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-lg); }
+.btn-primary { background: linear-gradient(90deg,var(--color-brand-500),var(--color-brand-400)); color: #fff; border-radius: var(--radius-md); padding: 0.75rem 1.2rem; font-weight: 700; box-shadow: var(--shadow-lg); }
+.soft-input { border-radius: var(--radius-md); border: 1px solid rgba(14,116,94,0.06); padding: 0.6rem 0.9rem; background: var(--color-surface); font-weight:700; }
+.feature-pill { border-radius: var(--radius-md); background: rgba(255,255,255,0.06); padding: 0.8rem; box-shadow: var(--shadow-sm); }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -39,10 +62,42 @@
 
 .hero-pattern {
   background-color: #047857;
-  background-image: 
-    radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.4), transparent 45%),
-    radial-gradient(circle at 85% 80%, rgba(5, 150, 105, 0.5), transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.2), transparent 50%);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(16, 185, 129, 0.28), transparent 42%),
+    radial-gradient(circle at 88% 78%, rgba(5, 150, 105, 0.32), transparent 38%),
+    linear-gradient(90deg, rgba(2,132,106,0.85), rgba(6,95,70,0.85));
+}
+
+/* Card + button refinements for a more human-crafted look */
+.card {
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(2, 132, 106, 0.08), 0 4px 10px rgba(15, 23, 42, 0.04);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg,#059669,#10b981);
+  color: #fff;
+  border-radius: 14px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(16,185,129,0.14);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(16,185,129,0.18); }
+
+.soft-input {
+  border-radius: 14px;
+  border: 1px solid #e6f4ee;
+  background: #ffffff;
+  padding: 0.65rem 0.9rem;
+  font-weight: 700;
+}
+
+.feature-pill {
+  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
+  padding: 0.8rem;
+  box-shadow: 0 6px 18px rgba(2,132,106,0.04);
 }
 
 .field-label {

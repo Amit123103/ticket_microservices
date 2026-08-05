@@ -45,7 +45,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
         </div>
 
         {/* Search Form Card */}
-        <form onSubmit={onSearch} className="relative z-10 mt-8 rounded-3xl bg-white p-5 shadow-2xl shadow-emerald-900/20 sm:p-7">
+        <form onSubmit={onSearch} className="relative z-10 mt-8 bg-white p-6 sm:p-8 card">
           {/* Top Options */}
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div className="flex items-center gap-6">
@@ -76,7 +76,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">From Station</span>
               </div>
               <select value={fromCode} onChange={(e) => setFromCode(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none">
+                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
                 {STATIONS.map((st) => (<option key={st.code} value={st.code}>{st.city} - {st.name} ({st.code})</option>))}
               </select>
               <p className="text-[11px] font-medium text-slate-400 mt-0.5">{getStation(fromCode)?.state}</p>
@@ -97,7 +97,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">To Station</span>
               </div>
               <select value={toCode} onChange={(e) => setToCode(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none">
+                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
                 {STATIONS.filter((st) => st.code !== fromCode).map((st) => (<option key={st.code} value={st.code}>{st.city} - {st.name} ({st.code})</option>))}
               </select>
               <p className="text-[11px] font-medium text-slate-400 mt-0.5">{getStation(toCode)?.state}</p>
@@ -110,7 +110,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Departure Date</span>
               </div>
               <input type="date" value={travelDate} min="2026-08-05" onChange={(e) => setTravelDate(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none" />
+                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input" />
               <div className="mt-1 flex gap-2">
                 <button type="button" onClick={() => setTravelDate('2026-08-05')} className="text-[10px] text-emerald-600 hover:underline font-bold">Today</button>
                 <button type="button" onClick={() => setTravelDate('2026-08-06')} className="text-[10px] text-emerald-600 hover:underline font-bold">Tomorrow</button>
@@ -124,7 +124,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Travellers</span>
               </div>
               <select value={passengerCount} onChange={(e) => setPassengerCount(Number(e.target.value))}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none">
+                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
                 {[1,2,3,4,5,6].map((n) => (<option key={n} value={n}>{n} {n === 1 ? 'Adult' : 'Adults'}</option>))}
               </select>
             </div>
@@ -136,7 +136,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Class</span>
               </div>
               <select value={classFilter} onChange={(e) => setClassFilter(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none">
+                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
                 <option value="ALL">All Classes</option>
                 <option value="1A">1A - First AC</option>
                 <option value="2A">2A - 2 Tier AC</option>
@@ -150,10 +150,9 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
 
           {/* Search Button */}
           <div className="mt-6 flex justify-end">
-            <button type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-8 py-4 font-bold text-white shadow-xl shadow-emerald-500/25 transition hover:scale-[1.01] hover:brightness-110 sm:w-auto">
-              <Sparkles className="h-5 w-5 text-emerald-200" />
-              <span>SEARCH TRAINS</span>
+            <button type="submit" className="btn-primary flex w-full items-center justify-center gap-2 sm:w-auto">
+              <Sparkles className="h-5 w-5 text-white/90" />
+              <span>Search trains</span>
             </button>
           </div>
         </form>
@@ -166,7 +165,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             { icon: Users, color: 'text-emerald-200', title: 'Tatkal Ready', sub: '1-click checkout' },
             { icon: Calendar, color: 'text-emerald-200', title: 'Live Seat Map', sub: 'Choose berths' },
           ].map(({ icon: Icon, color, title, sub }, i) => (
-            <div key={i} className="rounded-2xl bg-white/10 border border-white/20 p-4 backdrop-blur-sm">
+            <div key={i} className="feature-pill">
               <Icon className={`mx-auto h-6 w-6 ${color}`} />
               <p className="mt-2 text-xs font-bold text-white">{title}</p>
               <p className="text-[10px] text-emerald-100">{sub}</p>
