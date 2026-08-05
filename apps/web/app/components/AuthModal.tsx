@@ -60,25 +60,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(12px)' }}>
-      <div className="relative w-full max-w-md rounded-3xl p-8 animate-fade-in-up" style={{ background: '#0f1724', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 40px 100px rgba(0,0,0,0.6)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(12px)' }}>
+      <div className="relative w-full max-w-md rounded-md p-8 animate-fade-in-up border-orange-500/30" style={{ background: '#120e20', border: '1px solid rgba(249,115,22,0.3)', boxShadow: '0 20px 60px rgba(0,0,0,0.8)' }}>
 
         {/* Close */}
-        <button onClick={onClose} className="absolute right-5 top-5 rounded-full p-2 transition" style={{ background: 'rgba(255,255,255,0.06)', color: '#64748b' }}
-          onMouseEnter={e => (e.currentTarget.style.color = '#f1f5f9')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#64748b')}>
+        <button onClick={onClose} className="absolute right-5 top-5 rounded-md p-2 transition" style={{ background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#f8fafc')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#94a3b8')}>
           <X className="h-4 w-4" />
         </button>
 
         {/* Header */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl" style={{ background: 'linear-gradient(135deg, #6366f1, #818cf8)', boxShadow: '0 0 30px rgba(99,102,241,0.4)' }}>
+          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-md bg-gradient-to-br from-orange-500 to-purple-600 text-white shadow-lg" style={{ boxShadow: '0 4px 20px rgba(249,115,22,0.4)' }}>
             <Train className="h-7 w-7 text-white" />
           </div>
           <h2 className="text-2xl font-black mb-1" style={{ fontFamily: 'Outfit, sans-serif' }}>
             {view === 'choose' ? 'Welcome to RailGo' : (isSignUp ? 'Create Account' : 'Sign In')}
           </h2>
-          <p className="text-sm" style={{ color: '#64748b' }}>
+          <p className="text-sm text-slate-400">
             {view === 'choose' ? 'Choose how you\'d like to continue' : (isSignUp ? 'Start booking in seconds' : 'Good to see you again')}
           </p>
         </div>
@@ -86,47 +86,47 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         {view === 'choose' ? (
           <div className="space-y-3">
             {/* Google */}
-            <button onClick={handleGoogle} disabled={loading} className="group flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-sm font-semibold transition-all"
+            <button onClick={handleGoogle} disabled={loading} className="group flex w-full items-center gap-4 rounded-md px-5 py-3.5 text-sm font-semibold transition-all"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(249,115,22,0.4)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}>
-              {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto" style={{ color: '#6366f1' }} /> : (
+              {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto text-orange-500" /> : (
                 <>
-                  <div className="grid h-9 w-9 place-items-center rounded-xl" style={{ background: '#fff' }}><GoogleIcon /></div>
-                  <span>Continue with Google</span>
+                  <div className="grid h-9 w-9 place-items-center rounded-md" style={{ background: '#fff' }}><GoogleIcon /></div>
+                  <span className="text-slate-200">Continue with Google</span>
                 </>
               )}
             </button>
 
             {/* Apple */}
-            <button onClick={handleApple} disabled={loading} className="flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-sm font-semibold transition-all"
+            <button onClick={handleApple} disabled={loading} className="flex w-full items-center gap-4 rounded-md px-5 py-3.5 text-sm font-semibold transition-all"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(168,85,247,0.4)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}>
-              <div className="grid h-9 w-9 place-items-center rounded-xl" style={{ background: '#fff', color: '#000' }}><AppleIcon /></div>
-              <span>Continue with Apple</span>
+              <div className="grid h-9 w-9 place-items-center rounded-md" style={{ background: '#fff', color: '#000' }}><AppleIcon /></div>
+              <span className="text-slate-200">Continue with Apple</span>
             </button>
 
             {/* Divider */}
             <div className="flex items-center gap-3 py-2">
               <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-              <span className="text-xs font-semibold" style={{ color: '#334155' }}>or</span>
+              <span className="text-xs font-semibold text-slate-500">or</span>
               <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
             </div>
 
             {/* Email */}
-            <button onClick={() => setView('email')} className="flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-sm font-semibold transition-all"
+            <button onClick={() => setView('email')} className="flex w-full items-center gap-4 rounded-md px-5 py-3.5 text-sm font-semibold transition-all"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(249,115,22,0.4)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}>
-              <div className="grid h-9 w-9 place-items-center rounded-xl" style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)' }}>
-                <Mail className="h-4 w-4" style={{ color: '#818cf8' }} />
+              <div className="grid h-9 w-9 place-items-center rounded-md" style={{ background: 'rgba(249,115,22,0.15)', border: '1px solid rgba(249,115,22,0.3)' }}>
+                <Mail className="h-4 w-4 text-orange-400" />
               </div>
-              <span>Continue with Email</span>
+              <span className="text-slate-200">Continue with Email</span>
             </button>
 
-            <p className="text-center text-xs pt-2" style={{ color: '#334155' }}>
-              By continuing, you agree to our <span className="cursor-pointer" style={{ color: '#818cf8' }}>Terms</span> & <span className="cursor-pointer" style={{ color: '#818cf8' }}>Privacy Policy</span>
+            <p className="text-center text-xs pt-2 text-slate-500">
+              By continuing, you agree to our <span className="cursor-pointer text-orange-400">Terms</span> & <span className="cursor-pointer text-purple-400">Privacy Policy</span>
             </p>
           </div>
         ) : (
@@ -151,7 +151,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <div className="relative">
                 <input value={password} onChange={e => setPassword(e.target.value)}
                   type={showPass ? 'text' : 'password'} placeholder="••••••••" className="input-dark mt-1 pr-10" />
-                <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: '#475569' }}>
+                <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                   {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
@@ -159,29 +159,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
             {!isSignUp && (
               <div className="flex justify-end">
-                <button type="button" className="text-xs font-semibold" style={{ color: '#818cf8' }}>Forgot password?</button>
+                <button type="button" className="text-xs font-semibold text-orange-400">Forgot password?</button>
               </div>
             )}
 
             {error && (
-              <div className="rounded-xl px-4 py-3 text-sm font-semibold" style={{ background: 'rgba(244,63,94,0.12)', border: '1px solid rgba(244,63,94,0.25)', color: '#fb7185' }}>
+              <div className="rounded-md px-4 py-3 text-sm font-semibold" style={{ background: 'rgba(244,63,94,0.12)', border: '1px solid rgba(244,63,94,0.25)', color: '#fb7185' }}>
                 {error}
               </div>
             )}
 
-            <button type="submit" disabled={loading} className="btn-brand w-full py-4">
+            <button type="submit" disabled={loading} className="btn-brand w-full py-3.5">
               {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : (isSignUp ? 'Create Account' : 'Sign In')}
             </button>
 
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-              <button type="button" onClick={() => { setView('choose'); setError(''); }} className="text-xs font-semibold" style={{ color: '#64748b' }}>Back</button>
+              <button type="button" onClick={() => { setView('choose'); setError(''); }} className="text-xs font-semibold text-slate-400">Back</button>
               <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
             </div>
 
-            <p className="text-center text-sm" style={{ color: '#64748b' }}>
+            <p className="text-center text-sm text-slate-400">
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-              <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-bold" style={{ color: '#818cf8' }}>
+              <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-bold text-orange-400">
                 {isSignUp ? 'Sign In' : 'Sign Up'}
               </button>
             </p>
@@ -189,8 +189,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         )}
 
         {/* Security badge */}
-        <div className="mt-6 flex items-center justify-center gap-2 text-xs" style={{ color: '#1e293b' }}>
-          <Shield className="h-3.5 w-3.5" style={{ color: '#22d3ee' }} />
+        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
+          <Shield className="h-3.5 w-3.5 text-purple-400" />
           <span>256-bit SSL encryption • Your data is safe</span>
         </div>
       </div>

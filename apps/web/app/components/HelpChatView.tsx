@@ -130,19 +130,19 @@ export const HelpChatView: React.FC = () => {
         <div className="glass-light inline-flex rounded-2xl p-1.5 border" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <button
             onClick={() => setActiveTab('faq')}
-            className={`flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold transition ${
+            className={`flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-bold transition ${
               activeTab === 'faq' ? 'btn-brand text-white shadow-lg' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <FileQuestion className="h-4 w-4" /> Frequently Asked Questions
+            <FileQuestion className="h-4 w-4 text-orange-400" /> Frequently Asked Questions
           </button>
           <button
             onClick={() => setActiveTab('chat')}
-            className={`flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-bold transition ${
+            className={`flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-bold transition ${
               activeTab === 'chat' ? 'btn-brand text-white shadow-lg' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <MessageSquare className="h-4 w-4 text-cyan-400" /> Live AI Chat Support
+            <MessageSquare className="h-4 w-4 text-purple-400" /> Live AI Chat Support
           </button>
         </div>
       </div>

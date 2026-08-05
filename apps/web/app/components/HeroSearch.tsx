@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FormEvent } from 'react';
-import { ArrowLeftRight, Calendar, MapPin, Users, ShieldCheck, Sparkles, Filter, Radio } from 'lucide-react';
+import { ArrowLeftRight, Calendar, MapPin, Users, ShieldCheck, Sparkles, Filter } from 'lucide-react';
 import { STATIONS } from '../data/trainData';
 
 interface HeroSearchProps {
@@ -48,26 +48,26 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
         {/* Banner */}
         <div className="mx-auto max-w-3xl text-center">
           <div className="section-pill mb-3">
-            <Sparkles className="h-3.5 w-3.5" /> Instant Booking & Zero Cancellation Fee Option
+            <Sparkles className="h-3.5 w-3.5 text-orange-400" /> Instant Booking & Zero Cancellation Fee Option
           </div>
           <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl lg:text-6xl" style={{ fontFamily: 'Outfit, sans-serif' }}>
             Book Train Tickets <span className="gradient-text">In Seconds</span>
           </h1>
-          <p className="mt-3 text-base sm:text-lg" style={{ color: '#94a3b8' }}>
+          <p className="mt-3 text-base sm:text-lg text-slate-300">
             Authorized IRCTC booking partner. Real-time seat availability, live PNR tracking & instant refunds.
           </p>
         </div>
 
         {/* Search Form Card */}
-        <form onSubmit={onSearch} className="relative z-10 mt-8 card-elevated p-6 sm:p-8">
+        <form onSubmit={onSearch} className="relative z-10 mt-8 card-elevated p-6 sm:p-8 border-orange-500/20">
           {/* Top Options */}
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b pb-4" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
             <div className="flex items-center gap-6">
-              <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-indigo-400">
-                <input type="radio" name="triptype" defaultChecked className="h-4 w-4 accent-indigo-500" /> One Way
+              <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-orange-400">
+                <input type="radio" name="triptype" defaultChecked className="h-4 w-4 accent-orange-500" /> One Way
               </label>
               <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-400 hover:text-slate-200">
-                <input type="radio" name="triptype" className="h-4 w-4 accent-indigo-500" /> Round Trip
+                <input type="radio" name="triptype" className="h-4 w-4 accent-orange-500" /> Round Trip
               </label>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -79,7 +79,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                   onClick={() => setQuota(q)}
                   className={`rounded-md px-3.5 py-1 text-xs font-bold transition ${
                     quota === q
-                      ? 'bg-indigo-600 text-white shadow-sm'
+                      ? 'bg-gradient-to-r from-orange-500 to-purple-600 text-white shadow-sm'
                       : 'btn-ghost text-slate-400'
                   }`}
                 >
@@ -92,8 +92,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           {/* Form Fields */}
           <div className="grid gap-4 lg:grid-cols-[1.1fr_44px_1.1fr_1fr_0.8fr_1fr]">
             {/* From */}
-            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-              <div className="flex items-center gap-2 text-indigo-400">
+            <div className="rounded-md border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-orange-400">
                 <MapPin className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">From Station</span>
               </div>
@@ -117,15 +117,15 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 type="button"
                 onClick={switchRoute}
                 title="Swap stations"
-                className="grid h-11 w-11 place-items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 transition hover:bg-indigo-600 hover:text-white hover:rotate-180"
+                className="grid h-10 w-10 place-items-center rounded-md border border-orange-500/30 bg-orange-500/10 text-orange-400 transition hover:bg-orange-500 hover:text-white hover:rotate-180"
               >
-                <ArrowLeftRight className="h-5 w-5" />
+                <ArrowLeftRight className="h-4 w-4" />
               </button>
             </div>
 
             {/* To */}
-            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-              <div className="flex items-center gap-2 text-indigo-400">
+            <div className="rounded-md border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-orange-400">
                 <MapPin className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">To Station</span>
               </div>
@@ -144,8 +144,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </div>
 
             {/* Date */}
-            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-              <div className="flex items-center gap-2 text-cyan-400">
+            <div className="rounded-md border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-purple-400">
                 <Calendar className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Departure Date</span>
               </div>
@@ -160,14 +160,14 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
                 <button
                   type="button"
                   onClick={() => setTravelDate('2026-08-05')}
-                  className="text-[10px] text-cyan-400 hover:underline font-bold"
+                  className="text-[10px] text-purple-400 hover:underline font-bold"
                 >
                   Today
                 </button>
                 <button
                   type="button"
                   onClick={() => setTravelDate('2026-08-06')}
-                  className="text-[10px] text-cyan-400 hover:underline font-bold"
+                  className="text-[10px] text-purple-400 hover:underline font-bold"
                 >
                   Tomorrow
                 </button>
@@ -175,8 +175,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </div>
 
             {/* Passengers */}
-            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-              <div className="flex items-center gap-2 text-indigo-400">
+            <div className="rounded-md border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-orange-400">
                 <Users className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Travellers</span>
               </div>
@@ -194,8 +194,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </div>
 
             {/* Class */}
-            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-              <div className="flex items-center gap-2 text-cyan-400">
+            <div className="rounded-md border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-purple-400">
                 <Filter className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Class</span>
               </div>
@@ -217,7 +217,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
 
           {/* Search Button */}
           <div className="mt-6 flex justify-end">
-            <button type="submit" className="btn-brand flex w-full items-center justify-center gap-2 sm:w-auto px-8 py-3.5 text-base">
+            <button type="submit" className="btn-brand flex w-full items-center justify-center gap-2 sm:w-auto px-8 py-3 text-base">
               <Sparkles className="h-5 w-5 text-white/90" />
               <span>Search Trains</span>
             </button>
@@ -233,7 +233,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             { icon: Calendar, title: 'Live Seat Map', sub: 'Choose berths' },
           ].map(({ icon: Icon, title, sub }, i) => (
             <div key={i} className="card-dark p-4 flex flex-col items-center justify-center">
-              <Icon className="h-6 w-6 text-cyan-400" />
+              <Icon className="h-6 w-6 text-orange-400" />
               <p className="mt-2 text-xs font-bold text-slate-200">{title}</p>
               <p className="text-[10px] text-slate-400">{sub}</p>
             </div>

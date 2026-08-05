@@ -4,25 +4,27 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Design Tokens (Square / Crisp Modern Human UI) ─────── */
+/* ─── Design Tokens (Orange + Purple Mix Premium Palette) ───── */
 :root {
-  --bg-base:      #080c14;
-  --bg-surface:   #0f1724;
-  --bg-elevated:  #162032;
+  --bg-base:      #0a0812;
+  --bg-surface:   #120e20;
+  --bg-elevated:  #1a142e;
   --border:       rgba(255,255,255,0.08);
-  --border-brand: rgba(99,102,241,0.35);
+  --border-brand: rgba(249,115,22,0.35);
 
-  --brand:        #6366f1;
-  --brand-glow:   rgba(99,102,241,0.25);
-  --accent:       #22d3ee;
-  --accent-glow:  rgba(34,211,238,0.2);
+  --brand-orange: #f97316;
+  --brand-purple: #a855f7;
+  --brand:        #f97316;
+  --brand-glow:   rgba(249,115,22,0.3);
+  --accent:       #c084fc;
+  --accent-glow:  rgba(168,85,247,0.25);
   --success:      #10b981;
   --warning:      #f59e0b;
   --danger:       #f43f5e;
 
-  --text-primary: #f1f5f9;
-  --text-muted:   #64748b;
-  --text-dim:     #334155;
+  --text-primary: #f8fafc;
+  --text-muted:   #94a3b8;
+  --text-dim:     #475569;
 
   --radius-sm:  6px;
   --radius-md:  8px;
@@ -55,12 +57,12 @@
 /* ─── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-surface); }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--brand); }
+::-webkit-scrollbar-thumb { background: #2a1f45; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-orange); }
 
-/* ─── Glassmorphism (Square Structural Panels) ──────────── */
+/* ─── Glassmorphism ─────────────────────────────────────── */
 .glass {
-  background: rgba(15,23,36,0.85);
+  background: rgba(18,14,32,0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
@@ -74,13 +76,13 @@
 }
 
 .glass-brand {
-  background: rgba(99,102,241,0.06);
+  background: rgba(249,115,22,0.06);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(99,102,241,0.2);
+  border: 1px solid rgba(249,115,22,0.2);
 }
 
-/* ─── Square Structural Cards ──────────────────────────── */
+/* ─── Cards ──────────────────────────────────────────────── */
 .card-dark {
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -91,39 +93,39 @@
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
 }
 
-/* ─── Gradient Text ─────────────────────────────────────── */
+/* ─── Gradient Text (Orange + Purple Mix) ────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);
+  background: linear-gradient(135deg, #ff7a00 0%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ─── Square Human Buttons ─────────────────────────────── */
+/* ─── Buttons (Orange + Purple Mix) ──────────────────────── */
 .btn-brand {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, #f97316 0%, #9333ea 100%);
   color: #ffffff;
   font-weight: 700;
   font-size: 0.875rem;
   padding: 0.7rem 1.4rem;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(99,102,241,0.25);
+  box-shadow: 0 4px 16px rgba(249,115,22,0.3);
   transition: all 0.15s ease;
   font-family: 'Inter', sans-serif;
 }
 .btn-brand:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(99,102,241,0.35);
-  filter: brightness(1.08);
+  box-shadow: 0 6px 22px rgba(168,85,247,0.4);
+  filter: brightness(1.1);
 }
 
 .btn-accent {
@@ -131,7 +133,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #0891b2, #06b6d4);
+  background: linear-gradient(135deg, #9333ea 0%, #c084fc 100%);
   color: #ffffff;
   font-weight: 700;
   font-size: 0.875rem;
@@ -139,10 +141,10 @@
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(34,211,238,0.2);
+  box-shadow: 0 4px 14px rgba(168,85,247,0.3);
   transition: all 0.15s ease;
 }
-.btn-accent:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.btn-accent:hover { transform: translateY(-1px); filter: brightness(1.1); }
 
 .btn-ghost {
   display: inline-flex;
@@ -161,7 +163,7 @@
 }
 .btn-ghost:hover {
   background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.18);
+  border-color: rgba(249,115,22,0.3);
   color: #ffffff;
 }
 
@@ -182,7 +184,7 @@
 }
 .btn-danger:hover { background: rgba(244,63,94,0.2); }
 
-/* ─── Inputs (Square Modern) ────────────────────────────── */
+/* ─── Inputs ─────────────────────────────────────────────── */
 .input-dark {
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
@@ -198,23 +200,24 @@
 }
 .input-dark::placeholder { color: var(--text-muted); }
 .input-dark:focus {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 2px rgba(99,102,241,0.25);
-  background: rgba(99,102,241,0.05);
+  border-color: var(--brand-orange);
+  box-shadow: 0 0 0 2px rgba(249,115,22,0.25);
+  background: rgba(249,115,22,0.05);
 }
 
-/* ─── Square Badges ─────────────────────────────────────── */
+/* ─── Badges ─────────────────────────────────────────────── */
 .badge-success { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.25); border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; font-size: 0.7rem; font-weight: 700; }
 .badge-warning { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; font-size: 0.7rem; font-weight: 700; }
 .badge-danger  { background: rgba(244,63,94,0.12);  color: #fb7185; border: 1px solid rgba(244,63,94,0.25);  border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; font-size: 0.7rem; font-weight: 700; }
-.badge-brand   { background: rgba(99,102,241,0.12); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; font-size: 0.7rem; font-weight: 700; }
+.badge-brand   { background: rgba(249,115,22,0.15); color: #ff9a4d; border: 1px solid rgba(249,115,22,0.3); border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; font-size: 0.7rem; font-weight: 700; }
+.badge-purple  { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; font-size: 0.7rem; font-weight: 700; }
 .badge-muted   { background: rgba(255,255,255,0.04); color: #94a3b8; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.25rem 0.55rem; font-size: 0.7rem; font-weight: 700; }
 
-/* ─── Hero Mesh ─────────────────────────────────────────── */
+/* ─── Hero Mesh (Orange + Purple Glow) ──────────────────── */
 .hero-mesh {
   background:
-    radial-gradient(ellipse 70% 50% at 20% 10%, rgba(99,102,241,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 80% 90%, rgba(34,211,238,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 15% 15%, rgba(249,115,22,0.16) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 85%, rgba(168,85,247,0.16) 0%, transparent 55%),
     var(--bg-base);
 }
 
@@ -223,9 +226,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(99,102,241,0.08);
-  border: 1px solid rgba(99,102,241,0.25);
-  color: #a5b4fc;
+  background: rgba(249,115,22,0.1);
+  border: 1px solid rgba(249,115,22,0.25);
+  color: #ff9a4d;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -234,16 +237,16 @@
   border-radius: var(--radius-sm);
 }
 
-/* ─── Legacy classes adjusted for crisp square theme ───── */
+/* ─── Legacy compatibility classes ──────────────────────── */
 .card { border-radius: var(--radius-lg); background: var(--bg-surface); border: 1px solid var(--border); }
-.btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border-radius: var(--radius-md); padding: 0.7rem 1.4rem; font-weight: 700; border: none; cursor: pointer; }
+.btn-primary { background: linear-gradient(135deg, #f97316 0%, #9333ea 100%); color: #fff; border-radius: var(--radius-md); padding: 0.7rem 1.4rem; font-weight: 700; border: none; cursor: pointer; }
 .soft-input { border-radius: var(--radius-md); border: 1px solid var(--border); padding: 0.6rem 0.85rem; background: rgba(255,255,255,0.03); font-weight: 600; color: var(--text-primary); }
 .feature-pill { border-radius: var(--radius-md); background: rgba(255,255,255,0.04); padding: 0.8rem; border: 1px solid var(--border); }
 .hero-pattern { background: var(--bg-base); }
-.glass-panel { background: rgba(15,23,36,0.85); backdrop-filter: blur(16px); border: 1px solid var(--border); }
+.glass-panel { background: rgba(18,14,32,0.88); backdrop-filter: blur(16px); border: 1px solid var(--border); }
 .field-label { display: block; color: var(--text-muted); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 .field-control { display: block; width: 100%; margin-top: 0.35rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255,255,255,0.03); color: var(--text-primary); font-size: 0.875rem; font-weight: 600; padding: 0.65rem 0.85rem; }
-.field-control:focus { border-color: var(--brand); box-shadow: 0 0 0 2px rgba(99,102,241,0.25); outline: none; }
+.field-control:focus { border-color: var(--brand-orange); box-shadow: 0 0 0 2px rgba(249,115,22,0.25); outline: none; }
 
 select.soft-input, select.field-control {
   color: var(--text-primary);
