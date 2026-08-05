@@ -1,8 +1,8 @@
 'use client';
 
 import React, { FormEvent } from 'react';
-import { ArrowLeftRight, Calendar, MapPin, Users, ShieldCheck, Sparkles, Filter } from 'lucide-react';
-import { STATIONS, Station } from '../data/trainData';
+import { ArrowLeftRight, Calendar, MapPin, Users, ShieldCheck, Sparkles, Filter, Radio } from 'lucide-react';
+import { STATIONS } from '../data/trainData';
 
 interface HeroSearchProps {
   fromCode: string;
@@ -21,48 +21,70 @@ interface HeroSearchProps {
 }
 
 export const HeroSearch: React.FC<HeroSearchProps> = ({
-  fromCode, setFromCode, toCode, setToCode, travelDate, setTravelDate,
-  passengerCount, setPassengerCount, quota, setQuota, classFilter, setClassFilter, onSearch,
+  fromCode,
+  setFromCode,
+  toCode,
+  setToCode,
+  travelDate,
+  setTravelDate,
+  passengerCount,
+  setPassengerCount,
+  quota,
+  setQuota,
+  classFilter,
+  setClassFilter,
+  onSearch,
 }) => {
-  const switchRoute = () => { const t = fromCode; setFromCode(toCode); setToCode(t); };
+  const switchRoute = () => {
+    const t = fromCode;
+    setFromCode(toCode);
+    setToCode(t);
+  };
   const getStation = (code: string) => STATIONS.find((s) => s.code === code);
 
   return (
-    <section className="hero-pattern relative overflow-hidden px-4 pb-16 pt-10 sm:px-6 lg:px-8">
+    <section className="hero-mesh relative overflow-hidden px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Banner */}
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold text-white border border-white/30">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Instant Booking & Zero Cancellation Fee Option</span>
+          <div className="section-pill mb-3">
+            <Sparkles className="h-3.5 w-3.5" /> Instant Booking & Zero Cancellation Fee Option
           </div>
-          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Book Train Tickets <span className="text-emerald-200">In Seconds</span>
+          <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-5xl lg:text-6xl" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            Book Train Tickets <span className="gradient-text">In Seconds</span>
           </h1>
-          <p className="mt-3 text-base text-emerald-100 sm:text-lg">
+          <p className="mt-3 text-base sm:text-lg" style={{ color: '#94a3b8' }}>
             Authorized IRCTC booking partner. Real-time seat availability, live PNR tracking & instant refunds.
           </p>
         </div>
 
         {/* Search Form Card */}
-        <form onSubmit={onSearch} className="relative z-10 mt-8 bg-white p-6 sm:p-8 card">
+        <form onSubmit={onSearch} className="relative z-10 mt-8 card-elevated p-6 sm:p-8">
           {/* Top Options */}
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b pb-4" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
             <div className="flex items-center gap-6">
-              <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-emerald-700">
-                <input type="radio" name="triptype" defaultChecked className="h-4 w-4 accent-emerald-600" /> One Way
+              <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-indigo-400">
+                <input type="radio" name="triptype" defaultChecked className="h-4 w-4 accent-indigo-500" /> One Way
               </label>
-              <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-400 hover:text-slate-600">
-                <input type="radio" name="triptype" className="h-4 w-4 accent-emerald-600" /> Round Trip
+              <label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-400 hover:text-slate-200">
+                <input type="radio" name="triptype" className="h-4 w-4 accent-indigo-500" /> Round Trip
               </label>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Quota:</span>
               {['General', 'Tatkal', 'Ladies', 'Sr. Citizen'].map((q) => (
-                <button type="button" key={q} onClick={() => setQuota(q)}
-                  className={`rounded-lg px-3 py-1 text-xs font-bold transition ${
-                    quota === q ? 'bg-emerald-600 text-white shadow-md shadow-emerald-200' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}>{q}</button>
+                <button
+                  type="button"
+                  key={q}
+                  onClick={() => setQuota(q)}
+                  className={`rounded-xl px-3.5 py-1 text-xs font-bold transition ${
+                    quota === q
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'btn-ghost text-slate-400'
+                  }`}
+                >
+                  {q}
+                </button>
               ))}
             </div>
           </div>
@@ -70,73 +92,118 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
           {/* Form Fields */}
           <div className="grid gap-4 lg:grid-cols-[1.1fr_44px_1.1fr_1fr_0.8fr_1fr]">
             {/* From */}
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 focus-within:border-emerald-400 transition">
-              <div className="flex items-center gap-2 text-emerald-600">
+            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-indigo-400">
                 <MapPin className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">From Station</span>
               </div>
-              <select value={fromCode} onChange={(e) => setFromCode(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
-                {STATIONS.map((st) => (<option key={st.code} value={st.code}>{st.city} - {st.name} ({st.code})</option>))}
+              <select
+                value={fromCode}
+                onChange={(e) => setFromCode(e.target.value)}
+                className="mt-1 w-full font-bold focus:outline-none soft-input"
+              >
+                {STATIONS.map((st) => (
+                  <option key={st.code} value={st.code}>
+                    {st.city} - {st.name} ({st.code})
+                  </option>
+                ))}
               </select>
               <p className="text-[11px] font-medium text-slate-400 mt-0.5">{getStation(fromCode)?.state}</p>
             </div>
 
             {/* Swap */}
             <div className="flex items-center justify-center">
-              <button type="button" onClick={switchRoute} title="Swap"
-                className="grid h-11 w-11 place-items-center rounded-full border border-emerald-200 bg-emerald-50 text-emerald-600 transition hover:bg-emerald-600 hover:text-white hover:rotate-180">
+              <button
+                type="button"
+                onClick={switchRoute}
+                title="Swap stations"
+                className="grid h-11 w-11 place-items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 transition hover:bg-indigo-600 hover:text-white hover:rotate-180"
+              >
                 <ArrowLeftRight className="h-5 w-5" />
               </button>
             </div>
 
             {/* To */}
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 focus-within:border-emerald-400 transition">
-              <div className="flex items-center gap-2 text-emerald-600">
+            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-indigo-400">
                 <MapPin className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">To Station</span>
               </div>
-              <select value={toCode} onChange={(e) => setToCode(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
-                {STATIONS.filter((st) => st.code !== fromCode).map((st) => (<option key={st.code} value={st.code}>{st.city} - {st.name} ({st.code})</option>))}
+              <select
+                value={toCode}
+                onChange={(e) => setToCode(e.target.value)}
+                className="mt-1 w-full font-bold focus:outline-none soft-input"
+              >
+                {STATIONS.filter((st) => st.code !== fromCode).map((st) => (
+                  <option key={st.code} value={st.code}>
+                    {st.city} - {st.name} ({st.code})
+                  </option>
+                ))}
               </select>
               <p className="text-[11px] font-medium text-slate-400 mt-0.5">{getStation(toCode)?.state}</p>
             </div>
 
             {/* Date */}
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 focus-within:border-emerald-400 transition">
-              <div className="flex items-center gap-2 text-emerald-600">
+            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-cyan-400">
                 <Calendar className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Departure Date</span>
               </div>
-              <input type="date" value={travelDate} min="2026-08-05" onChange={(e) => setTravelDate(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input" />
+              <input
+                type="date"
+                value={travelDate}
+                min="2026-08-05"
+                onChange={(e) => setTravelDate(e.target.value)}
+                className="mt-1 w-full font-bold focus:outline-none soft-input"
+              />
               <div className="mt-1 flex gap-2">
-                <button type="button" onClick={() => setTravelDate('2026-08-05')} className="text-[10px] text-emerald-600 hover:underline font-bold">Today</button>
-                <button type="button" onClick={() => setTravelDate('2026-08-06')} className="text-[10px] text-emerald-600 hover:underline font-bold">Tomorrow</button>
+                <button
+                  type="button"
+                  onClick={() => setTravelDate('2026-08-05')}
+                  className="text-[10px] text-cyan-400 hover:underline font-bold"
+                >
+                  Today
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTravelDate('2026-08-06')}
+                  className="text-[10px] text-cyan-400 hover:underline font-bold"
+                >
+                  Tomorrow
+                </button>
               </div>
             </div>
 
             {/* Passengers */}
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 focus-within:border-emerald-400 transition">
-              <div className="flex items-center gap-2 text-emerald-600">
+            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-indigo-400">
                 <Users className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Travellers</span>
               </div>
-              <select value={passengerCount} onChange={(e) => setPassengerCount(Number(e.target.value))}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
-                {[1,2,3,4,5,6].map((n) => (<option key={n} value={n}>{n} {n === 1 ? 'Adult' : 'Adults'}</option>))}
+              <select
+                value={passengerCount}
+                onChange={(e) => setPassengerCount(Number(e.target.value))}
+                className="mt-1 w-full font-bold focus:outline-none soft-input"
+              >
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <option key={n} value={n}>
+                    {n} {n === 1 ? 'Adult' : 'Adults'}
+                  </option>
+                ))}
               </select>
             </div>
 
             {/* Class */}
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 focus-within:border-emerald-400 transition">
-              <div className="flex items-center gap-2 text-emerald-600">
+            <div className="rounded-2xl border p-3 transition" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+              <div className="flex items-center gap-2 text-cyan-400">
                 <Filter className="h-4 w-4" />
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Class</span>
               </div>
-              <select value={classFilter} onChange={(e) => setClassFilter(e.target.value)}
-                className="mt-1 w-full bg-transparent font-bold text-slate-900 focus:outline-none soft-input">
+              <select
+                value={classFilter}
+                onChange={(e) => setClassFilter(e.target.value)}
+                className="mt-1 w-full font-bold focus:outline-none soft-input"
+              >
                 <option value="ALL">All Classes</option>
                 <option value="1A">1A - First AC</option>
                 <option value="2A">2A - 2 Tier AC</option>
@@ -150,9 +217,9 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
 
           {/* Search Button */}
           <div className="mt-6 flex justify-end">
-            <button type="submit" className="btn-primary flex w-full items-center justify-center gap-2 sm:w-auto">
+            <button type="submit" className="btn-brand flex w-full items-center justify-center gap-2 sm:w-auto px-8 py-3.5 text-base">
               <Sparkles className="h-5 w-5 text-white/90" />
-              <span>Search trains</span>
+              <span>Search Trains</span>
             </button>
           </div>
         </form>
@@ -160,15 +227,15 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
         {/* Feature Badges */}
         <div className="mt-8 grid grid-cols-2 gap-4 text-center sm:grid-cols-4">
           {[
-            { icon: ShieldCheck, color: 'text-white', title: 'IRCTC Authorized', sub: 'Official partner' },
-            { icon: Sparkles, color: 'text-emerald-200', title: 'Instant Refund', sub: '100% on cancellation' },
-            { icon: Users, color: 'text-emerald-200', title: 'Tatkal Ready', sub: '1-click checkout' },
-            { icon: Calendar, color: 'text-emerald-200', title: 'Live Seat Map', sub: 'Choose berths' },
-          ].map(({ icon: Icon, color, title, sub }, i) => (
-            <div key={i} className="feature-pill">
-              <Icon className={`mx-auto h-6 w-6 ${color}`} />
-              <p className="mt-2 text-xs font-bold text-white">{title}</p>
-              <p className="text-[10px] text-emerald-100">{sub}</p>
+            { icon: ShieldCheck, title: 'IRCTC Authorized', sub: 'Official partner' },
+            { icon: Sparkles, title: 'Instant Refund', sub: '100% on cancellation' },
+            { icon: Users, title: 'Tatkal Ready', sub: '1-click checkout' },
+            { icon: Calendar, title: 'Live Seat Map', sub: 'Choose berths' },
+          ].map(({ icon: Icon, title, sub }, i) => (
+            <div key={i} className="card-dark p-4 flex flex-col items-center justify-center">
+              <Icon className="h-6 w-6 text-cyan-400" />
+              <p className="mt-2 text-xs font-bold text-slate-200">{title}</p>
+              <p className="text-[10px] text-slate-400">{sub}</p>
             </div>
           ))}
         </div>

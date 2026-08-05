@@ -232,7 +232,6 @@
       "turbopackFileSystemCacheForBuild": true,
       "turbopackInferModuleSideEffects": true,
       "turbopackPluginRuntimeStrategy": "childProcesses",
-      "typedRoutes": true,
       "turbopackMemoryEvictionMode": "auto",
       "optimizePackageImports": [
         "lucide-react",

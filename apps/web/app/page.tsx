@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState, FormEvent } from 'react';
-import { Navbar } from './components/Navbar';
+import { Navbar, NavTab } from './components/Navbar';
+import { LandingPage } from './components/LandingPage';
+import { AuthModal } from './components/AuthModal';
 import { HeroSearch } from './components/HeroSearch';
 import { TrainList } from './components/TrainList';
 import { TrainRouteModal } from './components/TrainRouteModal';
@@ -11,8 +13,9 @@ import { ETicketModal } from './components/ETicketModal';
 import { PNRStatusView } from './components/PNRStatusView';
 import { LiveStatusView } from './components/LiveStatusView';
 import { MyTripsView } from './components/MyTripsView';
-import { SupportModal } from './components/SupportModal';
-
+import { PaymentHistoryView } from './components/PaymentHistoryView';
+import { RefundHistoryView } from './components/RefundHistoryView';
+import { HelpChatView } from './components/HelpChatView';
 import { MicroservicesDashboard } from './components/MicroservicesDashboard';
 import { AITravelAssistant } from './components/AITravelAssistant';
 import { StationExplorer } from './components/StationExplorer';
@@ -31,8 +34,18 @@ import {
 } from './data/trainData';
 
 export default function Page() {
+  // Auth State
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [user, setUser] = useState<{ name: string; email: string; avatar: string } | null>({
+    name: 'Amit Kumar',
+    email: 'amit.kumar@gmail.com',
+    avatar: 'A',
+  });
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showLandingPage, setShowLandingPage] = useState(false);
+
   // Navigation Tab State
-  const [activeTab, setActiveTab] = useState<'search' | 'pnr' | 'live' | 'trips' | 'support' | 'microservices' | 'station' | 'reviews'>('search');
+  const [activeTab, setActiveTab] = useState<NavTab>('search');
 
   // Search Engine Form State
   const [fromCode, setFromCode] = useState('BCT');
@@ -55,10 +68,10 @@ export default function Page() {
   const [showECateringModal, setShowECateringModal] = useState(false);
   const [showAiAssistantModal, setShowAiAssistantModal] = useState(false);
 
-  // User Trips Database State
+  // User Trips State
   const [userTrips, setUserTrips] = useState<BookingTicket[]>(INITIAL_USER_TRIPS);
 
-  // Filtered Trains Computation
+  // Filtered Trains
   const filteredTrains = TRAINS_DATA.filter((t) => {
     const matchesFrom = t.fromCode === fromCode || fromCode === 'BCT';
     const matchesTo = t.toCode === toCode || toCode === 'NDLS';
@@ -75,6 +88,10 @@ export default function Page() {
   };
 
   const handleSelectTrain = (train: Train, travelClass: TrainClassInfo) => {
+    if (!isLoggedIn) {
+      setShowAuthModal(true);
+      return;
+    }
     setSeatTrainInfo({ train, travelClass });
   };
 
@@ -99,30 +116,66 @@ export default function Page() {
     );
   };
 
+  const handleLoginSuccess = (loggedInUser: { name: string; email: string; avatar: string }) => {
+    setUser(loggedInUser);
+    setIsLoggedIn(true);
+    setShowAuthModal(false);
+    setShowLandingPage(false);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setIsLoggedIn(false);
+  };
+
   const getStationCity = (code: string) => {
     return STATIONS.find((s) => s.code === code)?.city || code;
   };
 
+  // Render Landing Page if explicitly triggered or user chooses landing view
+  if (showLandingPage) {
+    return (
+      <>
+        <LandingPage
+          onLogin={() => {
+            setShowLandingPage(false);
+            setShowAuthModal(true);
+          }}
+        />
+        {showAuthModal && (
+          <AuthModal
+            onClose={() => setShowAuthModal(false)}
+            onSuccess={handleLoginSuccess}
+          />
+        )}
+      </>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-[#0b0f19] text-slate-100 selection:bg-indigo-500 selection:text-white">
+    <main className="min-h-screen antialiased selection:bg-indigo-500 selection:text-white" style={{ background: '#080c14', color: '#f1f5f9' }}>
       {/* Top Navbar Header */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         tripCount={userTrips.filter((t) => t.status === 'CONFIRMED').length}
+        isLoggedIn={isLoggedIn}
+        user={user}
+        onOpenAuth={() => setShowAuthModal(true)}
+        onLogout={handleLogout}
         onOpenWallet={() => setShowWalletModal(true)}
         onOpenNotifications={() => setShowNotificationsDrawer(true)}
         onOpenAiAssistant={() => setShowAiAssistantModal((prev) => !prev)}
       />
 
-      {/* AI Assistant Modal Bar */}
+      {/* AI Assistant Drawer Header */}
       {showAiAssistantModal && (
-        <div className="border-b border-slate-800 bg-slate-950/90 py-4">
+        <div className="border-b py-4 glass-brand animate-fade-in" style={{ borderColor: 'rgba(99,102,241,0.25)' }}>
           <AITravelAssistant />
         </div>
       )}
 
-      {/* SEARCH & TRAIN LISTING TAB */}
+      {/* VIEW 1: SEARCH & TRAIN LISTING */}
       {activeTab === 'search' && (
         <>
           <HeroSearch
@@ -157,24 +210,15 @@ export default function Page() {
         </>
       )}
 
-      {/* PNR STATUS TAB */}
+      {/* VIEW 2: PNR STATUS */}
       {activeTab === 'pnr' && (
         <PNRStatusView onOpenETicket={(t) => setViewTicket(t)} />
       )}
 
-      {/* LIVE TRAIN STATUS TAB */}
+      {/* VIEW 3: LIVE TRAIN TRACKING */}
       {activeTab === 'live' && <LiveStatusView />}
 
-      {/* STATIONS AMENITIES TAB */}
-      {activeTab === 'station' && <StationExplorer />}
-
-      {/* REVIEWS & RATINGS TAB */}
-      {activeTab === 'reviews' && <TrainReviews />}
-
-      {/* 28 MICROSERVICES DASHBOARD TAB */}
-      {activeTab === 'microservices' && <MicroservicesDashboard />}
-
-      {/* MY TRIPS TAB */}
+      {/* VIEW 4: MY TRIPS & BOOKING MANAGER */}
       {activeTab === 'trips' && (
         <MyTripsView
           trips={userTrips}
@@ -183,10 +227,32 @@ export default function Page() {
         />
       )}
 
-      {/* SUPPORT & FAQ TAB */}
-      {activeTab === 'support' && <SupportModal />}
+      {/* VIEW 5: PAYMENT HISTORY */}
+      {activeTab === 'payments' && <PaymentHistoryView />}
+
+      {/* VIEW 6: REFUND HISTORY */}
+      {activeTab === 'refunds' && <RefundHistoryView />}
+
+      {/* VIEW 7: HELP & LIVE CHAT */}
+      {activeTab === 'help' && <HelpChatView />}
+
+      {/* VIEW 8: STATIONS EXPLORER */}
+      {activeTab === 'station' && <StationExplorer />}
+
+      {/* VIEW 9: REVIEWS */}
+      {activeTab === 'reviews' && <TrainReviews />}
+
+      {/* VIEW 10: 28 MICROSERVICES DASHBOARD */}
+      {activeTab === 'microservices' && <MicroservicesDashboard />}
 
       {/* MODALS */}
+      {showAuthModal && (
+        <AuthModal
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={handleLoginSuccess}
+        />
+      )}
+
       {routeTrain && (
         <TrainRouteModal train={routeTrain} onClose={() => setRouteTrain(null)} />
       )}
@@ -230,22 +296,32 @@ export default function Page() {
         <ECateringModal onClose={() => setShowECateringModal(false)} />
       )}
 
-      {/* Footer */}
-      <footer className="mt-20 border-t border-slate-800 bg-slate-950 py-10 text-xs text-slate-400">
+      {/* Global Footer */}
+      <footer className="mt-20 border-t py-12 text-xs" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(15,23,36,0.6)' }}>
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center sm:flex-row sm:text-left sm:px-6 lg:px-8">
           <div>
-            <p className="font-bold text-slate-200">© 2026 RailGo IRCTC Express Services Inc.</p>
-            <p className="text-[11px] text-slate-500">Official 28 microservices train ticket booking & status platform.</p>
+            <p className="font-bold text-slate-200" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              © 2026 RailGo IRCTC Express Services Inc.
+            </p>
+            <p className="text-[11px] mt-0.5" style={{ color: '#64748b' }}>
+              Official 28 microservices train ticket booking & status platform.
+            </p>
           </div>
-          <div className="flex items-center gap-6 font-semibold">
-            <button onClick={() => setActiveTab('microservices')} className="hover:text-emerald-400">
+          <div className="flex flex-wrap items-center gap-6 font-semibold" style={{ color: '#94a3b8' }}>
+            <button onClick={() => setShowLandingPage(true)} className="hover:text-indigo-400 transition">
+              Landing Overview
+            </button>
+            <button onClick={() => setActiveTab('microservices')} className="hover:text-indigo-400 transition">
               Microservices Mesh (28)
             </button>
-            <button onClick={() => setActiveTab('support')} className="hover:text-indigo-400">
-              IRCTC Rules
+            <button onClick={() => setActiveTab('payments')} className="hover:text-indigo-400 transition">
+              Payments
             </button>
-            <button onClick={() => setActiveTab('support')} className="hover:text-indigo-400">
-              Refund Terms
+            <button onClick={() => setActiveTab('refunds')} className="hover:text-indigo-400 transition">
+              Refunds
+            </button>
+            <button onClick={() => setActiveTab('help')} className="hover:text-indigo-400 transition">
+              Help & Chat
             </button>
           </div>
         </div>

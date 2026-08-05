@@ -232,7 +232,6 @@ self.__SERVER_FILES_MANIFEST={
       "turbopackFileSystemCacheForBuild": true,
       "turbopackInferModuleSideEffects": true,
       "turbopackPluginRuntimeStrategy": "childProcesses",
-      "typedRoutes": true,
       "turbopackMemoryEvictionMode": "auto",
       "optimizePackageImports": [
         "lucide-react",
