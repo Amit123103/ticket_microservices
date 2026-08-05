@@ -1,1 +1,1 @@
-export default { experimental: { typedRoutes: true } };
+export default { typedRoutes: true };
