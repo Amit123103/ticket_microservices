@@ -35,7 +35,7 @@ export const SeatMapModal: React.FC<SeatMapModalProps> = ({ train, travelClass, 
       <div className="relative w-full max-w-4xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-stone-100 bg-stone-50/50 px-6 py-5">
           <div className="flex items-center gap-4">
-            <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20">
+            <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/20">
               <Icons.train className="h-5 w-5" />
             </div>
             <div>
@@ -55,11 +55,11 @@ export const SeatMapModal: React.FC<SeatMapModalProps> = ({ train, travelClass, 
               <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Coach:</span>
               {['B1','B2','B3','B4'].map((c) => (
                 <button key={c} onClick={() => { setCoachNumber(c); setSelectedSeats([]); }}
-                  className={`rounded-xl px-3.5 py-2 text-sm font-semibold transition-all ${coachNumber === c ? 'bg-orange-600 text-white shadow-sm shadow-orange-500/20' : 'bg-white text-stone-600 border border-stone-200 hover:border-orange-300 hover:text-orange-700'}`}>{c}</button>
+                  className={`rounded-xl px-3.5 py-2 text-sm font-semibold transition-all ${coachNumber === c ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/20' : 'bg-white text-stone-600 border border-stone-200 hover:border-purple-300 hover:text-purple-700'}`}>{c}</button>
               ))}
             </div>
             <div className="flex items-center gap-5 text-xs">
-              <div className="flex items-center gap-2"><div className="h-3.5 w-3.5 rounded-lg bg-orange-500"></div><span className="text-stone-500 font-medium">Selected</span></div>
+              <div className="flex items-center gap-2"><div className="h-3.5 w-3.5 rounded-lg bg-purple-600"></div><span className="text-stone-500 font-medium">Selected</span></div>
               <div className="flex items-center gap-2"><div className="h-3.5 w-3.5 rounded-lg bg-white border border-stone-300"></div><span className="text-stone-500 font-medium">Available</span></div>
               <div className="flex items-center gap-2"><div className="h-3.5 w-3.5 rounded-lg bg-red-50 border border-red-200"></div><span className="text-stone-500 font-medium">Booked</span></div>
             </div>
@@ -73,21 +73,21 @@ export const SeatMapModal: React.FC<SeatMapModalProps> = ({ train, travelClass, 
               return (
                 <button key={seat.seatNum} type="button" disabled={seat.isOccupied} onClick={() => toggleSeat(label, seat.isOccupied)}
                   className={`relative flex flex-col items-center justify-center rounded-2xl p-3.5 border transition-all ${
-                    isSel ? 'border-orange-400 bg-orange-50 text-orange-800 shadow-sm shadow-orange-500/10 scale-105'
+                    isSel ? 'border-purple-400 bg-purple-50 text-purple-800 shadow-sm shadow-purple-500/10 scale-105'
                     : seat.isOccupied ? 'border-red-200 bg-red-50 text-stone-400 cursor-not-allowed'
-                    : 'border-stone-200 bg-white text-stone-700 hover:border-orange-400 hover:bg-orange-50 hover:shadow-sm'}`}>
+                    : 'border-stone-200 bg-white text-stone-700 hover:border-purple-400 hover:bg-purple-50 hover:shadow-sm'}`}>
                   <span className="text-xs font-bold">{seat.seatNum}</span>
                   <span className="text-[10px] font-semibold mt-1 text-stone-400">{seat.type}</span>
-                  {isSel && <span className="absolute -top-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-orange-600 text-white shadow-sm"><Icons.check className="h-3 w-3 stroke-[3]" /></span>}
+                  {isSel && <span className="absolute -top-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-purple-600 text-white shadow-sm"><Icons.check className="h-3 w-3 stroke-[3]" /></span>}
                 </button>
               );
             })}
           </div>
 
           {/* Status Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-orange-50/60 p-5 border border-orange-200">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-purple-50/60 p-5 border border-purple-200">
             <div className="flex items-center gap-3">
-              <Icons.users className="h-5 w-5 text-orange-600" />
+              <Icons.users className="h-5 w-5 text-purple-600" />
               <div>
                 <p className="text-sm font-bold text-stone-800">Selected {selectedSeats.length} of {passengerCount}</p>
                 <p className="text-xs text-stone-500">{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Auto berth if none selected'}</p>
