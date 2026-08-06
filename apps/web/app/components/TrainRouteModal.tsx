@@ -18,7 +18,7 @@ export const TrainRouteModal: React.FC<TrainRouteModalProps> = ({ train, onClose
       <div className="relative w-full max-w-2xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
         <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/20">
               <Icons.route className="h-5 w-5" />
             </div>
             <div>
@@ -39,9 +39,9 @@ export const TrainRouteModal: React.FC<TrainRouteModalProps> = ({ train, onClose
               <p className="text-xs text-stone-500">{train.fromCode}</p>
             </div>
             <div className="flex-1 mx-4 flex items-center gap-1">
-              <div className="flex-1 h-0.5 bg-orange-300 rounded-full" />
-              <Icons.arrowRight className="h-4 w-4 text-orange-500" />
-              <div className="flex-1 h-0.5 bg-orange-300 rounded-full" />
+              <div className="flex-1 h-0.5 bg-purple-300 rounded-full" />
+              <Icons.arrowRight className="h-4 w-4 text-purple-600" />
+              <div className="flex-1 h-0.5 bg-purple-300 rounded-full" />
             </div>
             <div className="text-center">
               <p className="text-xs font-bold text-stone-400 uppercase">Destination</p>
@@ -54,11 +54,11 @@ export const TrainRouteModal: React.FC<TrainRouteModalProps> = ({ train, onClose
             {routeStations.map((st, i) => (
               <div key={i} className="flex items-start gap-4">
                 {i !== routeStations.length - 1 && <div className="absolute left-[15px] top-7 bottom-0 w-0.5 bg-stone-200" />}
-                <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold border-2 ${i === 0 ? 'bg-orange-600 text-white border-orange-600' : i === routeStations.length - 1 ? 'bg-stone-900 text-white border-stone-900' : 'bg-white text-stone-500 border-stone-300'}`}>{i + 1}</div>
-                <div className={`flex-1 flex flex-wrap items-center justify-between gap-2 rounded-xl p-3.5 border ${i === 0 ? 'bg-orange-50 border-orange-200' : i === routeStations.length - 1 ? 'bg-stone-900/5 border-stone-200' : 'bg-stone-50 border-stone-200'}`}>
+                <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold border-2 ${i === 0 ? 'bg-purple-600 text-white border-purple-600' : i === routeStations.length - 1 ? 'bg-stone-900 text-white border-stone-900' : 'bg-white text-stone-500 border-stone-300'}`}>{i + 1}</div>
+                <div className={`flex-1 flex flex-wrap items-center justify-between gap-2 rounded-xl p-3.5 border ${i === 0 ? 'bg-purple-50 border-purple-200' : i === routeStations.length - 1 ? 'bg-stone-900/5 border-stone-200' : 'bg-stone-50 border-stone-200'}`}>
                   <div>
                     <span className="font-bold text-stone-900 text-sm">{st.name}</span>
-                    <span className="ml-2 text-[10px] font-bold text-orange-600">{st.code}</span>
+                    <span className="ml-2 text-[10px] font-bold text-purple-600">{st.code}</span>
                   </div>
                   <div className="flex items-center gap-3 text-xs text-stone-500">
                     <span><Icons.clock className="h-3 w-3 inline mr-1" />{st.arr}</span>
