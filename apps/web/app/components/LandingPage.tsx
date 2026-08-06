@@ -75,8 +75,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
         <div className="pointer-events-none absolute -bottom-32 right-1/4 h-80 w-80 rounded-full bg-indigo-200/30 blur-3xl" />
 
         <div className="relative mx-auto max-w-5xl text-center">
-          <div className="section-pill mb-6 animate-fade-in-up">
-            <Icons.sparkles className="h-3.5 w-3.5 text-purple-600" /> AI-Powered Train Booking Platform
+          <div className="section-pill mb-6 animate-fade-in-up normal-case font-medium text-xs">
+            AI-Powered Train Booking Platform
           </div>
 
           <h1 className="animate-fade-in-up delay-100 mb-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl" style={{ fontFamily: 'Outfit, sans-serif' }}>

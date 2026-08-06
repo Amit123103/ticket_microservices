@@ -46,14 +46,14 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
     <section className="relative overflow-hidden px-4 pb-12 pt-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Banner Header */}
-        <div className="mx-auto max-w-3xl text-center mb-6">
-          <div className="section-pill mb-2.5">
-            <Icons.sparkles className="h-3.5 w-3.5 text-purple-600" /> Authorized IRCTC Partner • Zero Cancellation Fee
+        <div className="mx-auto max-w-3xl text-center mb-5">
+          <div className="section-pill mb-2 normal-case font-medium text-[11px]">
+            Authorized IRCTC Partner • Zero Cancellation Fee
           </div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl mb-2" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl mb-2" style={{ fontFamily: 'Outfit, sans-serif' }}>
             Book Train Tickets <span className="gradient-text">In Seconds</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-600 max-w-2xl mx-auto">
+          <p className="text-xs text-stone-500 max-w-xl mx-auto">
             Real-time seat availability, live GPS train tracking, Tatkal quota & 100% instant refunds.
           </p>
         </div>
