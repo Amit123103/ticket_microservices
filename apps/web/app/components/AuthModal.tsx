@@ -68,7 +68,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
         {/* Header */}
         <div className="px-8 pt-10 pb-6 text-center">
-          <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25">
+          <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25">
             <Icons.train className="h-8 w-8" />
           </div>
           <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: 'Outfit, sans-serif' }}>
@@ -83,12 +83,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
           {view === 'choose' ? (
             <div className="space-y-3">
               {/* Google */}
-              <button onClick={handleGoogle} disabled={loading} className="group flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-stone-200 hover:border-orange-300 hover:shadow-sm">
-                {loading ? <Icons.arrowRight className="h-5 w-5 animate-spin mx-auto text-orange-500" /> : (
+              <button onClick={handleGoogle} disabled={loading} className="group flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-stone-200 hover:border-purple-300 hover:shadow-sm">
+                {loading ? <Icons.arrowRight className="h-5 w-5 animate-spin mx-auto text-purple-600" /> : (
                   <>
                     <div className="grid h-9 w-9 place-items-center rounded-lg border border-stone-200"><GoogleIcon /></div>
                     <span className="text-stone-700">Continue with Google</span>
-                    <Icons.arrowRight className="h-4 w-4 ml-auto text-stone-400 group-hover:text-orange-500 transition-colors" />
+                    <Icons.arrowRight className="h-4 w-4 ml-auto text-stone-400 group-hover:text-purple-600 transition-colors" />
                   </>
                 )}
               </button>
@@ -108,8 +108,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               </div>
 
               {/* Email */}
-              <button onClick={() => setView('email')} className="flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-orange-200 bg-orange-50 hover:bg-orange-100 text-orange-700">
-                <div className="grid h-9 w-9 place-items-center rounded-lg bg-orange-100 text-orange-600">
+              <button onClick={() => setView('email')} className="flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700">
+                <div className="grid h-9 w-9 place-items-center rounded-lg bg-purple-100 text-purple-600">
                   <Icons.mail className="h-4 w-4" />
                 </div>
                 <span>Continue with Email</span>
@@ -117,7 +117,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               </button>
 
               <p className="text-center text-xs pt-2 text-stone-400">
-                By continuing, you agree to our <span className="cursor-pointer text-orange-600 font-medium">Terms</span> & <span className="cursor-pointer text-orange-600 font-medium">Privacy Policy</span>
+                By continuing, you agree to our <span className="cursor-pointer text-purple-600 font-medium">Terms</span> & <span className="cursor-pointer text-purple-600 font-medium">Privacy Policy</span>
               </p>
             </div>
           ) : (
@@ -150,7 +150,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
               {!isSignUp && (
                 <div className="flex justify-end">
-                  <button type="button" className="text-xs font-semibold text-orange-600 hover:text-orange-700">Forgot password?</button>
+                  <button type="button" className="text-xs font-semibold text-purple-600 hover:text-purple-700">Forgot password?</button>
                 </div>
               )}
 
@@ -172,7 +172,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
               <p className="text-center text-sm text-stone-500">
                 {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-                <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-bold text-orange-600 hover:text-orange-700">
+                <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-bold text-purple-600 hover:text-purple-700">
                   {isSignUp ? 'Sign In' : 'Sign Up'}
                 </button>
               </p>
@@ -182,7 +182,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
         {/* Security badge */}
         <div className="px-8 pb-6 flex items-center justify-center gap-2 text-xs text-stone-400">
-          <Icons.shield className="h-3.5 w-3.5 text-indigo-500" />
+          <Icons.shield className="h-3.5 w-3.5 text-purple-600" />
           <span>256-bit SSL encryption • Your data is safe</span>
         </div>
       </div>
