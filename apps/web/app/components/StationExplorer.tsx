@@ -29,8 +29,8 @@ export const StationExplorer: React.FC = () => {
             onClick={() => setSelectedCode(st.code)}
             className={`rounded-2xl border px-4 py-2.5 text-sm font-semibold transition-all ${
               selectedCode === st.code
-                ? 'border-orange-400 bg-orange-50 text-orange-700 shadow-sm shadow-orange-500/10'
-                : 'border-stone-200 bg-white text-stone-500 hover:border-orange-300 hover:text-orange-700 hover:shadow-sm'
+                ? 'border-purple-400 bg-purple-50 text-purple-700 shadow-sm shadow-purple-500/10'
+                : 'border-stone-200 bg-white text-stone-500 hover:border-purple-300 hover:text-purple-700 hover:shadow-sm'
             }`}
           >
             {st.city} ({st.code})
@@ -41,7 +41,7 @@ export const StationExplorer: React.FC = () => {
       <div className="rounded-3xl border border-stone-200 bg-white p-6 sm:p-8 shadow-lg shadow-stone-200/30 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-stone-100 pb-6">
           <div className="flex items-center gap-4">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-orange-100 text-orange-600 border border-orange-200">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-purple-100 text-purple-600 border border-purple-200">
               <Icons.mapPin className="h-6 w-6" />
             </div>
             <div>
@@ -68,7 +68,7 @@ export const StationExplorer: React.FC = () => {
             {amenities.map((item, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl border border-stone-200 bg-white p-5 space-y-2 hover:border-orange-200 hover:shadow-sm transition-all"
+                className="rounded-2xl border border-purple-100 bg-white p-5 space-y-2 hover:border-purple-300 hover:shadow-sm transition-all"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
