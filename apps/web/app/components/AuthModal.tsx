@@ -24,8 +24,6 @@ const AppleIcon = () => (
   </svg>
 );
 
-const GOOGLE_CLIENT_ID = '262838532038-m3pem1vdb65e3cp1p5l54jc8a1n75f8n.apps.googleusercontent.com';
-
 export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [showGoogleModal, setShowGoogleModal] = useState(false);
@@ -46,6 +44,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   // Social Auth Email inputs
   const [socialEmail, setSocialEmail] = useState('');
   const [socialName, setSocialName] = useState('');
+  const [socialError, setSocialError] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -67,21 +66,43 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
   const handleOpenGoogle = () => {
     setError('');
-    setSocialEmail(email.trim());
+    setSocialError('');
+
+    const cleanEmail = email.trim();
+    if (cleanEmail && cleanEmail.includes('@')) {
+      const userName = name.trim() || cleanEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+      triggerLoginSuccess(userName, cleanEmail);
+      return;
+    }
+
+    setSocialEmail('');
+    setSocialName('');
     setShowGoogleModal(true);
   };
 
   const handleOpenApple = () => {
     setError('');
-    setSocialEmail(email.trim());
+    setSocialError('');
+
+    const cleanEmail = email.trim();
+    if (cleanEmail && cleanEmail.includes('@')) {
+      const userName = name.trim() || cleanEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+      triggerLoginSuccess(userName, cleanEmail);
+      return;
+    }
+
+    setSocialEmail('');
+    setSocialName('');
     setShowAppleModal(true);
   };
 
   const handleConfirmGoogleAuth = (e: React.FormEvent) => {
     e.preventDefault();
+    setSocialError('');
+
     const cleanEmail = socialEmail.trim();
     if (!cleanEmail || !cleanEmail.includes('@')) {
-      setError('Please enter a valid Google / Gmail address.');
+      setSocialError('Please enter a valid Google / Gmail address.');
       return;
     }
 
@@ -92,9 +113,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
   const handleConfirmAppleAuth = (e: React.FormEvent) => {
     e.preventDefault();
+    setSocialError('');
+
     const cleanEmail = socialEmail.trim();
     if (!cleanEmail || !cleanEmail.includes('@')) {
-      setError('Please enter a valid Apple ID email address.');
+      setSocialError('Please enter a valid Apple ID email address.');
       return;
     }
 
@@ -390,7 +413,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
             <div className="text-center mb-4">
               <div className="mx-auto mb-2 grid h-10 w-10 place-items-center"><GoogleIcon /></div>
               <h3 className="font-bold text-base text-stone-900">Sign in with Google</h3>
-              <p className="text-xs text-stone-500 mt-1">Enter your Google / Gmail account email to sign in or sign up</p>
+              <p className="text-xs text-stone-500 mt-1">Enter your Google Account email to sign in or sign up</p>
             </div>
 
             <form onSubmit={handleConfirmGoogleAuth} className="space-y-3.5">
@@ -417,12 +440,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
                 />
               </div>
 
+              {socialError && (
+                <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
+                  {socialError}
+                </div>
+              )}
+
               <button
                 type="submit"
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-purple-600 to-violet-700 py-3 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all"
               >
                 <GoogleIcon />
-                <span>Sign In with Google</span>
+                <span>Continue with Google Account</span>
               </button>
             </form>
           </div>
@@ -472,12 +501,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
                 />
               </div>
 
+              {socialError && (
+                <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
+                  {socialError}
+                </div>
+              )}
+
               <button
                 type="submit"
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
               >
                 <AppleIcon />
-                <span>Sign In with Apple ID</span>
+                <span>Continue with Apple ID</span>
               </button>
             </form>
           </div>
