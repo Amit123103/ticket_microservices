@@ -13,20 +13,53 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
   );
   const [mobile, setMobile] = useState('9876543210');
   const [email, setEmail] = useState('amit.kumar@example.com');
+  const [upiId, setUpiId] = useState('amit@gpay');
   const [includeInsurance, setIncludeInsurance] = useState(true);
   const [includeFreeCancellation, setIncludeFreeCancellation] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<'UPI'|'Card'|'NetBanking'|'Wallet'>('UPI');
-  const [upiId, setUpiId] = useState('amit@gpay');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const baseFare = selectedClass.price * passengerCount;
   const totalFare = Math.round(baseFare + (includeInsurance ? 0.45*passengerCount : 0) + (includeFreeCancellation ? 99 : 0));
 
   const updatePassenger = (idx: number, field: keyof Passenger, value: any) => { const u = [...passengers]; u[idx] = { ...u[idx], [field]: value }; setPassengers(u); };
 
-  const handlePayAndBook = () => {
+  const validateStep1 = () => {
+    const e: Record<string, string> = {};
+    passengers.forEach((p, i) => {
+      if (!p.name.trim()) e[`passenger-${i}-name`] = 'Name is required';
+      if (!p.age || p.age < 1 || p.age > 120) e[`passenger-${i}-age`] = 'Valid age required';
+    });
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const validateStep2 = () => {
+    const e: Record<string, string> = {};
+    if (!mobile.trim() || mobile.length < 10) e.mobile = 'Valid mobile number required';
+    if (!email.trim() || !email.includes('@')) e.email = 'Valid email required';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const validateStep3 = () => {
+    const e: Record<string, string> = {};
+    if (paymentMethod === 'UPI' && (!upiId.trim() || !upiId.includes('@'))) e.upiId = 'Valid UPI ID required (e.g. user@gpay)';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleNext = (fromStep: 1|2) => {
+    if (fromStep === 1 && !validateStep1()) return;
+    if (fromStep === 2 && !validateStep2()) return;
+    setStep(fromStep === 1 ? 2 : 3);
+  };
+
+  const handlePayAndBook = async () => {
+    if (!validateStep3()) return;
     setIsProcessing(true);
-    setTimeout(() => {
+    try {
       const newTicket: BookingTicket = {
         pnr: Math.floor(1e9+Math.random()*9e9).toString(), bookingId: `TKT${Math.floor(1e5+Math.random()*9e5)}`,
         trainNumber: train.number, trainName: train.name, fromCode: train.fromCode, fromCity: train.fromName,
@@ -37,13 +70,27 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
         bookingTime: new Date().toISOString().replace('T',' ').substring(0,16), status:'CONFIRMED',
         coach: selectedSeats[0]?.split('-')[0]||'B3', chartStatus:'CHART PREPARED',
       };
+      await fetch('/api/tickets/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pnr: newTicket.pnr, bookingId: newTicket.bookingId, trainName: newTicket.trainName,
+          trainNumber: newTicket.trainNumber, fromCity: newTicket.fromCity, toCity: newTicket.toCity,
+          departureDate: newTicket.departureDate, departureTime: newTicket.departureTime,
+          arrivalTime: newTicket.arrivalTime, travelClass: newTicket.travelClass, quota: newTicket.quota,
+          passengers: newTicket.passengers, totalFare: newTicket.totalFare, paymentMethod: newTicket.paymentMethod,
+          email: email, mobile: mobile,
+        }),
+      });
       setIsProcessing(false); onBookingSuccess(newTicket);
-    }, 2000);
+    } catch {
+      setIsProcessing(false);
+    }
   };
 
   const steps = [
     { n: 1, l: 'Passengers', icon: Icons.users },
-    { n: 2, l: 'Add-ons', icon: Icons.shieldCheck },
+    { n: 2, l: 'Contact', icon: Icons.mail },
     { n: 3, l: 'Payment', icon: Icons.creditCard },
   ] as const;
 
@@ -87,12 +134,14 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
                 </div>
                 <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
                   <div>
-                    <label className="field-label">Full Name</label>
-                    <input type="text" value={p.name} onChange={(e) => updatePassenger(idx,'name',e.target.value)} className="field-control mt-1" />
+                    <label className="field-label">Full Name <span className="text-red-500">*</span></label>
+                    <input type="text" value={p.name} onChange={(e) => updatePassenger(idx,'name',e.target.value)} className="field-control mt-1" placeholder="Enter full name" />
+                    {errors[`passenger-${idx}-name`] && <p className="text-[10px] text-red-600 mt-1 font-semibold">{errors[`passenger-${idx}-name`]}</p>}
                   </div>
                   <div>
-                    <label className="field-label">Age</label>
-                    <input type="number" value={p.age} onChange={(e) => updatePassenger(idx,'age',Number(e.target.value))} className="field-control mt-1" />
+                    <label className="field-label">Age <span className="text-red-500">*</span></label>
+                    <input type="number" value={p.age} onChange={(e) => updatePassenger(idx,'age',Number(e.target.value))} className="field-control mt-1" min={1} max={120} />
+                    {errors[`passenger-${idx}-age`] && <p className="text-[10px] text-red-600 mt-1 font-semibold">{errors[`passenger-${idx}-age`]}</p>}
                   </div>
                   <div>
                     <label className="field-label">Gender</label>
@@ -118,28 +167,30 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
               </div>
             ))}
             <div className="flex justify-end pt-2">
-              <button onClick={() => setStep(2)} className="w-full sm:w-auto btn-brand flex items-center justify-center gap-2">
+              <button onClick={() => handleNext(1)} className="w-full sm:w-auto btn-brand flex items-center justify-center gap-2">
                 Continue <Icons.arrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>}
 
           {step === 2 && <div className="space-y-4 sm:space-y-5">
-            <h4 className="font-bold text-stone-900 text-sm sm:text-base">Contact & Protection</h4>
+            <h4 className="font-bold text-stone-900 text-sm sm:text-base">Contact Information</h4>
             <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
               <div>
-                <label className="field-label">Mobile Number</label>
+                <label className="field-label">Mobile Number <span className="text-red-500">*</span></label>
                 <div className="relative mt-1">
                   <Icons.phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 z-10" />
-                  <input type="text" value={mobile} onChange={(e) => setMobile(e.target.value)} className="field-control" style={{ paddingLeft: '2.5rem' }} />
+                  <input type="text" value={mobile} onChange={(e) => setMobile(e.target.value)} className="field-control" style={{ paddingLeft: '2.5rem' }} placeholder="9876543210" />
                 </div>
+                {errors.mobile && <p className="text-[10px] text-red-600 mt-1 font-semibold">{errors.mobile}</p>}
               </div>
               <div>
-                <label className="field-label">Email</label>
+                <label className="field-label">Email Address <span className="text-red-500">*</span></label>
                 <div className="relative mt-1">
                   <Icons.mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 z-10" />
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="field-control" style={{ paddingLeft: '2.5rem' }} />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="field-control" style={{ paddingLeft: '2.5rem' }} placeholder="you@example.com" />
                 </div>
+                {errors.email && <p className="text-[10px] text-red-600 mt-1 font-semibold">{errors.email}</p>}
               </div>
             </div>
             <label className="flex cursor-pointer items-start gap-3 sm:gap-4 rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 hover:border-purple-300 hover:shadow-sm transition-all cursor-pointer">
@@ -161,8 +212,8 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
             </label>
             <div className="flex items-center justify-between pt-2">
               <button onClick={() => setStep(1)} className="btn-ghost text-xs">Back</button>
-              <button onClick={() => setStep(3)} className="btn-brand flex items-center gap-2">
-                Payment <Icons.arrowRight className="h-4 w-4" />
+              <button onClick={() => handleNext(2)} className="btn-brand flex items-center gap-2">
+                Continue <Icons.arrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>}
@@ -179,8 +230,10 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
               ))}
             </div>
             {paymentMethod==='UPI' && <div className="rounded-2xl border border-stone-200 bg-stone-50/50 p-4 sm:p-5">
-              <label className="field-label">UPI ID</label>
-              <input type="text" value={upiId} onChange={(e) => setUpiId(e.target.value)} className="field-control mt-1" />
+              <label className="field-label">UPI ID <span className="text-red-500">*</span></label>
+              <input type="text" value={upiId} onChange={(e) => setUpiId(e.target.value)} className="field-control mt-1" placeholder="user@gpay" />
+              {errors.upiId && <p className="text-[10px] text-red-600 mt-1 font-semibold">{errors.upiId}</p>}
+              <p className="text-[10px] text-stone-400 mt-1.5">Example: amit@gpay, name@upi</p>
             </div>}
             <div className="rounded-2xl bg-purple-50/80 p-4 sm:p-5 border border-purple-200 space-y-2.5 sm:space-y-3">
               <div className="flex justify-between text-xs sm:text-sm text-stone-600">
