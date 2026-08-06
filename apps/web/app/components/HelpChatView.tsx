@@ -130,7 +130,7 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
           <button
             onClick={() => setActiveTab('faq')}
             className={`flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold transition-all ${
-              activeTab === 'faq' ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-stone-500 hover:text-stone-700'
+              activeTab === 'faq' ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' : 'text-stone-500 hover:text-stone-700'
             }`}
           >
             <Icons.fileQuestion className="h-4 w-4" /> Frequently Asked Questions
@@ -138,7 +138,7 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
           <button
             onClick={() => setActiveTab('chat')}
             className={`flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold transition-all ${
-              activeTab === 'chat' ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-stone-500 hover:text-stone-700'
+              activeTab === 'chat' ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' : 'text-stone-500 hover:text-stone-700'
             }`}
           >
             <Icons.messageSquare className="h-4 w-4" /> Live AI Chat Support
@@ -155,8 +155,8 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
                 onClick={() => setSelectedCategory(cat)}
                 className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
                   selectedCategory === cat
-                    ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20'
-                    : 'bg-white text-stone-500 border border-stone-200 hover:border-orange-300 hover:text-orange-700'
+                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20'
+                    : 'bg-white text-stone-500 border border-stone-200 hover:border-purple-300 hover:text-purple-700'
                 }`}
               >
                 {cat}
@@ -181,7 +181,7 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
                       {faq.question}
                     </span>
                     {isOpen ? (
-                      <Icons.chevronUp className="h-5 w-5 shrink-0 text-orange-500" />
+                      <Icons.chevronUp className="h-5 w-5 shrink-0 text-purple-600" />
                     ) : (
                       <Icons.chevronDown className="h-5 w-5 shrink-0 text-stone-400" />
                     )}
@@ -197,23 +197,23 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
           </div>
 
           <div className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-stone-200 bg-white p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-all">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-orange-50 text-orange-600 border border-orange-200">
+            <div className="rounded-2xl border border-purple-100 bg-white p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-all">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-purple-50 text-purple-600 border border-purple-200">
                 <Icons.phone className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-bold text-stone-900">Toll Free Helpline</h4>
-                <p className="text-sm font-mono font-bold text-orange-600 mt-0.5">1800-111-139</p>
+                <p className="text-sm font-mono font-bold text-purple-600 mt-0.5">1800-111-139</p>
                 <span className="text-xs text-stone-400">24x7 Customer Support</span>
               </div>
             </div>
-            <div className="rounded-2xl border border-stone-200 bg-white p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-all">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-200">
+            <div className="rounded-2xl border border-purple-100 bg-white p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-all">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-purple-50 text-purple-600 border border-purple-200">
                 <Icons.mail className="h-6 w-6" />
               </div>
               <div>
                 <h4 className="font-bold text-stone-900">Email Assistance</h4>
-                <p className="text-sm font-mono font-bold text-indigo-600 mt-0.5">care@railgo.in</p>
+                <p className="text-sm font-mono font-bold text-purple-600 mt-0.5">care@railgo.in</p>
                 <span className="text-xs text-stone-400">Response within 2 hours</span>
               </div>
             </div>
@@ -223,10 +223,10 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
 
       {activeTab === 'chat' && (
         <div className="mx-auto max-w-3xl">
-          <div className="rounded-3xl border border-stone-200 bg-white overflow-hidden flex flex-col shadow-lg shadow-stone-200/30" style={{ minHeight: '600px' }}>
-            <div className="flex items-center justify-between p-4 border-b border-stone-200 bg-stone-50/50">
+          <div className="rounded-3xl border border-purple-100 bg-white overflow-hidden flex flex-col shadow-lg shadow-purple-200/30" style={{ minHeight: '600px' }}>
+            <div className="flex items-center justify-between p-4 border-b border-purple-100 bg-purple-50/50">
               <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-tr from-indigo-600 to-orange-500 text-white shadow-lg">
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-tr from-purple-600 to-violet-600 text-white shadow-lg">
                   <Icons.bot className="h-5 w-5" />
                 </div>
                 <div>
@@ -240,7 +240,7 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
               <span className="badge-brand text-[10px]">Instant AI</span>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-stone-50/30">
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-purple-50/20">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -249,8 +249,8 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
                   <div
                     className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-xs font-bold ${
                       msg.sender === 'user'
-                        ? 'bg-orange-600 text-white'
-                        : 'bg-gradient-to-tr from-indigo-600 to-orange-500 text-white'
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-gradient-to-tr from-purple-600 to-violet-600 text-white'
                     }`}
                   >
                     {msg.sender === 'user' ? <Icons.user className="h-4 w-4" /> : <Icons.bot className="h-4 w-4" />}
@@ -259,14 +259,14 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
                   <div
                     className={`max-w-[80%] rounded-2xl p-4 text-sm leading-relaxed transition-all ${
                       msg.sender === 'user'
-                        ? 'bg-orange-600 text-white rounded-tr-none shadow-lg shadow-orange-500/20'
-                        : 'bg-white text-stone-700 rounded-tl-none border border-stone-200 shadow-sm'
+                        ? 'bg-purple-600 text-white rounded-tr-none shadow-lg shadow-purple-500/20'
+                        : 'bg-white text-stone-700 rounded-tl-none border border-purple-100 shadow-sm'
                     }`}
                   >
                     <p>{msg.text}</p>
                     <span
                       className={`block mt-1.5 text-[10px] ${
-                        msg.sender === 'user' ? 'text-orange-200 text-right' : 'text-stone-400'
+                        msg.sender === 'user' ? 'text-purple-200 text-right' : 'text-stone-400'
                       }`}
                     >
                       {msg.time}
@@ -276,13 +276,13 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
               ))}
 
               {isTyping && (
-                <div className="flex items-center gap-2 text-xs font-semibold text-orange-600 p-2">
+                <div className="flex items-center gap-2 text-xs font-semibold text-purple-600 p-2">
                   <Icons.bot className="h-4 w-4 animate-spin" /> RailAI is typing...
                 </div>
               )}
             </div>
 
-            <div className="px-4 py-3 border-t border-stone-200 bg-white flex flex-wrap gap-2">
+            <div className="px-4 py-3 border-t border-purple-100 bg-white flex flex-wrap gap-2">
               <span className="text-[10px] font-bold uppercase text-stone-400 self-center mr-1">Suggested:</span>
               {[
                 'Cancel ticket info',
@@ -293,7 +293,7 @@ export const HelpChatView: React.FC<HelpChatViewProps> = () => {
                 <button
                   key={i}
                   onClick={() => handleQuickQuestion(q)}
-                  className="rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-[11px] font-semibold text-stone-600 hover:border-orange-300 hover:text-orange-700 hover:bg-orange-50 transition-all"
+                  className="rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-[11px] font-semibold text-stone-600 hover:border-purple-300 hover:text-purple-700 hover:bg-purple-50 transition-all"
                 >
                   {q}
                 </button>
