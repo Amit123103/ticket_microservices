@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { PageNavbar, NavTab } from './components/Navbar';
 import { LandingPage } from './components/LandingPage';
 import { AuthModal } from './components/AuthModal';
@@ -41,8 +41,42 @@ export default function Page() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showLandingPage, setShowLandingPage] = useState(true);
 
-  // Navigation Tab State
-  const [activeTab, setActiveTab] = useState<NavTab>('search');
+  // Navigation Tab State with URL query sync
+  const [activeTab, setActiveTabState] = useState<NavTab>('search');
+
+  const setActiveTab = (tab: NavTab) => {
+    setActiveTabState(tab);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', tab);
+      window.history.pushState({}, '', url.toString());
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab') as NavTab;
+      const validTabs: NavTab[] = [
+        'search', 'pnr', 'live', 'trips', 'payments',
+        'refunds', 'help', 'station', 'reviews', 'microservices'
+      ];
+      if (tabParam && validTabs.includes(tabParam)) {
+        setActiveTabState(tabParam);
+      }
+
+      const handlePopState = () => {
+        const p = new URLSearchParams(window.location.search);
+        const t = p.get('tab') as NavTab;
+        if (t && validTabs.includes(t)) {
+          setActiveTabState(t);
+        }
+      };
+
+      window.addEventListener('popstate', handlePopState);
+      return () => window.removeEventListener('popstate', handlePopState);
+    }
+  }, []);
 
   // Search Engine Form State
   const [fromCode, setFromCode] = useState('BCT');

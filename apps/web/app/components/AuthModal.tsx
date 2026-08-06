@@ -54,7 +54,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     if (!email.includes('@')) { setError('Enter a valid email.'); return; }
     if (password.length < 6)  { setError('Password must be at least 6 characters.'); return; }
     if (isSignUp && !name.trim()) { setError('Enter your name.'); return; }
-    mockLogin(isSignUp ? name.trim() : 'Demo User', email);
+    const userName = isSignUp
+      ? name.trim()
+      : (email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Demo User');
+    mockLogin(userName, email);
   };
 
   return (
