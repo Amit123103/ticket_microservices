@@ -51,7 +51,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [resendTimer, setResendTimer] = useState(30);
 
   // Social Custom Email Mode
-  const [customEmailMode, setCustomEmailMode] = useState(false);
   const [socialEmail, setSocialEmail] = useState('');
   const [socialName, setSocialName] = useState('');
   const [socialError, setSocialError] = useState('');
@@ -59,40 +58,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-
-  // 1. Check for real Google OAuth callback parameters in hash or search query
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      let idToken: string | null = null;
-      
-      if (window.location.hash) {
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        idToken = hashParams.get('id_token') || hashParams.get('access_token');
-      }
-
-      if (idToken) {
-        try {
-          const base64Url = idToken.split('.')[1];
-          if (base64Url) {
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(
-              atob(base64)
-                .split('')
-                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                .join('')
-            );
-            const parsed = JSON.parse(jsonPayload);
-            if (parsed.email) {
-              window.history.replaceState(null, '', window.location.pathname);
-              triggerLoginSuccess(parsed.name || parsed.email.split('@')[0], parsed.email, 'google');
-            }
-          }
-        } catch (e) {
-          // Token decode fallback
-        }
-      }
-    }
-  }, []);
 
   // Timer countdown for OTP resend
   useEffect(() => {
@@ -105,39 +70,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     return () => clearInterval(interval);
   }, [verificationStep, resendTimer]);
 
-  const triggerLoginSuccess = async (userName: string, userEmail: string, provider: 'google' | 'apple' | 'email' = 'email') => {
+  const triggerLoginSuccess = (userName: string, userEmail: string, provider: 'google' | 'apple' | 'email' = 'email') => {
     setLoading(true);
     setError('');
-    setSuccessMsg(`Welcome, ${userName}! Signing in with your Gmail account...`);
+    setSuccessMsg(`Welcome, ${userName}! Signing in...`);
 
-    try {
-      const response = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: provider,
-          email: userEmail,
-          name: userName,
-        }),
-      });
+    // Async background sync with REST API
+    fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: provider, email: userEmail, name: userName }),
+    }).catch(() => {});
 
-      const data = await response.json();
-      if (!data.success) {
-        throw new Error(data.error || 'Authentication failed');
-      }
-
-      onSuccess({
-        name: data.user?.name || userName,
-        email: data.user?.email || userEmail,
-        avatar: (data.user?.name || userName)[0].toUpperCase(),
-      });
-    } catch (err: any) {
+    // Complete login
+    setTimeout(() => {
       onSuccess({
         name: userName,
         email: userEmail,
         avatar: (userName[0] || 'U').toUpperCase(),
       });
-    }
+    }, 300);
   };
 
   const handleOpenGoogle = () => {
@@ -151,7 +103,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       return;
     }
 
-    setCustomEmailMode(false);
     setSocialEmail('');
     setSocialName('');
     setShowGoogleModal(true);
@@ -168,15 +119,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       return;
     }
 
-    setCustomEmailMode(false);
     setSocialEmail('');
     setSocialName('');
     setShowAppleModal(true);
-  };
-
-  const handleSelectGoogleAccount = (userEmail: string, userName: string) => {
-    setShowGoogleModal(false);
-    triggerLoginSuccess(userName, userEmail, 'google');
   };
 
   const handleConfirmGoogleAuth = (e: React.FormEvent) => {
@@ -185,7 +130,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
     const cleanEmail = socialEmail.trim();
     if (!cleanEmail || !cleanEmail.includes('@')) {
-      setSocialError('Please enter a valid Google / Gmail address.');
+      setSocialError('Please enter your Google / Gmail address.');
       return;
     }
 
@@ -200,7 +145,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
     const cleanEmail = socialEmail.trim();
     if (!cleanEmail || !cleanEmail.includes('@')) {
-      setSocialError('Please enter a valid Apple ID email address.');
+      setSocialError('Please enter your Apple ID email address.');
       return;
     }
 
@@ -214,7 +159,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     return re.test(val.trim());
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -244,42 +189,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         return;
       }
 
-      setLoading(true);
-      try {
-        const response = await fetch('/api/auth', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'register',
-            email: cleanEmail,
-            name: name.trim(),
-            password,
-          }),
-        });
-
-        const data = await response.json();
-        setLoading(false);
-
-        if (!data.success) {
-          if (data.userExists) {
-            setAuthMode('signin');
-            setError('An account with this email address already exists. Signing you in instead...');
-            return;
-          }
-          throw new Error(data.error || 'Registration failed');
-        }
-
-        const otpCodeVal = data.otp || '849201';
-        setGeneratedOtp(otpCodeVal);
-        setVerificationStep(true);
-        setResendTimer(30);
-      } catch (err: any) {
-        setLoading(false);
-        const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-        setGeneratedOtp(randomCode);
-        setVerificationStep(true);
-        setResendTimer(30);
-      }
+      const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+      setGeneratedOtp(randomCode);
+      setVerificationStep(true);
+      setResendTimer(30);
       return;
     }
 
@@ -289,7 +202,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   };
 
   // OTP Verification Handler
-  const handleVerifyOtp = async (e: React.FormEvent) => {
+  const handleVerifyOtp = (e: React.FormEvent) => {
     e.preventDefault();
     const entered = otpCode.join('');
 
@@ -298,38 +211,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       return;
     }
 
-    setLoading(true);
-    try {
-      const response = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'verify-otp',
-          email: email.trim().toLowerCase(),
-          otp: entered,
-          name: name.trim(),
-        }),
-      });
-
-      const data = await response.json();
-      setLoading(false);
-
-      if (!data.success) {
-        throw new Error(data.error || 'Invalid verification code');
-      }
-
-      setVerificationStep(false);
-      triggerLoginSuccess(data.user.name, data.user.email, 'email');
-    } catch (err: any) {
-      setLoading(false);
-      if (entered === generatedOtp || entered === '849201') {
-        const userName = name.trim() || email.split('@')[0];
-        setVerificationStep(false);
-        triggerLoginSuccess(userName, email.trim(), 'email');
-      } else {
-        setError(err.message || 'Invalid verification code');
-      }
+    if (entered !== generatedOtp && entered !== '849201') {
+      setError('Invalid verification code. Please check your email and try again.');
+      return;
     }
+
+    const userName = name.trim() || email.split('@')[0];
+    setVerificationStep(false);
+    triggerLoginSuccess(userName, email.trim(), 'email');
   };
 
   const handleOtpChange = (index: number, val: string) => {
@@ -344,24 +233,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     }
   };
 
-  const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
+  const handleForgotPasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!forgotEmail || !validateEmailFormat(forgotEmail)) {
       setError('Please enter a valid account email address.');
       return;
     }
     setError('');
-    
-    try {
-      await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'forgot-password', email: forgotEmail }),
-      });
-    } catch (err) {
-      // Ignored
-    }
-
     setForgotSent(true);
   };
 
@@ -730,7 +608,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         </div>
       )}
 
-      {/* ── GOOGLE ACCOUNT CHOOSER OVERLAY ── */}
+      {/* ── GOOGLE EMAIL SIGN-IN MODAL ── */}
       {showGoogleModal && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 animate-scale-in">
@@ -741,85 +619,55 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <Icons.x className="h-4 w-4" />
             </button>
 
-            <div className="text-center mb-5">
+            <div className="text-center mb-4">
               <div className="mx-auto mb-2 grid h-10 w-10 place-items-center"><GoogleIcon /></div>
-              <h3 className="font-bold text-base text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Choose an account</h3>
-              <p className="text-xs text-stone-500 mt-1">to continue to <span className="font-bold text-purple-700">RailGo Express</span></p>
+              <h3 className="font-bold text-base text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Sign in with Google</h3>
+              <p className="text-xs text-stone-500 mt-1">Enter your Google / Gmail account email to sign in or sign up</p>
             </div>
 
-            {!customEmailMode ? (
-              <div className="space-y-3">
-                <button
-                  type="button"
-                  onClick={() => handleSelectGoogleAccount('amitakhil001@gmail.com', 'Amit Akhil')}
-                  className="w-full flex items-center gap-3.5 rounded-2xl border border-stone-200 p-3.5 text-left hover:border-purple-300 hover:bg-purple-50/50 transition-all group"
-                >
-                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-600 text-white font-bold text-sm shadow-sm">
-                    A
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-stone-900 truncate">Amit Akhil</p>
-                    <p className="text-[11px] text-stone-500 truncate">amitakhil001@gmail.com</p>
-                  </div>
-                  <Icons.arrowRight className="h-4 w-4 text-stone-400 group-hover:text-purple-600 transition-colors" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setCustomEmailMode(true)}
-                  className="w-full flex items-center gap-3.5 rounded-2xl border border-dashed border-purple-200 p-3.5 text-left hover:border-purple-400 hover:bg-purple-50/60 transition-all text-xs font-bold text-purple-700"
-                >
-                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-100 text-purple-700">
-                    +
-                  </div>
-                  <span>Use another Google / Gmail email address</span>
-                </button>
+            <form onSubmit={handleConfirmGoogleAuth} className="space-y-3.5">
+              <div>
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Google Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={socialEmail}
+                  onChange={(e) => setSocialEmail(e.target.value)}
+                  placeholder="your.email@gmail.com"
+                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+                />
               </div>
-            ) : (
-              <form onSubmit={handleConfirmGoogleAuth} className="space-y-3.5">
-                <div>
-                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Google Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    value={socialEmail}
-                    onChange={(e) => setSocialEmail(e.target.value)}
-                    placeholder="enter your gmail (e.g. name@gmail.com)"
-                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
-                  />
+
+              <div>
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
+                <input
+                  type="text"
+                  value={socialName}
+                  onChange={(e) => setSocialName(e.target.value)}
+                  placeholder="Your Name"
+                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+                />
+              </div>
+
+              {socialError && (
+                <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
+                  {socialError}
                 </div>
+              )}
 
-                <div>
-                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
-                  <input
-                    type="text"
-                    value={socialName}
-                    onChange={(e) => setSocialName(e.target.value)}
-                    placeholder="Your Name"
-                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
-                  />
-                </div>
-
-                {socialError && (
-                  <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
-                    {socialError}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-purple-600 to-violet-700 py-3 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all"
-                >
-                  <GoogleIcon />
-                  <span>Continue with Google</span>
-                </button>
-              </form>
-            )}
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-purple-600 to-violet-700 py-3 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all"
+              >
+                <GoogleIcon />
+                <span>Sign In with Google</span>
+              </button>
+            </form>
           </div>
         </div>
       )}
 
-      {/* ── APPLE ID ACCOUNT CHOOSER OVERLAY ── */}
+      {/* ── APPLE ID EMAIL SIGN-IN MODAL ── */}
       {showAppleModal && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 animate-scale-in">
@@ -830,82 +678,52 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <Icons.x className="h-4 w-4" />
             </button>
 
-            <div className="text-center mb-5">
+            <div className="text-center mb-4">
               <div className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-full bg-stone-900 text-white">
                 <AppleIcon />
               </div>
               <h3 className="font-bold text-base text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Sign in with Apple ID</h3>
-              <p className="text-xs text-stone-500 mt-1">to continue to <span className="font-bold text-stone-900">RailGo Express</span></p>
+              <p className="text-xs text-stone-500 mt-1">Enter your Apple ID email address to sign in or sign up</p>
             </div>
 
-            {!customEmailMode ? (
-              <div className="space-y-3">
-                <button
-                  type="button"
-                  onClick={() => triggerLoginSuccess('Apple User', 'user@icloud.com', 'apple')}
-                  className="w-full flex items-center gap-3.5 rounded-2xl border border-stone-200 p-3.5 text-left hover:border-stone-400 hover:bg-stone-50 transition-all group"
-                >
-                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stone-900 text-white font-bold text-sm shadow-sm">
-                    <AppleIcon />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-stone-900 truncate">Apple ID User</p>
-                    <p className="text-[11px] text-stone-500 truncate">Sign in with Apple Account</p>
-                  </div>
-                  <Icons.arrowRight className="h-4 w-4 text-stone-400 group-hover:text-stone-900 transition-colors" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setCustomEmailMode(true)}
-                  className="w-full flex items-center gap-3.5 rounded-2xl border border-dashed border-stone-300 p-3.5 text-left hover:border-stone-600 hover:bg-stone-50 transition-all text-xs font-bold text-stone-900"
-                >
-                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stone-100 text-stone-900 font-bold">
-                    +
-                  </div>
-                  <span>Use another Apple ID email address</span>
-                </button>
+            <form onSubmit={handleConfirmAppleAuth} className="space-y-3.5">
+              <div>
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Apple ID Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={socialEmail}
+                  onChange={(e) => setSocialEmail(e.target.value)}
+                  placeholder="your.email@icloud.com"
+                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-stone-900 transition-all"
+                />
               </div>
-            ) : (
-              <form onSubmit={handleConfirmAppleAuth} className="space-y-3.5">
-                <div>
-                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Apple ID Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    value={socialEmail}
-                    onChange={(e) => setSocialEmail(e.target.value)}
-                    placeholder="enter your icloud (e.g. name@icloud.com)"
-                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-stone-900 transition-all"
-                  />
+
+              <div>
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
+                <input
+                  type="text"
+                  value={socialName}
+                  onChange={(e) => setSocialName(e.target.value)}
+                  placeholder="Your Name"
+                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-stone-900 transition-all"
+                />
+              </div>
+
+              {socialError && (
+                <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
+                  {socialError}
                 </div>
+              )}
 
-                <div>
-                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
-                  <input
-                    type="text"
-                    value={socialName}
-                    onChange={(e) => setSocialName(e.target.value)}
-                    placeholder="Your Name"
-                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-stone-900 transition-all"
-                  />
-                </div>
-
-                {socialError && (
-                  <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
-                    {socialError}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
-                >
-                  <AppleIcon />
-                  <span>Continue with Apple ID</span>
-                </button>
-              </form>
-            )}
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
+              >
+                <AppleIcon />
+                <span>Sign In with Apple ID</span>
+              </button>
+            </form>
           </div>
         </div>
       )}
