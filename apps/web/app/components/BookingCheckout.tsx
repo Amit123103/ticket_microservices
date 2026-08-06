@@ -130,15 +130,15 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
               <div>
                 <label className="field-label">Mobile Number</label>
                 <div className="relative mt-1">
-                  <Icons.phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
-                  <input type="text" value={mobile} onChange={(e) => setMobile(e.target.value)} className="field-control pl-10" />
+                  <Icons.phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 z-10" />
+                  <input type="text" value={mobile} onChange={(e) => setMobile(e.target.value)} className="field-control" style={{ paddingLeft: '2.5rem' }} />
                 </div>
               </div>
               <div>
                 <label className="field-label">Email</label>
                 <div className="relative mt-1">
-                  <Icons.mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="field-control pl-10" />
+                  <Icons.mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 z-10" />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="field-control" style={{ paddingLeft: '2.5rem' }} />
                 </div>
               </div>
             </div>

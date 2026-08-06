@@ -353,6 +353,9 @@
   outline: none;
   font-family: 'Inter', sans-serif;
 }
+.field-control.pl-10, input.field-control.pl-10 {
+  padding-left: 2.5rem !important;
+}
 .field-control:focus {
   border-color: var(--brand);
   box-shadow: 0 0 0 3px var(--brand-glow);

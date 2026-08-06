@@ -68,8 +68,8 @@ export const PaymentHistoryView: React.FC = () => {
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 max-w-md">
-          <Icons.search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
-          <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search by Transaction ID, PNR or Train..." className="field-control pl-10" />
+          <Icons.search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400 z-10" />
+          <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search by Transaction ID, PNR or Train..." className="field-control" style={{ paddingLeft: '2.5rem' }} />
         </div>
         <div className="flex items-center gap-2">
           <Icons.filter className="h-4 w-4 text-stone-400" />
