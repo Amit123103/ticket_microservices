@@ -62,7 +62,7 @@ export const PaymentHistoryView: React.FC = () => {
         <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm hover:shadow-md transition-all">
           <span className="text-xs font-bold uppercase tracking-wider text-stone-500">Primary Payment Method</span>
           <p className="mt-2 text-xl font-bold text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>UPI (GPay)</p>
-          <span className="mt-1 inline-block text-xs text-orange-500">Default checkout method</span>
+          <span className="mt-1 inline-block text-xs text-purple-600">Default checkout method</span>
         </div>
       </div>
 
@@ -75,7 +75,7 @@ export const PaymentHistoryView: React.FC = () => {
           <Icons.filter className="h-4 w-4 text-stone-400" />
           <span className="text-xs font-semibold text-stone-500">Filter:</span>
           {(['ALL', 'SUCCESS', 'FAILED', 'PENDING'] as const).map((st) => (
-            <button key={st} onClick={() => setStatusFilter(st)} className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${statusFilter === st ? 'bg-orange-600 text-white shadow-sm shadow-orange-500/20' : 'bg-white text-stone-500 border border-stone-200 hover:border-orange-300 hover:text-orange-700'}`}>{st}</button>
+            <button key={st} onClick={() => setStatusFilter(st)} className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${statusFilter === st ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/20' : 'bg-white text-stone-500 border border-stone-200 hover:border-purple-300 hover:text-purple-700'}`}>{st}</button>
           ))}
         </div>
       </div>
