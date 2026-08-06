@@ -70,13 +70,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         console.log('OAuth popup opened');
       }
     }
-    // Direct Google authentication
-    triggerLoginSuccess('Google User', 'user@gmail.com');
+    const userEmail = email.includes('@') ? email : 'amit.kumar@gmail.com';
+    const userName = name.trim() || (userEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()));
+    triggerLoginSuccess(userName, userEmail);
   };
 
   const handleAppleLogin = () => {
     setLoading(true);
-    triggerLoginSuccess('Apple User', 'user@icloud.com');
+    const userEmail = email.includes('@') ? email : 'amit.kumar@icloud.com';
+    const userName = name.trim() || (userEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()));
+    triggerLoginSuccess(userName, userEmail);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

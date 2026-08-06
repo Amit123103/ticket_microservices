@@ -34,12 +34,21 @@ import {
   BookingTicket,
 } from './data/trainData';
 
+const SESSION_STORAGE_KEY = 'railgo_user_session_v1';
+const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+
+interface SavedUserSession {
+  user: { name: string; email: string; avatar: string };
+  loginTime: number;
+}
+
 export default function Page() {
-  // Auth State — DEFAULT TO NOT LOGGED IN SO LANDING PAGE OPENS FIRST!
+  // Auth State
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<{ name: string; email: string; avatar: string } | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showLandingPage, setShowLandingPage] = useState(true);
+  const [sessionExpiredNotice, setSessionExpiredNotice] = useState(false);
 
   // Navigation Tab State with URL query sync
   const [activeTab, setActiveTabState] = useState<NavTab>('search');
@@ -49,28 +58,60 @@ export default function Page() {
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
       url.searchParams.set('tab', tab);
-      window.history.pushState({}, '', url.toString());
+      window.history.pushState({ tab }, '', url.toString());
     }
   };
 
+  // 1. PERSISTENT AUTH SESSION CHECK (24-Hour Auto Logout)
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get('tab') as NavTab;
+      try {
+        const rawSession = localStorage.getItem(SESSION_STORAGE_KEY);
+        if (rawSession) {
+          const session: SavedUserSession = JSON.parse(rawSession);
+          const now = Date.now();
+          const elapsed = now - session.loginTime;
+
+          if (elapsed < TWENTY_FOUR_HOURS_MS) {
+            // Valid session (<24 hours) -> Keep logged in!
+            setUser(session.user);
+            setIsLoggedIn(true);
+            setShowLandingPage(false);
+          } else {
+            // Expired (>= 24 hours) -> Auto logout!
+            localStorage.removeItem(SESSION_STORAGE_KEY);
+            setIsLoggedIn(false);
+            setUser(null);
+            setShowLandingPage(true);
+            setSessionExpiredNotice(true);
+          }
+        }
+      } catch (err) {
+        console.error('Session restoration error:', err);
+      }
+    }
+  }, []);
+
+  // 2. BROWSER HISTORY & BACK/FORWARD BUTTON POPSTATE EVENT
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
       const validTabs: NavTab[] = [
         'search', 'pnr', 'live', 'trips', 'payments',
         'refunds', 'help', 'station', 'reviews', 'microservices'
       ];
-      if (tabParam && validTabs.includes(tabParam)) {
-        setActiveTabState(tabParam);
-      }
+
+      const syncTabFromUrl = () => {
+        const params = new URLSearchParams(window.location.search);
+        const tabParam = params.get('tab') as NavTab;
+        if (tabParam && validTabs.includes(tabParam)) {
+          setActiveTabState(tabParam);
+        }
+      };
+
+      syncTabFromUrl();
 
       const handlePopState = () => {
-        const p = new URLSearchParams(window.location.search);
-        const t = p.get('tab') as NavTab;
-        if (t && validTabs.includes(t)) {
-          setActiveTabState(t);
-        }
+        syncTabFromUrl();
       };
 
       window.addEventListener('popstate', handlePopState);
@@ -102,7 +143,7 @@ export default function Page() {
   // User Trips State
   const [userTrips, setUserTrips] = useState<BookingTicket[]>(INITIAL_USER_TRIPS);
 
-  // Dynamic Route Solver — 100% working train search for ALL station pairs
+  // Dynamic Route Solver
   const displayTrains = getTrainsForRoute(fromCode, toCode, classFilter);
 
   const handleSearchSubmit = (e: FormEvent) => {
@@ -155,12 +196,25 @@ export default function Page() {
     setIsLoggedIn(true);
     setShowAuthModal(false);
     setShowLandingPage(false);
+    setSessionExpiredNotice(false);
+
+    // Save session to localStorage for 24-hour persistence across page refresh
+    if (typeof window !== 'undefined') {
+      const sessionData: SavedUserSession = {
+        user: loggedInUser,
+        loginTime: Date.now(),
+      };
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionData));
+    }
   };
 
   const handleLogout = () => {
     setUser(null);
     setIsLoggedIn(false);
     setShowLandingPage(true);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+    }
   };
 
   const getStationCity = (code: string) => {
@@ -171,6 +225,12 @@ export default function Page() {
   if (showLandingPage || !isLoggedIn) {
     return (
       <main className="min-h-screen bg-white text-stone-900">
+        {sessionExpiredNotice && (
+          <div className="bg-amber-500 text-white text-xs font-bold text-center py-2 px-4 sticky top-0 z-50">
+            Your session expired after 24 hours. Please log in again to continue.
+          </div>
+        )}
+
         <LandingPage
           onLogin={() => setShowAuthModal(true)}
         />
