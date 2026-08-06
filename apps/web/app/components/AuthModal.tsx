@@ -52,13 +52,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       onSuccess({
         name: userName,
         email: userEmail,
-        avatar: userName[0].toUpperCase(),
+        avatar: (userName[0] || 'U').toUpperCase(),
       });
-    }, 700);
+    }, 600);
   };
 
   const handleGoogleLogin = () => {
+    const cleanEmail = email.trim();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      setError('Please enter your Google / Gmail address in the email field to sign in.');
+      return;
+    }
+
+    setError('');
     setLoading(true);
+
     if (typeof window !== 'undefined') {
       const redirectUri = window.location.origin;
       const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
@@ -68,31 +76,39 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       try {
         window.open(googleAuthUrl, 'GoogleLogin', 'width=520,height=620');
       } catch (e) {
-        console.log('OAuth popup opened');
+        console.log('Google OAuth popup opened');
       }
     }
-    const userEmail = email.includes('@') ? email : 'amit.kumar@gmail.com';
-    const userName = name.trim() || (userEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()));
-    triggerLoginSuccess(userName, userEmail);
+
+    const userName = name.trim() || cleanEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    triggerLoginSuccess(userName, cleanEmail);
   };
 
   const handleAppleLogin = () => {
+    const cleanEmail = email.trim();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      setError('Please enter your Apple ID email address in the email field to sign in.');
+      return;
+    }
+
+    setError('');
     setLoading(true);
-    const userEmail = email.includes('@') ? email : 'amit.kumar@icloud.com';
-    const userName = name.trim() || (userEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()));
-    triggerLoginSuccess(userName, userEmail);
+
+    const userName = name.trim() || cleanEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    triggerLoginSuccess(userName, cleanEmail);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (!email.includes('@')) {
+    const cleanEmail = email.trim();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
       setError('Please enter a valid email address.');
       return;
     }
 
-    if (password.length < 6) {
+    if (!password || password.length < 6) {
       setError('Password must be at least 6 characters long.');
       return;
     }
@@ -117,9 +133,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
     const userName =
       authMode === 'signup'
         ? name.trim()
-        : email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Demo User';
+        : cleanEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
-    triggerLoginSuccess(userName, email);
+    triggerLoginSuccess(userName, cleanEmail);
   };
 
   return (
@@ -215,9 +231,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
                 <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name</label>
                 <input
                   type="text"
+                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Amit Kumar"
+                  placeholder="e.g. Amit Kumar"
                   className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
                 />
               </div>
@@ -228,9 +245,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Email Address</label>
               <input
                 type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="enter your email (e.g. name@domain.com)"
                 className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
               />
             </div>
@@ -262,6 +280,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <div className="relative mt-1">
                 <input
                   type={showPass ? 'text' : 'password'}
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
@@ -283,6 +302,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
                 <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Confirm Password</label>
                 <input
                   type={showPass ? 'text' : 'password'}
+                  required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
