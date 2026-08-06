@@ -24,9 +24,9 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({ onClose 
       <div className="relative w-full max-w-lg rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
         <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-4">
           <div className="flex items-center gap-2">
-            <Icons.bell className="h-5 w-5 text-orange-600" />
+            <Icons.bell className="h-5 w-5 text-purple-600" />
             <h3 className="font-bold text-stone-900 text-lg">Notifications</h3>
-            <span className="rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-orange-700 border border-orange-200">{notifs.length}</span>
+            <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-200">{notifs.length}</span>
           </div>
           <button onClick={onClose} className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all">
             <Icons.x className="h-5 w-5" />
@@ -34,7 +34,7 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({ onClose 
         </div>
         <div className="max-h-[70vh] overflow-y-auto p-4 space-y-2">
           {notifs.map((n) => (
-            <div key={n.id} className="flex items-start gap-3 rounded-2xl p-4 hover:border-orange-200 hover:bg-orange-50/30 transition-all cursor-pointer border border-transparent">
+            <div key={n.id} className="flex items-start gap-3 rounded-2xl p-4 hover:border-purple-200 hover:bg-purple-50/30 transition-all cursor-pointer border border-transparent">
               <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-stone-50 border border-stone-200">{getIcon(n.type)}</div>
               <div className="flex-1">
                 <p className="text-sm font-bold text-stone-800">{n.title}</p>
