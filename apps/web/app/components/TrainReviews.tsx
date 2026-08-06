@@ -19,7 +19,7 @@ export const TrainReviews: React.FC<TrainReviewsProps> = ({ train, onClose }) =>
       <div className="relative w-full max-w-2xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
         <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/20">
               <Icons.train className="h-5 w-5" />
             </div>
             <div>
@@ -35,7 +35,7 @@ export const TrainReviews: React.FC<TrainReviewsProps> = ({ train, onClose }) =>
         <div className="p-6 space-y-6">
           <div className="flex flex-wrap items-center gap-6 rounded-2xl bg-stone-50 p-5 border border-stone-200">
             <div className="text-center">
-              <span className="text-4xl font-black text-orange-600" style={{ fontFamily: 'Outfit, sans-serif' }}>{avgRating}</span>
+              <span className="text-4xl font-black text-purple-600" style={{ fontFamily: 'Outfit, sans-serif' }}>{avgRating}</span>
               <p className="text-xs text-stone-500 mt-1">Average Rating</p>
             </div>
             <div className="flex items-center gap-0.5">
@@ -48,10 +48,10 @@ export const TrainReviews: React.FC<TrainReviewsProps> = ({ train, onClose }) =>
 
           <div className="space-y-4">
             {reviews.map((r, i) => (
-              <div key={i} className="rounded-2xl border border-stone-200 bg-white p-5 hover:border-orange-200 transition-all">
+              <div key={i} className="rounded-2xl border border-purple-100 bg-white p-5 hover:border-purple-300 transition-all">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="grid h-9 w-9 place-items-center rounded-full bg-orange-50 text-orange-700 font-bold text-sm border border-orange-200">{r.user[0]}</div>
+                    <div className="grid h-9 w-9 place-items-center rounded-full bg-purple-50 text-purple-700 font-bold text-sm border border-purple-200">{r.user[0]}</div>
                     <div>
                       <p className="font-bold text-stone-900 text-sm">{r.user}</p>
                       <div className="flex items-center gap-1 mt-0.5">
