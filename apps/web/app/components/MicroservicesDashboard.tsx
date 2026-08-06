@@ -52,9 +52,9 @@ export const MicroservicesDashboard: React.FC = () => {
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
         {[
-          { l: 'Total Services', v: '28', c: 'text-orange-700' },
+          { l: 'Total Services', v: '28', c: 'text-purple-700' },
           { l: 'Healthy', v: '28/28', c: 'text-emerald-700' },
-          { l: 'Avg Latency', v: '102ms', c: 'text-orange-700' },
+          { l: 'Avg Latency', v: '102ms', c: 'text-purple-700' },
           { l: 'Avg Uptime', v: '99.96%', c: 'text-emerald-700' }
         ].map(({ l, v, c }) => (
           <div key={l} className="rounded-2xl border border-stone-200 bg-white p-5 text-center shadow-sm hover:shadow-md transition-all">
@@ -67,7 +67,7 @@ export const MicroservicesDashboard: React.FC = () => {
       <div className="mb-6 flex flex-wrap items-center gap-2 justify-center">
         {categories.map((cat) => (
           <button key={cat} onClick={() => setSelectedCategory(cat)}
-            className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${selectedCategory===cat?'bg-orange-600 text-white shadow-lg shadow-orange-500/20':'bg-white text-stone-600 border border-stone-200 hover:border-orange-300 hover:text-orange-700'}`}>{cat}</button>
+            className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${selectedCategory===cat?'bg-purple-600 text-white shadow-lg shadow-purple-500/20':'bg-white text-stone-600 border border-stone-200 hover:border-purple-300 hover:text-purple-700'}`}>{cat}</button>
         ))}
       </div>
 
@@ -75,9 +75,9 @@ export const MicroservicesDashboard: React.FC = () => {
         {filtered.map((svc, idx) => {
           const Icon = svc.icon;
           return (
-            <div key={idx} className="group rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition-all hover:shadow-lg hover:shadow-stone-200/50 hover:border-orange-300">
+            <div key={idx} className="group rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition-all hover:shadow-lg hover:shadow-stone-200/50 hover:border-purple-300">
               <div className="flex items-start justify-between mb-3">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-orange-50 text-orange-600 border border-orange-200 group-hover:bg-orange-100 transition-colors">
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-purple-50 text-purple-600 border border-purple-200 group-hover:bg-purple-100 transition-colors">
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700 border border-emerald-200">
@@ -87,7 +87,7 @@ export const MicroservicesDashboard: React.FC = () => {
               <h4 className="font-bold text-stone-900 text-sm">{svc.name}</h4>
               <p className="text-[11px] text-stone-500 mt-1 leading-relaxed">{svc.description}</p>
               <div className="mt-3 flex items-center justify-between border-t border-stone-100 pt-3">
-                <div className="text-center"><span className="text-[9px] font-bold uppercase text-stone-400">Latency</span><p className="text-xs font-bold text-orange-700">{svc.latency}</p></div>
+                <div className="text-center"><span className="text-[9px] font-bold uppercase text-stone-400">Latency</span><p className="text-xs font-bold text-purple-700">{svc.latency}</p></div>
                 <div className="text-center"><span className="text-[9px] font-bold uppercase text-stone-400">Uptime</span><p className="text-xs font-bold text-emerald-700">{svc.uptime}</p></div>
                 <div className="text-center"><span className="text-[9px] font-bold uppercase text-stone-400">Category</span><p className="text-xs font-bold text-stone-600">{svc.category}</p></div>
               </div>
