@@ -37,7 +37,7 @@ export const ReviewsView: React.FC = () => {
           { l: 'Satisfaction', v: '92%' }
         ].map(({ l, v }) => (
           <div key={l} className="rounded-2xl border border-stone-200 bg-white p-5 text-center shadow-sm hover:shadow-md transition-all">
-            <p className="text-2xl font-bold text-orange-700" style={{ fontFamily: 'Outfit, sans-serif' }}>{v}</p>
+            <p className="text-2xl font-bold text-purple-700" style={{ fontFamily: 'Outfit, sans-serif' }}>{v}</p>
             <p className="text-xs font-medium text-stone-500 mt-1">{l}</p>
           </div>
         ))}
@@ -70,14 +70,14 @@ export const ReviewsView: React.FC = () => {
 
       <div className="space-y-4">
         {reviews.map((r) => (
-          <article key={r.id} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-orange-200 transition-all">
+          <article key={r.id} className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-purple-200 transition-all">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-full bg-orange-50 text-orange-700 font-bold text-sm border border-orange-200">{r.user[0]}</div>
+                <div className="grid h-10 w-10 place-items-center rounded-full bg-purple-50 text-purple-700 font-bold text-sm border border-purple-200">{r.user[0]}</div>
                 <div>
                   <p className="font-bold text-stone-900 text-sm">{r.user}</p>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <Icons.train className="h-3.5 w-3.5 text-orange-600" />
+                    <Icons.train className="h-3.5 w-3.5 text-purple-600" />
                     <span className="text-xs text-stone-500">{r.train}</span>
                   </div>
                 </div>
@@ -93,7 +93,7 @@ export const ReviewsView: React.FC = () => {
               <div className="flex items-center gap-1.5 text-xs text-stone-400">
                 <Icons.clock className="h-3 w-3" /> {r.date}
               </div>
-              <button className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-orange-600 transition-colors font-medium">
+              <button className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-purple-600 transition-colors font-medium">
                 <Icons.thumbsUp className="h-3.5 w-3.5" /> {r.likes}
               </button>
             </div>
