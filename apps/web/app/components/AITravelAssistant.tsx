@@ -62,7 +62,7 @@ export const AITravelAssistant: React.FC = () => {
               <div
                 className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl text-white font-bold ${
                   m.role === 'ai'
-                    ? 'bg-gradient-to-tr from-orange-600 to-orange-700 shadow-lg shadow-orange-500/20'
+                    ? 'bg-gradient-to-tr from-purple-600 to-violet-600 shadow-lg shadow-purple-500/20'
                     : 'bg-stone-200 text-stone-600'
                 }`}
               >
@@ -73,7 +73,7 @@ export const AITravelAssistant: React.FC = () => {
                 className={`max-w-[80%] rounded-2xl p-4 text-sm font-medium leading-relaxed ${
                   m.role === 'ai'
                     ? 'bg-white border border-stone-200 text-stone-800 shadow-sm'
-                    : 'bg-orange-600 text-white shadow-lg shadow-orange-500/20'
+                    : 'bg-purple-600 text-white shadow-lg shadow-purple-500/20'
                 }`}
               >
                 {m.text}
@@ -82,7 +82,7 @@ export const AITravelAssistant: React.FC = () => {
           ))}
 
           {isThinking && (
-            <div className="flex items-center gap-2 text-sm font-semibold text-orange-600">
+            <div className="flex items-center gap-2 text-sm font-semibold text-purple-600">
               <Icons.refresh className="h-4 w-4 animate-spin" />
               <span>RailAI microservice analyzing parameters...</span>
             </div>
@@ -100,7 +100,7 @@ export const AITravelAssistant: React.FC = () => {
               key={prompt}
               type="button"
               onClick={() => handleSend(prompt)}
-              className="rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-semibold text-stone-600 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700 transition-all"
+              className="rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-semibold text-stone-600 hover:border-purple-300 hover:bg-purple-50 hover:text-purple-700 transition-all"
             >
               <Icons.sparkles className="h-3.5 w-3.5 inline mr-1" />{prompt}
             </button>
