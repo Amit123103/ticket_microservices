@@ -137,9 +137,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
         {/* Modal Top Header */}
         <div className="px-6 pt-7 pb-4 text-center border-b border-purple-50">
-          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-md shadow-purple-500/25">
-            <span className="font-extrabold text-base tracking-tight">RG</span>
-          </div>
+          <Logo showText={false} className="h-12 w-auto mx-auto mb-3" />
           <h2 className="text-xl font-bold text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>
             {authMode === 'signin' ? 'Sign In to RailGo' : 'Create RailGo Account'}
           </h2>
