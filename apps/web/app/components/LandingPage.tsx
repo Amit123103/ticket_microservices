@@ -1,7 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Logo } from './Logo';
+
+const TRAIN_BG_IMAGES = [
+  'https://images.unsplash.com/photo-1532105956626-9569c03602f6?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1515165562839-978402923d5c?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1558694440-03aed0a29482?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1527684651001-731c474bbb5a?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=2000&q=80',
+  'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=2000&q=80',
+];
 
 interface LandingPageProps {
   onLogin: () => void;
@@ -114,6 +127,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
   const [activePanelTab, setActivePanelTab] = useState<'trains' | 'features'>('trains');
   const [selectedTrainIndex, setSelectedTrainIndex] = useState(0);
 
+  const [bgIndex, setBgIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBgIndex((prev) => (prev + 1) % TRAIN_BG_IMAGES.length);
+    }, 2000); // 2 SECONDS AUTOMATIC DELAY!
+
+    return () => clearInterval(timer);
+  }, []);
+
   const currentTrain = SPECIAL_TRAINS[selectedTrainIndex];
 
   return (
@@ -152,10 +175,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
 
       {/* ── Hero Section ── */}
       <section className="relative overflow-hidden px-4 pt-12 pb-14 sm:px-6 lg:px-8">
-        <div className="pointer-events-none absolute -top-32 left-1/3 h-96 w-96 rounded-full bg-purple-200/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 right-1/4 h-80 w-80 rounded-full bg-indigo-200/20 blur-3xl" />
+        {/* 10 Automated Background Images Slideshow Carousel (2s Delay) */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          {TRAIN_BG_IMAGES.map((img, idx) => (
+            <div
+              key={img}
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
+                bgIndex === idx ? 'opacity-30 scale-105 transition-all duration-1000' : 'opacity-0 scale-100'
+              }`}
+              style={{ backgroundImage: `url(${img})` }}
+            />
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-50/90 via-white/80 to-purple-50/95 backdrop-blur-[2px]" />
+        </div>
 
-        <div className="relative mx-auto max-w-4xl text-center">
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
           <div className="section-pill mb-3 normal-case font-medium text-[11px]">
             AI-Powered Indian Railways Microservices Platform
           </div>
