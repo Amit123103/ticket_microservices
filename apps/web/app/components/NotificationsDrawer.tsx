@@ -13,7 +13,7 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({ onClos
     <div className="fixed inset-0 z-50 flex justify-end bg-stone-950/40 backdrop-blur-sm">
       <div className="h-full w-full max-w-md border-l border-stone-200 bg-white shadow-2xl shadow-stone-300/30 space-y-6 overflow-y-auto animate-slide-in-right">
         <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
-          <div className="flex items-center gap-2 text-orange-600 font-bold">
+          <div className="flex items-center gap-2 text-purple-600 font-bold">
             <Icons.bell className="h-5 w-5" />
             <span>Notifications</span>
           </div>
@@ -30,7 +30,7 @@ export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({ onClos
             <div
               key={n.id}
               className={`rounded-2xl border p-4 space-y-1.5 transition-all hover:shadow-sm ${
-                n.read ? 'border-stone-200 bg-stone-50/50 opacity-75' : 'border-orange-200 bg-orange-50/30'
+                n.read ? 'border-stone-200 bg-stone-50/50 opacity-75' : 'border-purple-200 bg-purple-50/30'
               }`}
             >
               <div className="flex items-center justify-between">
