@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Logo } from './Logo';
 
 interface LandingPageProps {
   onLogin: () => void;
@@ -121,21 +122,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
       {/* ── Sticky Navigation Header ── */}
       <header className="sticky top-0 z-50 border-b border-purple-100 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-md shadow-purple-500/20">
-              <span className="font-extrabold text-sm tracking-tighter">RG</span>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-lg text-stone-900 leading-none" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                  RailGo
-                </span>
-                <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-200">
-                  28 MESH
-                </span>
-              </div>
-              <p className="text-[10px] text-stone-400 mt-0.5 leading-none">IRCTC Express Partner</p>
-            </div>
+          <div className="cursor-pointer">
+            <Logo className="h-10 w-auto" />
           </div>
 
           <nav className="hidden items-center gap-7 md:flex text-xs font-semibold text-stone-600">

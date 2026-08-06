@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Icons } from './Icons';
+import { Logo } from './Logo';
 
 interface AuthModalProps {
   onClose: () => void;

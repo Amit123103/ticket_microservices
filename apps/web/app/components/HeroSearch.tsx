@@ -2,6 +2,7 @@
 
 import React, { FormEvent } from 'react';
 import { Icons } from './Icons';
+import { Logo } from './Logo';
 import { STATIONS } from '../data/trainData';
 
 interface HeroSearchProps {
@@ -47,6 +48,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
       <div className="mx-auto max-w-7xl">
         {/* Banner Header */}
         <div className="mx-auto max-w-3xl text-center mb-5">
+          <Logo showText={false} className="h-12 w-auto mx-auto mb-2" />
           <div className="section-pill mb-2 normal-case font-medium text-[11px]">
             Authorized IRCTC Partner • Zero Cancellation Fee
           </div>
