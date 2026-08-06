@@ -80,16 +80,16 @@ export const Logo: React.FC<LogoProps> = ({ className = 'h-10 w-auto', size, sho
       {/* Brand Text */}
       {showText && (
         <div className="flex flex-col">
-          <div className="flex items-center gap-1.5 leading-none">
-            <span className="font-extrabold text-xl tracking-tight text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <div className="flex items-center gap-2 leading-none">
+            <span className="font-extrabold text-xl sm:text-2xl tracking-tight gradient-text" style={{ fontFamily: 'Outfit, sans-serif' }}>
               RailGo
             </span>
-            <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[9px] font-extrabold text-purple-700 border border-purple-200">
-              28 MESH
+            <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-200">
+              28 Mesh
             </span>
           </div>
-          <span className="text-[10px] font-bold text-stone-400 mt-0.5 tracking-wide uppercase">
-            IRCTC NextGen Partner
+          <span className="text-[11px] font-medium text-stone-500 mt-1 leading-none">
+            Official IRCTC Express Partner
           </span>
         </div>
       )}
