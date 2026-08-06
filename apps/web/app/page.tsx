@@ -154,11 +154,18 @@ export default function Page() {
   // ONCE LOGGED IN -> RENDER FULL APP & TICKET BOOKING DASHBOARD
   return (
     <main className="min-h-screen antialiased selection:bg-purple-500 selection:text-white bg-purple-900/10 text-white">
-      {/* Navigation Options */}
+      {/* Top Header & Navigation Options */}
       <PageNavbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         tripCount={userTrips.filter((t) => t.status === 'CONFIRMED').length}
+        user={user}
+        onOpenWallet={() => setShowWalletModal(true)}
+        onOpenNotifications={() => setShowNotificationsDrawer(true)}
+        onOpenECatering={() => setShowECateringModal(true)}
+        onOpenAiAssistant={() => setShowAiAssistantModal(true)}
+        onLogout={handleLogout}
+        onGoHome={() => setActiveTab('search')}
       />
 
       {/* AI Assistant Drawer Header */}
