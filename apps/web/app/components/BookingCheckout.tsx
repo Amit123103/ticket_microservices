@@ -66,8 +66,8 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
           {steps.map(({ n, l, icon: Icon }, i) => (
             <React.Fragment key={n}>
               {i > 0 && <div className="h-px w-8 bg-stone-200" />}
-              <button onClick={() => setStep(n as any)} className={`flex items-center gap-2 text-xs font-semibold transition-colors ${step >= n ? 'text-orange-700' : 'text-stone-400'}`}>
-                <div className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-bold transition-all ${step >= n ? 'bg-orange-600 text-white shadow-sm shadow-orange-500/20' : 'bg-stone-100 text-stone-400'}`}>
+              <button onClick={() => setStep(n as any)} className={`flex items-center gap-2 text-xs font-semibold transition-colors ${step >= n ? 'text-purple-700' : 'text-stone-400'}`}>
+                <div className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-bold transition-all ${step >= n ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/20' : 'bg-stone-100 text-stone-400'}`}>
                   {step > n ? <Icons.sparkles className="h-3.5 w-3.5" /> : n}
                 </div>
                 <span className="hidden sm:inline">{l}</span>
@@ -80,9 +80,9 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
           {step === 1 && <div className="space-y-5">
             <h4 className="font-bold text-stone-900 text-base">Passenger Information</h4>
             {passengers.map((p, idx) => (
-              <div key={idx} className="rounded-2xl border border-stone-200 bg-white p-5 space-y-4 shadow-sm">
+              <div key={idx} className="rounded-2xl border border-purple-100 bg-white p-5 space-y-4 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-orange-600">Passenger {idx + 1}</span>
+                  <span className="text-xs font-bold text-purple-600">Passenger {idx + 1}</span>
                   <span className="text-xs font-mono font-semibold text-stone-500 bg-stone-50 px-2 py-1 rounded-lg">{p.seatAssigned}</span>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-3">
@@ -142,18 +142,18 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
                 </div>
               </div>
             </div>
-            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-orange-300 hover:shadow-sm transition-all cursor-pointer">
-              <input type="checkbox" checked={includeFreeCancellation} onChange={(e) => setIncludeFreeCancellation(e.target.checked)} className="mt-1 h-4 w-4 accent-orange-600" />
+            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-purple-300 hover:shadow-sm transition-all cursor-pointer">
+              <input type="checkbox" checked={includeFreeCancellation} onChange={(e) => setIncludeFreeCancellation(e.target.checked)} className="mt-1 h-4 w-4 accent-purple-600" />
               <div className="flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-bold text-stone-800 text-sm">Free Cancellation (+₹99)</span>
-                  <span className="rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-bold text-orange-700 border border-orange-200">Recommended</span>
+                  <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-200">Recommended</span>
                 </div>
                 <p className="text-xs text-stone-500 mt-1">100% refund before chart preparation.</p>
               </div>
             </label>
-            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-orange-300 hover:shadow-sm transition-all cursor-pointer">
-              <input type="checkbox" checked={includeInsurance} onChange={(e) => setIncludeInsurance(e.target.checked)} className="mt-1 h-4 w-4 accent-orange-600" />
+            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-purple-300 hover:shadow-sm transition-all cursor-pointer">
+              <input type="checkbox" checked={includeInsurance} onChange={(e) => setIncludeInsurance(e.target.checked)} className="mt-1 h-4 w-4 accent-purple-600" />
               <div className="flex-1">
                 <span className="font-bold text-stone-800 text-sm">Travel Insurance (+₹0.45/pax)</span>
                 <p className="text-xs text-stone-500 mt-1">Coverage up to ₹10,00,000.</p>
@@ -172,9 +172,9 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[{id:'UPI',l:'UPI / GPay',i:Icons.smartphone},{id:'Card',l:'Cards',i:Icons.creditCard},{id:'NetBanking',l:'Net Banking',i:Icons.building},{id:'Wallet',l:'Wallet',i:Icons.wallet}].map(({id,l,i:Icon}) => (
                 <button key={id} onClick={() => setPaymentMethod(id as any)}
-                  className={`flex flex-col items-center gap-3 rounded-2xl border p-5 transition-all ${paymentMethod===id?'border-orange-400 bg-orange-50 shadow-sm shadow-orange-500/10':'border-stone-200 hover:border-orange-300 hover:bg-orange-50/30'}`}>
-                  <Icon className={`h-5 w-5 ${paymentMethod===id?'text-orange-600':'text-stone-400'}`} />
-                  <span className={`text-xs font-semibold ${paymentMethod===id?'text-orange-700':'text-stone-600'}`}>{l}</span>
+                  className={`flex flex-col items-center gap-3 rounded-2xl border p-5 transition-all ${paymentMethod===id?'border-purple-400 bg-purple-50 shadow-sm shadow-purple-500/10':'border-stone-200 hover:border-purple-300 hover:bg-purple-50/30'}`}>
+                  <Icon className={`h-5 w-5 ${paymentMethod===id?'text-purple-600':'text-stone-400'}`} />
+                  <span className={`text-xs font-semibold ${paymentMethod===id?'text-purple-700':'text-stone-600'}`}>{l}</span>
                 </button>
               ))}
             </div>
@@ -182,7 +182,7 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
               <label className="field-label">UPI ID</label>
               <input type="text" value={upiId} onChange={(e) => setUpiId(e.target.value)} className="field-control mt-1" />
             </div>}
-            <div className="rounded-2xl bg-orange-50/80 p-5 border border-orange-200 space-y-3">
+            <div className="rounded-2xl bg-purple-50/80 p-5 border border-purple-200 space-y-3">
               <div className="flex justify-between text-sm text-stone-600">
                 <span>Base Fare ({passengerCount} Pax)</span>
                 <span className="font-semibold">₹{baseFare}</span>
@@ -191,9 +191,9 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
                 <span>Free Cancellation</span>
                 <span className="font-semibold">₹99</span>
               </div>}
-              <div className="flex justify-between border-t border-orange-200 pt-3 font-bold text-stone-900 text-base">
+              <div className="flex justify-between border-t border-purple-200 pt-3 font-bold text-stone-900 text-base">
                 <span>Total</span>
-                <span className="text-orange-700">₹{totalFare}</span>
+                <span className="text-purple-700">₹{totalFare}</span>
               </div>
             </div>
             <div className="flex items-center justify-between pt-2">
