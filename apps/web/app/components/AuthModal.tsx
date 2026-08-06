@@ -66,19 +66,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   };
 
   const handleOpenGoogle = () => {
-    if (typeof window !== 'undefined') {
-      const redirectUri = window.location.origin;
-      const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-        redirectUri
-      )}&response_type=token%20id_token&scope=openid%20email%20profile&nonce=${Date.now()}`;
-
-      try {
-        window.open(googleAuthUrl, 'GoogleLogin', 'width=520,height=620');
-      } catch (e) {
-        console.log('Google OAuth window opened');
-      }
-    }
-    setSocialEmail(email);
+    setError('');
+    setSocialEmail(email.trim() || 'amitakhil001@gmail.com');
     setShowGoogleModal(true);
   };
 
