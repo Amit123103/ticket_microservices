@@ -55,7 +55,7 @@ export const ETicketModal: React.FC<ETicketModalProps> = ({ ticket, onClose }) =
           {[
             { l: 'PNR Number', v: ticket.pnr, c: 'text-indigo-600 font-mono' },
             { l: 'Booking ID', v: ticket.bookingId, c: 'font-mono' },
-            { l: 'Departure Date', v: ticket.departureDate, c: 'text-orange-600' },
+            { l: 'Departure Date', v: ticket.departureDate, c: 'text-purple-600' },
             { l: 'Chart Status', v: ticket.chartStatus, c: 'text-emerald-600' },
           ].map(({ l, v, c }) => (
             <div key={l} className="rounded-2xl p-4 bg-stone-50 border border-stone-200">
