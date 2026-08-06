@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <rect width="100" height="100" rx="28" fill="url(#bgGrad)"/>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#7e22ce"/>
+      <stop offset="100%" stopColor="#3b0764"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#ffffff"/>
+      <stop offset="100%" stopColor="#e9d5ff"/>
+    </linearGradient>
+  </defs>
+  {/* Orbital Swoosh */}
+  <path d="M 12 70 C 8 85, 30 92, 50 86 C 80 77, 95 55, 90 30 C 88 18, 75 14, 62 20 C 75 22, 84 32, 80 46 C 74 68, 52 82, 28 85 C 18 86, 12 80, 15 72 Z" fill="url(#glow)" opacity="0.95"/>
+  {/* RG Letter Styling */}
+  <path d="M 28 68 L 44 32 L 62 32 C 72 32, 78 37, 74 46 C 71 52, 65 54, 58 54 L 68 68 L 56 68 L 48 56 L 42 56 L 37 68 Z M 45 50 L 56 50 C 62 50, 65 48, 66 43 C 67 39, 64 37, 58 37 L 49 37 Z" fill="#ffffff"/>
+  <path d="M 82 34 L 72 34 C 60 34, 54 42, 50 54 C 46 64, 50 71, 62 71 C 72 71, 80 64, 83 54 L 66 54 L 68 47 L 88 47 C 86 62, 74 77, 58 77 C 42 77, 36 64, 41 50 C 46 34, 58 26, 76 26 L 84 26 Z" fill="#ffffff" opacity="0.9"/>
+</svg>

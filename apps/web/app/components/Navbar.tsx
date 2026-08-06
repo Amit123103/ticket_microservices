@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Icons } from './Icons';
+import { Logo } from './Logo';
 
 export type NavTab =
   | 'search'
@@ -67,22 +68,9 @@ export const PageNavbar: React.FC<PageNavProps> = ({
           {/* Brand Logo */}
           <div
             onClick={onGoHome || (() => setActiveTab('search'))}
-            className="flex items-center gap-3 cursor-pointer group"
+            className="cursor-pointer group"
           >
-            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
-              <Icons.train className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-xl text-stone-900 leading-none" style={{ fontFamily: 'Outfit, sans-serif' }}>
-                  RailGo
-                </span>
-                <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-200">
-                  28 MESH
-                </span>
-              </div>
-              <p className="text-[10px] font-semibold text-purple-600 mt-0.5">Indian Railways Microservices</p>
-            </div>
+            <Logo className="h-10 w-auto" />
           </div>
 
           {/* Header Quick Actions & Profile */}
