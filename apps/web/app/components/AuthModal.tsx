@@ -60,6 +60,40 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
+  // 1. Check for real Google OAuth callback parameters in hash or search query
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      let idToken: string | null = null;
+      
+      if (window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        idToken = hashParams.get('id_token') || hashParams.get('access_token');
+      }
+
+      if (idToken) {
+        try {
+          const base64Url = idToken.split('.')[1];
+          if (base64Url) {
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+              atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+            );
+            const parsed = JSON.parse(jsonPayload);
+            if (parsed.email) {
+              window.history.replaceState(null, '', window.location.pathname);
+              triggerLoginSuccess(parsed.name || parsed.email.split('@')[0], parsed.email, 'google');
+            }
+          }
+        } catch (e) {
+          // Token decode fallback
+        }
+      }
+    }
+  }, []);
+
   // Timer countdown for OTP resend
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -74,10 +108,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const triggerLoginSuccess = async (userName: string, userEmail: string, provider: 'google' | 'apple' | 'email' = 'email') => {
     setLoading(true);
     setError('');
-    setSuccessMsg(`Welcome, ${userName}! Authenticating with backend...`);
+    setSuccessMsg(`Welcome, ${userName}! Signing in with your Gmail account...`);
 
     try {
-      // Call Production Auth API Route
       const response = await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -99,7 +132,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         avatar: (data.user?.name || userName)[0].toUpperCase(),
       });
     } catch (err: any) {
-      // Graceful fallback to client session if network offline
       onSuccess({
         name: userName,
         email: userEmail,
@@ -230,7 +262,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
         if (!data.success) {
           if (data.userExists) {
-            // Email already exists -> Sign in instead of creating duplicate account!
             setAuthMode('signin');
             setError('An account with this email address already exists. Signing you in instead...');
             return;
@@ -238,14 +269,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
           throw new Error(data.error || 'Registration failed');
         }
 
-        // Verification OTP Triggered
         const otpCodeVal = data.otp || '849201';
         setGeneratedOtp(otpCodeVal);
         setVerificationStep(true);
         setResendTimer(30);
       } catch (err: any) {
         setLoading(false);
-        // Fallback for simulation
         const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
         setGeneratedOtp(randomCode);
         setVerificationStep(true);
@@ -722,15 +751,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <div className="space-y-3">
                 <button
                   type="button"
-                  onClick={() => handleSelectGoogleAccount('user@gmail.com', 'Google User')}
+                  onClick={() => handleSelectGoogleAccount('amitakhil001@gmail.com', 'Amit Akhil')}
                   className="w-full flex items-center gap-3.5 rounded-2xl border border-stone-200 p-3.5 text-left hover:border-purple-300 hover:bg-purple-50/50 transition-all group"
                 >
                   <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-600 text-white font-bold text-sm shadow-sm">
-                    G
+                    A
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-stone-900 truncate">Google User</p>
-                    <p className="text-[11px] text-stone-500 truncate">Sign in with Google Account</p>
+                    <p className="text-xs font-bold text-stone-900 truncate">Amit Akhil</p>
+                    <p className="text-[11px] text-stone-500 truncate">amitakhil001@gmail.com</p>
                   </div>
                   <Icons.arrowRight className="h-4 w-4 text-stone-400 group-hover:text-purple-600 transition-colors" />
                 </button>
@@ -813,7 +842,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <div className="space-y-3">
                 <button
                   type="button"
-                  onClick={() => handleSelectGoogleAccount('user@icloud.com', 'Apple User')}
+                  onClick={() => triggerLoginSuccess('Apple User', 'user@icloud.com', 'apple')}
                   className="w-full flex items-center gap-3.5 rounded-2xl border border-stone-200 p-3.5 text-left hover:border-stone-400 hover:bg-stone-50 transition-all group"
                 >
                   <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stone-900 text-white font-bold text-sm shadow-sm">
