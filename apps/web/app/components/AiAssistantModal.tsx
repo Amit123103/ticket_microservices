@@ -37,12 +37,12 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ onClose }) =
       <div className="relative w-full max-w-lg rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden flex flex-col" style={{ maxHeight: '80vh' }}>
         <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/20">
               <Icons.brain className="h-5 w-5" />
             </div>
             <div>
               <h3 className="font-bold text-stone-900">RailAI Assistant</h3>
-              <p className="text-[10px] text-orange-600 font-bold">Powered by AI • Always Learning</p>
+              <p className="text-[10px] text-purple-600 font-bold">Powered by AI • Always Learning</p>
             </div>
           </div>
           <button onClick={onClose} className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all">
@@ -52,7 +52,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ onClose }) =
 
         <div className="border-b border-stone-100 bg-white px-4 py-3 flex gap-2 overflow-x-auto no-scrollbar">
           {quickQuestions.map((q, i) => (
-            <button key={i} onClick={() => handleSend(q)} className="shrink-0 rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-semibold text-stone-600 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700 transition-all">
+            <button key={i} onClick={() => handleSend(q)} className="shrink-0 rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-semibold text-stone-600 hover:border-purple-300 hover:bg-purple-50 hover:text-purple-700 transition-all">
               <Icons.sparkles className="h-3.5 w-3.5 inline mr-1" />{q}
             </button>
           ))}
@@ -61,8 +61,8 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({ onClose }) =
         <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-stone-50/30">
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
-              <div className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed ${m.role === 'user' ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20' : 'bg-white text-stone-700 border border-stone-200 shadow-sm'}`}>
-                {m.role === 'bot' && <Icons.bot className="inline h-3.5 w-3.5 text-orange-600 mr-1.5" />}{m.text}
+              <div className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed ${m.role === 'user' ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20' : 'bg-white text-stone-700 border border-stone-200 shadow-sm'}`}>
+                {m.role === 'bot' && <Icons.bot className="inline h-3.5 w-3.5 text-purple-600 mr-1.5" />}{m.text}
               </div>
             </div>
           ))}
