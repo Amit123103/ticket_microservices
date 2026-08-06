@@ -10,3 +10,13 @@ build/
 node_modules/
 .DS_Store
 Thumbs.db
+
+# Next.js & Vercel
+.next/
+*.next
+.vercel
+out/
+
+# Environment files
+.env*.local
+.env
