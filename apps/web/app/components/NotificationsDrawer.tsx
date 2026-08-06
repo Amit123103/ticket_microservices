@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Bell, X, CheckCircle2, Info, AlertTriangle } from 'lucide-react';
+import { Icons } from './Icons';
 import { INITIAL_NOTIFICATIONS, NotificationItem } from '../data/microservicesData';
 
 interface NotificationsDrawerProps {
@@ -10,42 +10,39 @@ interface NotificationsDrawerProps {
 
 export const NotificationsDrawer: React.FC<NotificationsDrawerProps> = ({ onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/80 backdrop-blur-sm">
-      <div className="h-full w-full max-w-md border-l border-slate-800 bg-slate-900 p-6 shadow-2xl space-y-6 overflow-y-auto">
-        
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-          <div className="flex items-center gap-2 text-indigo-400 font-bold">
-            <Bell className="h-5 w-5" />
-            <span>notification-service Alerts</span>
+    <div className="fixed inset-0 z-50 flex justify-end bg-stone-950/40 backdrop-blur-sm">
+      <div className="h-full w-full max-w-md border-l border-stone-200 bg-white shadow-2xl shadow-stone-300/30 space-y-6 overflow-y-auto animate-slide-in-right">
+        <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
+          <div className="flex items-center gap-2 text-orange-600 font-bold">
+            <Icons.bell className="h-5 w-5" />
+            <span>Notifications</span>
           </div>
           <button
             onClick={onClose}
-            className="rounded-full bg-slate-800 p-1.5 text-slate-400 hover:text-white"
+            className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all"
           >
-            <X className="h-5 w-5" />
+            <Icons.x className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Notifications List */}
-        <div className="space-y-3">
+        <div className="px-4 pb-6 space-y-3">
           {INITIAL_NOTIFICATIONS.map((n) => (
             <div
               key={n.id}
-              className={`rounded-2xl border p-4 space-y-1.5 transition ${
-                n.read ? 'border-slate-800/80 bg-slate-950/40 opacity-80' : 'border-indigo-500/30 bg-slate-950'
+              className={`rounded-2xl border p-4 space-y-1.5 transition-all hover:shadow-sm ${
+                n.read ? 'border-stone-200 bg-stone-50/50 opacity-75' : 'border-orange-200 bg-orange-50/30'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {n.type === 'SUCCESS' && <CheckCircle2 className="h-4 w-4 text-emerald-400" />}
-                  {n.type === 'INFO' && <Info className="h-4 w-4 text-sky-400" />}
-                  {n.type === 'WARNING' && <AlertTriangle className="h-4 w-4 text-amber-400" />}
-                  <h4 className="font-bold text-white text-xs">{n.title}</h4>
+                  {n.type === 'SUCCESS' && <Icons.check className="h-4 w-4 text-emerald-500" />}
+                  {n.type === 'INFO' && <Icons.info className="h-4 w-4 text-indigo-500" />}
+                  {n.type === 'WARNING' && <Icons.alertTriangle className="h-4 w-4 text-amber-500" />}
+                  <h4 className="font-bold text-stone-900 text-sm">{n.title}</h4>
                 </div>
-                <span className="text-[10px] text-slate-500">{n.time}</span>
+                <span className="text-[10px] text-stone-400">{n.time}</span>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed">{n.message}</p>
+              <p className="text-xs text-stone-600 leading-relaxed">{n.message}</p>
             </div>
           ))}
         </div>

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Building2, MapPin, Clock, Train, Wifi, Coffee, Shield, Phone, Search, ChevronDown, ChevronUp, Users, Accessibility } from 'lucide-react';
+import { Icons } from './Icons';
 
 export const StationInfoView: React.FC = () => {
   const [selectedStation, setSelectedStation] = useState(0);
@@ -20,64 +20,62 @@ export const StationInfoView: React.FC = () => {
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="text-center max-w-2xl mx-auto mb-8">
-        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-xs font-bold text-emerald-700 border border-emerald-200 mb-3"><Building2 className="h-4 w-4" /> Station Guide</div>
-        <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">Station Information</h2>
-        <p className="mt-2 text-sm text-slate-500">Detailed info on major Indian railway stations — platforms, facilities, and amenities.</p>
+        <div className="section-pill mb-3">
+          <Icons.building className="h-3.5 w-3.5" /> Station Guide
+        </div>
+        <h2 className="text-3xl font-bold sm:text-4xl" style={{ fontFamily: 'Outfit, sans-serif' }}>Station Information</h2>
+        <p className="mt-2 text-sm text-stone-500">Detailed info on major Indian railway stations — platforms, facilities, and amenities.</p>
       </div>
 
-      {/* Station Selector */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
         {stations.map((s, idx) => (
           <button key={s.code} onClick={() => setSelectedStation(idx)}
-            className={`rounded-2xl border p-4 text-center transition ${selectedStation === idx ? 'border-emerald-500 bg-emerald-50 ring-1 ring-emerald-400' : 'border-slate-200 bg-white hover:border-emerald-300'}`}>
-            <span className="text-lg font-black text-emerald-700">{s.code}</span>
-            <p className="text-[10px] font-bold text-slate-500 mt-0.5">{s.city}</p>
+            className={`rounded-2xl border p-4 text-center transition ${selectedStation === idx ? 'border-orange-500 bg-orange-50 ring-1 ring-orange-400' : 'border-stone-200 bg-white hover:border-orange-300'}`}>
+            <span className="text-lg font-black text-orange-700">{s.code}</span>
+            <p className="text-[10px] font-bold text-stone-500 mt-0.5">{s.city}</p>
           </button>
         ))}
       </div>
 
-      {/* Station Details */}
-      <div className="rounded-3xl border border-slate-200 bg-white shadow-lg overflow-hidden">
-        <div className="border-b border-slate-100 bg-emerald-50 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+      <div className="rounded-3xl border border-stone-200 bg-white shadow-lg overflow-hidden">
+        <div className="border-b border-stone-100 bg-orange-50/80 px-6 py-5 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="grid h-14 w-14 place-items-center rounded-2xl bg-emerald-600 text-white font-black text-lg shadow-lg shadow-emerald-200">{st.code}</div>
-            <div><h3 className="text-xl font-black text-slate-900">{st.name}</h3>
-              <p className="text-xs text-slate-500">{st.city} • {st.zone}</p></div>
+            <div className="grid h-14 w-14 place-items-center rounded-2xl bg-orange-600 text-white font-black text-lg shadow-lg shadow-orange-200">{st.code}</div>
+            <div><h3 className="text-xl font-bold text-stone-900">{st.name}</h3>
+              <p className="text-xs text-stone-500">{st.city} • {st.zone}</p></div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="text-center"><span className="text-lg font-black text-emerald-700">{st.platforms}</span><p className="text-[10px] text-slate-400 font-bold">Platforms</p></div>
-            <div className="text-center"><span className="text-lg font-black text-emerald-700">{st.daily}</span><p className="text-[10px] text-slate-400 font-bold">Daily Trains</p></div>
+            <div className="text-center"><span className="text-lg font-black text-orange-700">{st.platforms}</span><p className="text-[10px] text-stone-400 font-bold">Platforms</p></div>
+            <div className="text-center"><span className="text-lg font-black text-orange-700">{st.daily}</span><p className="text-[10px] text-stone-400 font-bold">Daily Trains</p></div>
           </div>
         </div>
 
         <div className="p-6 space-y-5">
-          {/* Facilities */}
-          <div className="rounded-2xl border border-slate-200 overflow-hidden">
-            <button onClick={() => setExpandedSection(expandedSection === 'facilities' ? null : 'facilities')} className="flex w-full items-center justify-between p-4 bg-slate-50 text-left font-bold text-slate-800">
-              <span className="flex items-center gap-2"><Coffee className="h-4 w-4 text-emerald-600" /> Facilities & Amenities</span>
-              {expandedSection === 'facilities' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          <div className="rounded-2xl border border-stone-200 overflow-hidden">
+            <button onClick={() => setExpandedSection(expandedSection === 'facilities' ? null : 'facilities')} className="flex w-full items-center justify-between p-4 bg-stone-50 text-left font-bold text-stone-800">
+              <span className="flex items-center gap-2"><Icons.utensils className="h-4 w-4 text-orange-600" /> Facilities & Amenities</span>
+              {expandedSection === 'facilities' ? <Icons.chevronUp className="h-4 w-4" /> : <Icons.chevronDown className="h-4 w-4" />}
             </button>
             {expandedSection === 'facilities' && (
               <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {st.facilities.map((f) => (
-                  <div key={f} className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-                    <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
-                    <span className="text-xs font-bold text-slate-700">{f}</span>
+                  <div key={f} className="flex items-center gap-2 rounded-xl border border-orange-200 bg-orange-50 p-3">
+                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                    <span className="text-xs font-bold text-stone-700">{f}</span>
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Access & Contact */}
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 flex items-center gap-4">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 border border-emerald-200"><Accessibility className="h-5 w-5 text-emerald-600" /></div>
-              <div><p className="text-xs font-bold text-slate-400 uppercase">Accessibility</p><p className="text-sm font-bold text-slate-800">{st.wheelchair ? 'Wheelchair accessible • Ramps • Lifts' : 'Limited'}</p></div>
+            <div className="rounded-2xl border border-stone-200 bg-stone-50 p-5 flex items-center gap-4">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-orange-50 border border-orange-200"><Icons.users className="h-5 w-5 text-orange-600" /></div>
+              <div><p className="text-xs font-bold text-stone-400 uppercase">Accessibility</p><p className="text-sm font-bold text-stone-800">{st.wheelchair ? 'Wheelchair accessible • Ramps • Lifts' : 'Limited'}</p></div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 flex items-center gap-4">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 border border-emerald-200"><Phone className="h-5 w-5 text-emerald-600" /></div>
-              <div><p className="text-xs font-bold text-slate-400 uppercase">Station Helpline</p><p className="text-sm font-bold text-slate-800">{st.contact}</p></div>
+            <div className="rounded-2xl border border-stone-200 bg-stone-50 p-5 flex items-center gap-4">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-orange-50 border border-orange-200"><Icons.phone className="h-5 w-5 text-orange-600" /></div>
+              <div><p className="text-xs font-bold text-stone-400 uppercase">Station Helpline</p><p className="text-sm font-bold text-stone-800">{st.contact}</p></div>
             </div>
           </div>
         </div>

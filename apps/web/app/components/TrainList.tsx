@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Train as TrainIcon, ArrowRight, Star, Sparkles, Eye, Utensils } from 'lucide-react';
+import { Icons } from './Icons';
 import { Train, TrainClassInfo } from '../data/trainData';
 
 interface TrainListProps {
@@ -33,22 +33,22 @@ export const TrainList: React.FC<TrainListProps> = ({
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-200">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold text-slate-900">Available Trains</h2>
+            <h2 className="text-2xl font-bold text-stone-900">Available Trains</h2>
             <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-200">
               {trains.length} Found
             </span>
           </div>
-          <p className="mt-1 text-xs text-slate-400">{fromCity} → {toCity} • {travelDate} • {passengerCount} {passengerCount === 1 ? 'Adult' : 'Adults'} • {quota}</p>
+          <p className="mt-1 text-sm text-stone-400">{fromCity} → {toCity} • {travelDate} • {passengerCount} {passengerCount === 1 ? 'Adult' : 'Adults'} • {quota}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase text-slate-400">Sort:</span>
-          <div className="flex rounded-xl bg-slate-100 p-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Sort:</span>
+          <div className="flex rounded-xl bg-stone-100 p-1">
             {(['departure', 'duration', 'price'] as const).map((s) => (
               <button key={s} onClick={() => setSortBy(s)}
-                className={`rounded-lg px-3 py-1 text-xs font-bold transition capitalize ${sortBy === s ? 'bg-emerald-600 text-white' : 'text-slate-500 hover:text-slate-700'}`}>
+                className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all capitalize ${sortBy === s ? 'bg-orange-600 text-white shadow-sm' : 'text-stone-500 hover:text-stone-700 hover:bg-white'}`}>
                 {s}
               </button>
             ))}
@@ -64,73 +64,75 @@ export const TrainList: React.FC<TrainListProps> = ({
 
           return (
             <article key={train.id}
-              className="overflow-hidden rounded-3xl bg-white card transition hover:shadow-md hover:border-emerald-200">
+              className="rounded-2xl border border-stone-200 bg-white overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-stone-200/60 hover:border-orange-200">
               {/* Top Banner */}
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50 px-6 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-stone-50/80 px-5 sm:px-6 py-3.5 border-b border-stone-100">
                 <div className="flex flex-wrap items-center gap-3">
-                  <TrainIcon className="h-4 w-4 text-emerald-600" />
-                  <h3 className="font-extrabold text-slate-900 text-base">{train.name}</h3>
-                  <span className="rounded-md bg-slate-200 px-2 py-0.5 text-xs font-bold text-slate-600">#{train.number}</span>
+                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-orange-100 text-orange-600">
+                    <Icons.train className="h-4 w-4" />
+                  </div>
+                  <h3 className="font-bold text-stone-900 text-base">{train.name}</h3>
+                  <span className="rounded-lg bg-white px-2 py-1 text-xs font-semibold text-stone-500 border border-stone-200">#{train.number}</span>
                   {train.badge && (
-                    <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">{train.badge}</span>
+                    <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[11px] font-bold text-orange-700 border border-orange-200">{train.badge}</span>
                   )}
                 </div>
-                <div className="flex items-center gap-4 text-xs font-medium text-slate-400">
+                <div className="flex items-center gap-4 text-xs font-medium text-stone-400">
                   <div className="flex items-center gap-1 text-amber-500">
-                    <Star className="h-3.5 w-3.5 fill-amber-400" />
-                    <span className="font-bold text-slate-700">{train.rating}</span>
+                    <Icons.star className="h-3.5 w-3.5 fill-amber-400" />
+                    <span className="font-bold text-stone-700">{train.rating}</span>
                   </div>
-                  <button onClick={onOpenECatering} className="flex items-center gap-1 text-emerald-600 hover:underline font-bold">
-                    <Utensils className="h-3.5 w-3.5" /> E-Catering
+                  <button onClick={onOpenECatering} className="flex items-center gap-1.5 text-orange-600 hover:text-orange-700 font-semibold transition-colors">
+                    <Icons.utensils className="h-3.5 w-3.5" /> E-Catering
                   </button>
-                  <button onClick={() => onViewRoute(train)} className="flex items-center gap-1 text-emerald-600 hover:underline font-bold">
-                    <Eye className="h-3.5 w-3.5" /> Timetable
+                  <button onClick={() => onViewRoute(train)} className="flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
+                    <Icons.eye className="h-3.5 w-3.5" /> Timetable
                   </button>
                 </div>
               </div>
 
-              <div className="p-6">
-                <div className="grid gap-6 lg:grid-cols-[1.2fr_1.5fr_1fr] lg:items-center">
+              <div className="p-5 sm:p-6">
+                <div className="grid gap-6 lg:grid-cols-[1.2fr_1.6fr_1fr] lg:items-center">
                   {/* Times */}
-                  <div className="flex items-center justify-between gap-4 rounded-2xl bg-emerald-50/50 p-4 border border-emerald-100">
+                  <div className="flex items-center justify-between gap-3 rounded-2xl bg-orange-50/60 p-5 border border-orange-100">
                     <div className="text-center">
-                      <strong className="block text-xl font-black text-slate-900">{train.departureTime}</strong>
-                      <span className="text-xs font-bold text-emerald-700">{train.fromName}</span>
+                      <strong className="block text-2xl font-bold text-stone-900">{train.departureTime}</strong>
+                      <span className="text-xs font-semibold text-orange-700">{train.fromName}</span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <span className="text-xs font-semibold text-slate-400">{train.duration}</span>
-                      <div className="relative my-1 flex items-center w-24">
-                        <div className="h-0.5 w-full bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
-                        <ArrowRight className="absolute right-0 h-4 w-4 text-emerald-600" />
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-xs font-semibold text-stone-400">{train.duration}</span>
+                      <div className="relative flex items-center w-20">
+                        <div className="h-0.5 w-full bg-gradient-to-r from-orange-300 to-orange-500 rounded-full"></div>
+                        <Icons.arrowRight className="absolute right-0 h-3.5 w-3.5 text-orange-500" />
                       </div>
                     </div>
                     <div className="text-center">
-                      <strong className="block text-xl font-black text-slate-900">{train.arrivalTime}</strong>
-                      <span className="text-xs font-bold text-emerald-700">{train.toName}</span>
+                      <strong className="block text-2xl font-bold text-stone-900">{train.arrivalTime}</strong>
+                      <span className="text-xs font-semibold text-orange-700">{train.toName}</span>
                     </div>
                   </div>
 
                   {/* Class Pills */}
                   <div>
-                    <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Travel Class & Availability:</p>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-3">
+                    <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-stone-400">Travel Class & Availability:</p>
+                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-3">
                       {train.classes.map((cls) => (
                         <button key={cls.code} type="button"
                           onClick={() => setSelectedClassMap((p) => ({ ...p, [train.id]: cls.code }))}
-                          className={`flex flex-col justify-between rounded-xl border p-3 text-left transition ${
+                          className={`flex flex-col justify-between rounded-xl border p-3 text-left transition-all ${
                             ccCode === cls.code
-                              ? 'border-emerald-500 bg-emerald-50 ring-1 ring-emerald-400'
-                              : 'border-slate-200 hover:border-emerald-300'
+                              ? 'border-orange-400 bg-orange-50 shadow-sm shadow-orange-500/10'
+                              : 'border-stone-200 hover:border-orange-300 hover:bg-orange-50/30'
                           }`}>
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-black text-slate-700">{cls.code}</span>
-                            <strong className="text-sm font-extrabold text-emerald-700">₹{cls.price}</strong>
+                            <span className="text-xs font-bold text-stone-700">{cls.code}</span>
+                            <strong className="text-sm font-bold text-orange-700">₹{cls.price}</strong>
                           </div>
                           <div className="mt-2">
                             <span className={`block text-[10px] font-bold ${cls.status === 'AVAILABLE' ? 'text-emerald-600' : cls.status === 'RAC' ? 'text-amber-600' : 'text-rose-600'}`}>
                               {cls.status === 'AVAILABLE' ? `AVAILABLE-${cls.available.toString().padStart(4,'0')}` : `${cls.status} ${cls.statusNumber}`}
                             </span>
-                            <span className="block text-[9px] text-slate-400">{cls.name}</span>
+                            <span className="block text-[10px] text-stone-400">{cls.name}</span>
                           </div>
                         </button>
                       ))}
@@ -138,15 +140,15 @@ export const TrainList: React.FC<TrainListProps> = ({
                   </div>
 
                   {/* Price & Book */}
-                  <div className="flex flex-col items-end justify-between">
-                    <div className="text-right">
-                      <span className="text-xs text-slate-400">Total ({passengerCount} Pax)</span>
-                      <strong className="block text-2xl font-black text-slate-900">₹{(ccInfo.price * passengerCount).toLocaleString('en-IN')}</strong>
+                  <div className="flex flex-col items-end justify-between gap-4">
+                    <div className="text-right w-full">
+                      <span className="text-xs text-stone-400">Total ({passengerCount} Pax)</span>
+                      <strong className="block text-2xl font-bold text-stone-900">₹{(ccInfo.price * passengerCount).toLocaleString('en-IN')}</strong>
                       <span className="text-[10px] font-bold text-emerald-600">Includes GST</span>
                     </div>
                     <button onClick={() => onSelectTrain(train, ccInfo)}
-                      className="mt-4 flex w-full items-center justify-center gap-2 btn-primary">
-                      <Sparkles className="h-4 w-4 text-white/90" /> Select & Choose Seat
+                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:from-orange-600 hover:to-orange-700 transition-all">
+                      <Icons.sparkles className="h-4 w-4 text-white/90" /> Select & Choose Seat
                     </button>
                   </div>
                 </div>

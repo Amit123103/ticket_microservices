@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sparkles, Bot, Send, CheckCircle2, ArrowRight, Zap, RefreshCw } from 'lucide-react';
+import { Icons } from './Icons';
 
 export const AITravelAssistant: React.FC = () => {
   const [messages, setMessages] = useState<Array<{ role: 'ai' | 'user'; text: string }>>([
@@ -42,43 +42,38 @@ export const AITravelAssistant: React.FC = () => {
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-      {/* Header */}
       <div className="text-center max-w-2xl mx-auto mb-8">
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-bold text-indigo-300 mb-3">
-          <Bot className="h-4 w-4 text-indigo-400" />
-          <span>Powered by ai-service & recommendation-service</span>
+        <div className="section-pill mb-3">
+          <Icons.sparkles className="h-3.5 w-3.5" /> AI-Powered Assistant
         </div>
-        <h2 className="text-3xl font-extrabold text-white sm:text-4xl">RailAI Smart Travel Assistant</h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <h2 className="text-3xl font-bold text-stone-900 sm:text-4xl">RailAI Smart Travel Assistant</h2>
+        <p className="mt-2 text-sm text-stone-500">
           Get instant predictions on seat confirmation probabilities, optimal routes, and Tatkal timing strategies.
         </p>
       </div>
 
-      {/* Chat Container */}
-      <div className="rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl overflow-hidden">
-        
-        {/* Chat Body */}
-        <div className="p-6 h-[400px] overflow-y-auto space-y-4 bg-slate-950/60">
+      <div className="rounded-3xl border border-stone-200 bg-white shadow-xl shadow-stone-200/30 overflow-hidden">
+        <div className="p-6 h-[400px] overflow-y-auto space-y-4 bg-stone-50/50">
           {messages.map((m, idx) => (
             <div
               key={idx}
-              className={`flex items-start gap-3 ${m.role === 'user' ? 'flex-row-reverse' : ''}`}
+              className={`flex items-start gap-3 animate-fade-in ${m.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
               <div
                 className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl text-white font-bold ${
                   m.role === 'ai'
-                    ? 'bg-gradient-to-tr from-indigo-600 to-emerald-500 shadow-md shadow-indigo-500/20'
-                    : 'bg-slate-800 text-slate-300'
+                    ? 'bg-gradient-to-tr from-orange-600 to-orange-700 shadow-lg shadow-orange-500/20'
+                    : 'bg-stone-200 text-stone-600'
                 }`}
               >
-                {m.role === 'ai' ? <Bot className="h-5 w-5" /> : ' You '}
+                {m.role === 'ai' ? <Icons.bot className="h-5 w-5" /> : 'You'}
               </div>
 
               <div
-                className={`max-w-[80%] rounded-2xl p-4 text-xs font-medium leading-relaxed ${
+                className={`max-w-[80%] rounded-2xl p-4 text-sm font-medium leading-relaxed ${
                   m.role === 'ai'
-                    ? 'border border-slate-800 bg-slate-900 text-slate-100'
-                    : 'bg-indigo-600 text-white'
+                    ? 'bg-white border border-stone-200 text-stone-800 shadow-sm'
+                    : 'bg-orange-600 text-white shadow-lg shadow-orange-500/20'
                 }`}
               >
                 {m.text}
@@ -87,15 +82,14 @@ export const AITravelAssistant: React.FC = () => {
           ))}
 
           {isThinking && (
-            <div className="flex items-center gap-2 text-xs font-bold text-indigo-400">
-              <RefreshCw className="h-4 w-4 animate-spin" />
+            <div className="flex items-center gap-2 text-sm font-semibold text-orange-600">
+              <Icons.refresh className="h-4 w-4 animate-spin" />
               <span>RailAI microservice analyzing parameters...</span>
             </div>
           )}
         </div>
 
-        {/* Preset Prompt Suggestions */}
-        <div className="border-t border-slate-800 bg-slate-950 p-3 flex flex-wrap gap-2">
+        <div className="border-t border-stone-200 bg-white p-4 flex flex-wrap gap-2">
           {[
             'Will my RAC 12 ticket get confirmed?',
             'Which train is fastest to Ahmedabad?',
@@ -106,37 +100,35 @@ export const AITravelAssistant: React.FC = () => {
               key={prompt}
               type="button"
               onClick={() => handleSend(prompt)}
-              className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-1.5 text-[11px] font-bold text-indigo-300 hover:border-indigo-500 hover:bg-slate-800"
+              className="rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-semibold text-stone-600 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700 transition-all"
             >
-              ✨ {prompt}
+              <Icons.sparkles className="h-3.5 w-3.5 inline mr-1" />{prompt}
             </button>
           ))}
         </div>
 
-        {/* Input Bar */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend(input);
           }}
-          className="flex items-center gap-2 border-t border-slate-800 bg-slate-900 p-4"
+          className="flex items-center gap-3 border-t border-stone-200 bg-stone-50/50 p-4"
         >
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask RailAI anything about your trip..."
-            className="flex-1 rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs font-bold text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            className="field-control flex-1 text-sm py-3"
           />
           <button
             type="submit"
-            className="flex items-center gap-1.5 rounded-xl bg-indigo-600 px-5 py-3 text-xs font-bold text-white hover:bg-indigo-500"
+            className="btn-brand flex items-center gap-1.5 px-5 py-3 rounded-xl shrink-0"
           >
             <span>Ask AI</span>
-            <Send className="h-4 w-4" />
+            <Icons.send className="h-4 w-4" />
           </button>
         </form>
-
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { X, Bell, CheckCircle2, Clock, AlertCircle, Info } from 'lucide-react';
+import { Icons } from './Icons';
 
 interface NotificationsModalProps { onClose: () => void; }
 
@@ -14,25 +14,35 @@ export const NotificationsModal: React.FC<NotificationsModalProps> = ({ onClose 
   ];
 
   const getIcon = (type: string) => {
-    if (type === 'success') return <CheckCircle2 className="h-4 w-4 text-emerald-600" />;
-    if (type === 'warning') return <AlertCircle className="h-4 w-4 text-amber-500" />;
-    return <Info className="h-4 w-4 text-blue-500" />;
+    if (type === 'success') return <Icons.check className="h-4 w-4 text-emerald-600" />;
+    if (type === 'warning') return <Icons.alertTriangle className="h-4 w-4 text-amber-500" />;
+    return <Icons.info className="h-4 w-4 text-indigo-500" />;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-lg rounded-3xl bg-white card overflow-hidden">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-emerald-50 px-6 py-4">
-          <div className="flex items-center gap-2"><Bell className="h-5 w-5 text-emerald-600" /><h3 className="font-bold text-slate-900 text-lg">Notifications</h3>
-            <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">{notifs.length}</span></div>
-          <button onClick={onClose} className="rounded-full bg-white p-2 text-slate-400 hover:text-slate-700 border border-slate-200 shadow-sm"><X className="h-5 w-5" /></button>
+    <div className="modal-overlay">
+      <div className="relative w-full max-w-lg rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
+        <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-4">
+          <div className="flex items-center gap-2">
+            <Icons.bell className="h-5 w-5 text-orange-600" />
+            <h3 className="font-bold text-stone-900 text-lg">Notifications</h3>
+            <span className="rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-orange-700 border border-orange-200">{notifs.length}</span>
+          </div>
+          <button onClick={onClose} className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all">
+            <Icons.x className="h-5 w-5" />
+          </button>
         </div>
         <div className="max-h-[70vh] overflow-y-auto p-4 space-y-2">
           {notifs.map((n) => (
-            <div key={n.id} className="flex items-start gap-3 rounded-xl bg-white p-4 hover:border-emerald-200 hover:bg-slate-50 transition cursor-pointer">
-              <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-slate-50 border border-slate-200">{getIcon(n.type)}</div>
-              <div className="flex-1"><p className="text-sm font-bold text-slate-800">{n.title}</p><p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{n.desc}</p>
-                <div className="flex items-center gap-1 mt-2 text-[10px] text-slate-400"><Clock className="h-3 w-3" /> {n.time}</div></div>
+            <div key={n.id} className="flex items-start gap-3 rounded-2xl p-4 hover:border-orange-200 hover:bg-orange-50/30 transition-all cursor-pointer border border-transparent">
+              <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-stone-50 border border-stone-200">{getIcon(n.type)}</div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-stone-800">{n.title}</p>
+                <p className="text-xs text-stone-500 mt-0.5 leading-relaxed">{n.desc}</p>
+                <div className="flex items-center gap-1 mt-2 text-[10px] text-stone-400">
+                  <Icons.clock className="h-3 w-3" /> {n.time}
+                </div>
+              </div>
             </div>
           ))}
         </div>

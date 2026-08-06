@@ -23,7 +23,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased min-h-screen" style={{ background: '#ffffff', color: '#0f172a' }}>
+      <body className="antialiased min-h-screen bg-stone-50 text-stone-900">
         {children}
       </body>
     </html>

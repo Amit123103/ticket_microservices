@@ -1,12 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HelpCircle, MessageSquare, Send, Bot, User, ChevronDown, ChevronUp, Phone, Mail, FileQuestion, Sparkles } from 'lucide-react';
+import { Icons } from './Icons';
+
+interface HelpChatViewProps {}
 
 interface FAQ {
   question: string;
   answer: string;
   category: 'Booking' | 'Cancellation' | 'PNR & Live' | 'Payments';
+}
+
+interface ChatMessage {
+  id: string;
+  sender: 'user' | 'bot';
+  text: string;
+  time: string;
 }
 
 const FAQS: FAQ[] = [
@@ -37,19 +46,11 @@ const FAQS: FAQ[] = [
   },
 ];
 
-interface ChatMessage {
-  id: string;
-  sender: 'user' | 'bot';
-  text: string;
-  time: string;
-}
-
-export const HelpChatView: React.FC = () => {
+export const HelpChatView: React.FC<HelpChatViewProps> = () => {
   const [activeTab, setActiveTab] = useState<'faq' | 'chat'>('faq');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
 
-  // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -112,54 +113,50 @@ export const HelpChatView: React.FC = () => {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      {/* Header */}
       <div className="mx-auto mb-10 max-w-3xl text-center">
         <div className="section-pill mb-3">
-          <HelpCircle className="h-3.5 w-3.5" /> Customer Care & Support
+          <Icons.help className="h-3.5 w-3.5" /> Customer Care & Support
         </div>
-        <h2 className="text-3xl font-black sm:text-4xl" style={{ fontFamily: 'Outfit, sans-serif' }}>
+        <h2 className="text-3xl font-bold sm:text-4xl" style={{ fontFamily: 'Outfit, sans-serif' }}>
           Help Center & Live Assistance
         </h2>
-        <p className="mt-2 text-sm" style={{ color: '#94a3b8' }}>
+        <p className="mt-2 text-sm text-stone-500">
           Find answers to common travel queries or chat live with our RailAI support team.
         </p>
       </div>
 
-      {/* Main Switch Tabs */}
       <div className="mb-8 flex justify-center">
-        <div className="glass-light inline-flex rounded-2xl p-1.5 border" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="inline-flex rounded-2xl p-1.5 border border-stone-200 bg-stone-50/80">
           <button
             onClick={() => setActiveTab('faq')}
-            className={`flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-bold transition ${
-              activeTab === 'faq' ? 'btn-brand text-white shadow-lg' : 'text-slate-400 hover:text-slate-200'
+            className={`flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold transition-all ${
+              activeTab === 'faq' ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-stone-500 hover:text-stone-700'
             }`}
           >
-            <FileQuestion className="h-4 w-4 text-orange-400" /> Frequently Asked Questions
+            <Icons.fileQuestion className="h-4 w-4" /> Frequently Asked Questions
           </button>
           <button
             onClick={() => setActiveTab('chat')}
-            className={`flex items-center gap-2 rounded-md px-6 py-2.5 text-sm font-bold transition ${
-              activeTab === 'chat' ? 'btn-brand text-white shadow-lg' : 'text-slate-400 hover:text-slate-200'
+            className={`flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold transition-all ${
+              activeTab === 'chat' ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-stone-500 hover:text-stone-700'
             }`}
           >
-            <MessageSquare className="h-4 w-4 text-purple-400" /> Live AI Chat Support
+            <Icons.messageSquare className="h-4 w-4" /> Live AI Chat Support
           </button>
         </div>
       </div>
 
-      {/* TAB 1: FAQ ACCORDION */}
       {activeTab === 'faq' && (
         <div className="space-y-6">
-          {/* Category Filter */}
           <div className="flex flex-wrap items-center justify-center gap-2">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`rounded-xl px-4 py-2 text-xs font-bold transition ${
+                className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
                   selectedCategory === cat
-                    ? 'bg-indigo-600 text-white shadow-md'
-                    : 'btn-ghost text-slate-400'
+                    ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20'
+                    : 'bg-white text-stone-500 border border-stone-200 hover:border-orange-300 hover:text-orange-700'
                 }`}
               >
                 {cat}
@@ -167,32 +164,30 @@ export const HelpChatView: React.FC = () => {
             ))}
           </div>
 
-          {/* Accordion */}
           <div className="mx-auto max-w-4xl space-y-3">
             {filteredFaqs.map((faq, idx) => {
               const isOpen = expandedFaq === idx;
               return (
                 <div
                   key={idx}
-                  className="card-dark overflow-hidden transition-all duration-200"
-                  style={{ borderColor: isOpen ? 'rgba(99,102,241,0.4)' : 'rgba(255,255,255,0.08)' }}
+                  className="rounded-2xl border border-stone-200 bg-white overflow-hidden transition-all duration-200 hover:shadow-md hover:shadow-stone-200/30"
                 >
                   <button
                     onClick={() => setExpandedFaq(isOpen ? null : idx)}
-                    className="flex w-full items-center justify-between p-5 text-left font-bold text-slate-100 transition hover:bg-white/[0.02]"
+                    className="flex w-full items-center justify-between p-5 text-left font-semibold text-stone-800 transition-colors hover:bg-stone-50/50"
                   >
                     <span className="flex items-center gap-3 text-sm sm:text-base">
                       <span className="badge-brand text-[10px] uppercase">{faq.category}</span>
                       {faq.question}
                     </span>
                     {isOpen ? (
-                      <ChevronUp className="h-5 w-5 shrink-0 text-indigo-400" />
+                      <Icons.chevronUp className="h-5 w-5 shrink-0 text-orange-500" />
                     ) : (
-                      <ChevronDown className="h-5 w-5 shrink-0 text-slate-500" />
+                      <Icons.chevronDown className="h-5 w-5 shrink-0 text-stone-400" />
                     )}
                   </button>
                   {isOpen && (
-                    <div className="border-t p-5 text-sm leading-relaxed" style={{ borderColor: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}>
+                    <div className="border-t border-stone-100 p-5 text-sm leading-relaxed text-stone-600">
                       {faq.answer}
                     </div>
                   )}
@@ -201,83 +196,77 @@ export const HelpChatView: React.FC = () => {
             })}
           </div>
 
-          {/* Contact Support Direct Grid */}
           <div className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2">
-            <div className="card-dark p-6 flex items-center gap-4">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-cyan-500/20 text-cyan-400">
-                <Phone className="h-6 w-6" />
+            <div className="rounded-2xl border border-stone-200 bg-white p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-all">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-orange-50 text-orange-600 border border-orange-200">
+                <Icons.phone className="h-6 w-6" />
               </div>
               <div>
-                <h4 className="font-bold text-slate-100">Toll Free Helpline</h4>
-                <p className="text-sm font-mono font-bold text-indigo-400 mt-0.5">1800-111-139</p>
-                <span className="text-xs" style={{ color: '#64748b' }}>24x7 Customer Support</span>
+                <h4 className="font-bold text-stone-900">Toll Free Helpline</h4>
+                <p className="text-sm font-mono font-bold text-orange-600 mt-0.5">1800-111-139</p>
+                <span className="text-xs text-stone-400">24x7 Customer Support</span>
               </div>
             </div>
-            <div className="card-dark p-6 flex items-center gap-4">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-purple-500/20 text-purple-400">
-                <Mail className="h-6 w-6" />
+            <div className="rounded-2xl border border-stone-200 bg-white p-6 flex items-center gap-4 shadow-sm hover:shadow-md transition-all">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-200">
+                <Icons.mail className="h-6 w-6" />
               </div>
               <div>
-                <h4 className="font-bold text-slate-100">Email Assistance</h4>
-                <p className="text-sm font-mono font-bold text-cyan-400 mt-0.5">care@railgo.in</p>
-                <span className="text-xs" style={{ color: '#64748b' }}>Response within 2 hours</span>
+                <h4 className="font-bold text-stone-900">Email Assistance</h4>
+                <p className="text-sm font-mono font-bold text-indigo-600 mt-0.5">care@railgo.in</p>
+                <span className="text-xs text-stone-400">Response within 2 hours</span>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* TAB 2: LIVE CHAT */}
       {activeTab === 'chat' && (
         <div className="mx-auto max-w-3xl">
-          <div className="card-dark overflow-hidden flex flex-col h-[600px] border" style={{ borderColor: 'rgba(99,102,241,0.3)' }}>
-            {/* Chat Box Header */}
-            <div className="flex items-center justify-between p-4 border-b bg-slate-900/80 glass" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+          <div className="rounded-3xl border border-stone-200 bg-white overflow-hidden flex flex-col shadow-lg shadow-stone-200/30" style={{ minHeight: '600px' }}>
+            <div className="flex items-center justify-between p-4 border-b border-stone-200 bg-stone-50/50">
               <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 text-white shadow-lg">
-                  <Bot className="h-5 w-5" />
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-tr from-indigo-600 to-orange-500 text-white shadow-lg">
+                  <Icons.bot className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-slate-100 text-sm">RailAI Assistant</h4>
+                  <h4 className="font-bold text-stone-900 text-sm">RailAI Assistant</h4>
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[11px]" style={{ color: '#94a3b8' }}>Online • 28 Microservices Connected</span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse-soft" />
+                    <span className="text-[11px] text-stone-500">Online • 28 Microservices Connected</span>
                   </div>
                 </div>
               </div>
               <span className="badge-brand text-[10px]">Instant AI</span>
             </div>
 
-            {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ background: 'rgba(8,12,20,0.6)' }}>
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-stone-50/30">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex items-start gap-3 animate-chat-pop ${
-                    msg.sender === 'user' ? 'flex-row-reverse' : ''
-                  }`}
+                  className={`flex items-start gap-3 animate-fade-in ${msg.sender === 'user' ? 'flex-row-reverse' : ''}`}
                 >
                   <div
                     className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-xs font-bold ${
                       msg.sender === 'user'
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gradient-to-tr from-cyan-500 to-blue-600 text-white'
+                        ? 'bg-orange-600 text-white'
+                        : 'bg-gradient-to-tr from-indigo-600 to-orange-500 text-white'
                     }`}
                   >
-                    {msg.sender === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                    {msg.sender === 'user' ? <Icons.user className="h-4 w-4" /> : <Icons.bot className="h-4 w-4" />}
                   </div>
 
                   <div
-                    className={`max-w-[80%] rounded-2xl p-4 text-sm leading-relaxed ${
+                    className={`max-w-[80%] rounded-2xl p-4 text-sm leading-relaxed transition-all ${
                       msg.sender === 'user'
-                        ? 'bg-indigo-600 text-white rounded-tr-none'
-                        : 'card-dark text-slate-200 rounded-tl-none border-white/10'
+                        ? 'bg-orange-600 text-white rounded-tr-none shadow-lg shadow-orange-500/20'
+                        : 'bg-white text-stone-700 rounded-tl-none border border-stone-200 shadow-sm'
                     }`}
                   >
                     <p>{msg.text}</p>
                     <span
-                      className={`block mt-1 text-[10px] ${
-                        msg.sender === 'user' ? 'text-indigo-200 text-right' : 'text-slate-500'
+                      className={`block mt-1.5 text-[10px] ${
+                        msg.sender === 'user' ? 'text-orange-200 text-right' : 'text-stone-400'
                       }`}
                     >
                       {msg.time}
@@ -287,46 +276,40 @@ export const HelpChatView: React.FC = () => {
               ))}
 
               {isTyping && (
-                <div className="flex items-center gap-2 text-xs text-indigo-400 font-semibold p-2">
-                  <Bot className="h-4 w-4 animate-spin" /> RailAI is typing...
+                <div className="flex items-center gap-2 text-xs font-semibold text-orange-600 p-2">
+                  <Icons.bot className="h-4 w-4 animate-spin" /> RailAI is typing...
                 </div>
               )}
             </div>
 
-            {/* Quick Questions Chips */}
-            <div className="px-4 py-2 border-t flex flex-wrap gap-2 text-xs" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(15,23,36,0.9)' }}>
-              <span className="text-[10px] font-bold uppercase text-slate-500 self-center">Suggested:</span>
-              <button
-                onClick={() => handleQuickQuestion('How do I cancel my ticket?')}
-                className="btn-ghost px-2.5 py-1 text-[11px] rounded-lg"
-              >
-                Cancel ticket info
-              </button>
-              <button
-                onClick={() => handleQuickQuestion('When will I get my refund?')}
-                className="btn-ghost px-2.5 py-1 text-[11px] rounded-lg"
-              >
-                Refund status ETA
-              </button>
-              <button
-                onClick={() => handleQuickQuestion('How to check PNR status?')}
-                className="btn-ghost px-2.5 py-1 text-[11px] rounded-lg"
-              >
-                PNR tracking help
-              </button>
+            <div className="px-4 py-3 border-t border-stone-200 bg-white flex flex-wrap gap-2">
+              <span className="text-[10px] font-bold uppercase text-stone-400 self-center mr-1">Suggested:</span>
+              {[
+                'Cancel ticket info',
+                'Refund status ETA',
+                'PNR tracking help',
+                'Tatkal rules'
+              ].map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleQuickQuestion(q)}
+                  className="rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-[11px] font-semibold text-stone-600 hover:border-orange-300 hover:text-orange-700 hover:bg-orange-50 transition-all"
+                >
+                  {q}
+                </button>
+              ))}
             </div>
 
-            {/* Chat Input Form */}
-            <form onSubmit={handleSendMessage} className="p-3 border-t bg-slate-900/90 glass flex items-center gap-2" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+            <form onSubmit={handleSendMessage} className="p-4 border-t border-stone-200 bg-white flex items-center gap-3">
               <input
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Ask RailAI anything about train booking, PNR or refunds..."
-                className="input-dark flex-1 text-sm py-2.5"
+                className="field-control flex-1 text-sm py-3"
               />
-              <button type="submit" className="btn-brand px-4 py-2.5 rounded-xl shrink-0">
-                <Send className="h-4 w-4" />
+              <button type="submit" className="btn-brand px-4 py-3 rounded-xl shrink-0">
+                <Icons.send className="h-4 w-4" />
               </button>
             </form>
           </div>

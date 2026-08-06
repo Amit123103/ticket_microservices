@@ -1,13 +1,12 @@
 'use client';
 import React, { useState } from 'react';
-import { X, Mail, Eye, EyeOff, Train, Shield, Loader2 } from 'lucide-react';
+import { Icons } from './Icons';
 
 interface AuthModalProps {
   onClose: () => void;
   onSuccess: (user: { name: string; email: string; avatar: string }) => void;
 }
 
-// Google SVG icon
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
     <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
@@ -17,7 +16,6 @@ const GoogleIcon = () => (
   </svg>
 );
 
-// Apple SVG icon
 const AppleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
     <path d="M14.94 12.98c-.28.62-.62 1.2-1.02 1.74-.54.7-1.08 1.05-1.62 1.06-.41 0-.9-.12-1.47-.36-.58-.24-1.12-.36-1.6-.36-.51 0-1.06.12-1.65.36-.58.24-1.06.37-1.43.38-.52.02-1.07-.34-1.64-1.07-.43-.55-.79-1.16-1.06-1.82A8.8 8.8 0 0 1 2 9.3c0-.97.21-1.81.63-2.51.33-.55.77-1 1.32-1.33.55-.33 1.15-.5 1.79-.51.44 0 1.02.14 1.73.41.71.27 1.17.41 1.36.41.15 0 .66-.16 1.51-.48.81-.3 1.5-.42 2.07-.38 1.53.12 2.68.72 3.44 1.8a4.16 4.16 0 0 0-2.02 3.77c.03 1.27.47 2.34 1.33 3.19zm-3.6-12.1c0 .99-.36 1.91-1.09 2.76-.88 1.01-1.93 1.6-3.08 1.51-.01-.12-.02-.24-.02-.37 0-.95.41-1.97 1.14-2.8.36-.42.82-.77 1.38-1.04.55-.27 1.07-.42 1.57-.44.01.13.1.26.1.38z"/>
@@ -60,137 +58,131 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(12px)' }}>
-      <div className="relative w-full max-w-md rounded-md p-8 animate-fade-in-up border-orange-500/30" style={{ background: '#120e20', border: '1px solid rgba(249,115,22,0.3)', boxShadow: '0 20px 60px rgba(0,0,0,0.8)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(28,25,23,0.4)', backdropFilter: 'blur(8px)' }}>
+      <div className="relative w-full max-w-md rounded-3xl border border-stone-200 bg-white shadow-2xl shadow-stone-300/30 animate-scale-in overflow-hidden">
 
         {/* Close */}
-        <button onClick={onClose} className="absolute right-5 top-5 rounded-md p-2 transition" style={{ background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}
-          onMouseEnter={e => (e.currentTarget.style.color = '#f8fafc')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#94a3b8')}>
-          <X className="h-4 w-4" />
+        <button onClick={onClose} className="absolute right-4 top-4 rounded-xl p-2 transition-colors text-stone-400 hover:text-stone-700 hover:bg-stone-100">
+          <Icons.x className="h-5 w-5" />
         </button>
 
         {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-md bg-gradient-to-br from-orange-500 to-purple-600 text-white shadow-lg" style={{ boxShadow: '0 4px 20px rgba(249,115,22,0.4)' }}>
-            <Train className="h-7 w-7 text-white" />
+        <div className="px-8 pt-10 pb-6 text-center">
+          <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25">
+            <Icons.train className="h-8 w-8" />
           </div>
-          <h2 className="text-2xl font-black mb-1" style={{ fontFamily: 'Outfit, sans-serif' }}>
+          <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: 'Outfit, sans-serif' }}>
             {view === 'choose' ? 'Welcome to RailGo' : (isSignUp ? 'Create Account' : 'Sign In')}
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-stone-500">
             {view === 'choose' ? 'Choose how you\'d like to continue' : (isSignUp ? 'Start booking in seconds' : 'Good to see you again')}
           </p>
         </div>
 
-        {view === 'choose' ? (
-          <div className="space-y-3">
-            {/* Google */}
-            <button onClick={handleGoogle} disabled={loading} className="group flex w-full items-center gap-4 rounded-md px-5 py-3.5 text-sm font-semibold transition-all"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(249,115,22,0.4)')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}>
-              {loading ? <Loader2 className="h-5 w-5 animate-spin mx-auto text-orange-500" /> : (
-                <>
-                  <div className="grid h-9 w-9 place-items-center rounded-md" style={{ background: '#fff' }}><GoogleIcon /></div>
-                  <span className="text-slate-200">Continue with Google</span>
-                </>
-              )}
-            </button>
-
-            {/* Apple */}
-            <button onClick={handleApple} disabled={loading} className="flex w-full items-center gap-4 rounded-md px-5 py-3.5 text-sm font-semibold transition-all"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(168,85,247,0.4)')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}>
-              <div className="grid h-9 w-9 place-items-center rounded-md" style={{ background: '#fff', color: '#000' }}><AppleIcon /></div>
-              <span className="text-slate-200">Continue with Apple</span>
-            </button>
-
-            {/* Divider */}
-            <div className="flex items-center gap-3 py-2">
-              <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-              <span className="text-xs font-semibold text-slate-500">or</span>
-              <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-            </div>
-
-            {/* Email */}
-            <button onClick={() => setView('email')} className="flex w-full items-center gap-4 rounded-md px-5 py-3.5 text-sm font-semibold transition-all"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(249,115,22,0.4)')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}>
-              <div className="grid h-9 w-9 place-items-center rounded-md" style={{ background: 'rgba(249,115,22,0.15)', border: '1px solid rgba(249,115,22,0.3)' }}>
-                <Mail className="h-4 w-4 text-orange-400" />
-              </div>
-              <span className="text-slate-200">Continue with Email</span>
-            </button>
-
-            <p className="text-center text-xs pt-2 text-slate-500">
-              By continuing, you agree to our <span className="cursor-pointer text-orange-400">Terms</span> & <span className="cursor-pointer text-purple-400">Privacy Policy</span>
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleEmailSubmit} className="space-y-4">
-            {/* Name (sign up only) */}
-            {isSignUp && (
-              <div>
-                <label className="field-label">Full Name</label>
-                <input value={name} onChange={e => setName(e.target.value)} type="text" placeholder="Amit Kumar" className="input-dark mt-1" />
-              </div>
-            )}
-
-            {/* Email */}
-            <div>
-              <label className="field-label">Email Address</label>
-              <input value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="you@example.com" className="input-dark mt-1" />
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="field-label">Password</label>
-              <div className="relative">
-                <input value={password} onChange={e => setPassword(e.target.value)}
-                  type={showPass ? 'text' : 'password'} placeholder="••••••••" className="input-dark mt-1 pr-10" />
-                <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-                  {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-
-            {!isSignUp && (
-              <div className="flex justify-end">
-                <button type="button" className="text-xs font-semibold text-orange-400">Forgot password?</button>
-              </div>
-            )}
-
-            {error && (
-              <div className="rounded-md px-4 py-3 text-sm font-semibold" style={{ background: 'rgba(244,63,94,0.12)', border: '1px solid rgba(244,63,94,0.25)', color: '#fb7185' }}>
-                {error}
-              </div>
-            )}
-
-            <button type="submit" disabled={loading} className="btn-brand w-full py-3.5">
-              {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : (isSignUp ? 'Create Account' : 'Sign In')}
-            </button>
-
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-              <button type="button" onClick={() => { setView('choose'); setError(''); }} className="text-xs font-semibold text-slate-400">Back</button>
-              <div className="flex-1 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-            </div>
-
-            <p className="text-center text-sm text-slate-400">
-              {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-              <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-bold text-orange-400">
-                {isSignUp ? 'Sign In' : 'Sign Up'}
+        <div className="px-8 pb-8">
+          {view === 'choose' ? (
+            <div className="space-y-3">
+              {/* Google */}
+              <button onClick={handleGoogle} disabled={loading} className="group flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-stone-200 hover:border-orange-300 hover:shadow-sm">
+                {loading ? <Icons.arrowRight className="h-5 w-5 animate-spin mx-auto text-orange-500" /> : (
+                  <>
+                    <div className="grid h-9 w-9 place-items-center rounded-lg border border-stone-200"><GoogleIcon /></div>
+                    <span className="text-stone-700">Continue with Google</span>
+                    <Icons.arrowRight className="h-4 w-4 ml-auto text-stone-400 group-hover:text-orange-500 transition-colors" />
+                  </>
+                )}
               </button>
-            </p>
-          </form>
-        )}
+
+              {/* Apple */}
+              <button onClick={handleApple} disabled={loading} className="flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-stone-200 hover:border-stone-300 hover:shadow-sm">
+                <div className="grid h-9 w-9 place-items-center rounded-lg border border-stone-200 text-stone-700"><AppleIcon /></div>
+                <span className="text-stone-700">Continue with Apple</span>
+                <Icons.arrowRight className="h-4 w-4 ml-auto text-stone-400" />
+              </button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-4 py-3">
+                <div className="flex-1 h-px bg-stone-200" />
+                <span className="text-xs font-semibold text-stone-400">or</span>
+                <div className="flex-1 h-px bg-stone-200" />
+              </div>
+
+              {/* Email */}
+              <button onClick={() => setView('email')} className="flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-orange-200 bg-orange-50 hover:bg-orange-100 text-orange-700">
+                <div className="grid h-9 w-9 place-items-center rounded-lg bg-orange-100 text-orange-600">
+                  <Icons.mail className="h-4 w-4" />
+                </div>
+                <span>Continue with Email</span>
+                <Icons.arrowRight className="h-4 w-4 ml-auto" />
+              </button>
+
+              <p className="text-center text-xs pt-2 text-stone-400">
+                By continuing, you agree to our <span className="cursor-pointer text-orange-600 font-medium">Terms</span> & <span className="cursor-pointer text-orange-600 font-medium">Privacy Policy</span>
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleEmailSubmit} className="space-y-4">
+              {/* Name (sign up only) */}
+              {isSignUp && (
+                <div>
+                  <label className="field-label">Full Name</label>
+                  <input value={name} onChange={e => setName(e.target.value)} type="text" placeholder="Amit Kumar" className="field-control mt-1" />
+                </div>
+              )}
+
+              {/* Email */}
+              <div>
+                <label className="field-label">Email Address</label>
+                <input value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="you@example.com" className="field-control mt-1" />
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="field-label">Password</label>
+                <div className="relative mt-1">
+                  <input value={password} onChange={e => setPassword(e.target.value)}
+                    type={showPass ? 'text' : 'password'} placeholder="••••••••" className="field-control pr-10" />
+                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600">
+                    {showPass ? <Icons.x className="h-4 w-4" /> : <Icons.arrowRight className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {!isSignUp && (
+                <div className="flex justify-end">
+                  <button type="button" className="text-xs font-semibold text-orange-600 hover:text-orange-700">Forgot password?</button>
+                </div>
+              )}
+
+              {error && (
+                <div className="rounded-xl px-4 py-3 text-sm font-semibold bg-red-50 border border-red-200 text-red-700">
+                  {error}
+                </div>
+              )}
+
+              <button type="submit" disabled={loading} className="btn-brand w-full py-3.5 justify-center">
+                {loading ? <Icons.arrowRight className="h-5 w-5 animate-spin" /> : (isSignUp ? 'Create Account' : 'Sign In')}
+              </button>
+
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-px bg-stone-200" />
+                <button type="button" onClick={() => { setView('choose'); setError(''); }} className="text-xs font-semibold text-stone-400 hover:text-stone-600">Back</button>
+                <div className="flex-1 h-px bg-stone-200" />
+              </div>
+
+              <p className="text-center text-sm text-stone-500">
+                {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+                <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-bold text-orange-600 hover:text-orange-700">
+                  {isSignUp ? 'Sign In' : 'Sign Up'}
+                </button>
+              </p>
+            </form>
+          )}
+        </div>
 
         {/* Security badge */}
-        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
-          <Shield className="h-3.5 w-3.5 text-purple-400" />
+        <div className="px-8 pb-6 flex items-center justify-center gap-2 text-xs text-stone-400">
+          <Icons.shield className="h-3.5 w-3.5 text-indigo-500" />
           <span>256-bit SSL encryption • Your data is safe</span>
         </div>
       </div>

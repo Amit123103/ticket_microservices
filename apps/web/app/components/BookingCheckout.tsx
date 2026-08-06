@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, ShieldCheck, CreditCard, Wallet, Smartphone, Building2, Sparkles, ArrowRight } from 'lucide-react';
+import { Icons } from './Icons';
 import { Train, TrainClassInfo, Passenger, BookingTicket } from '../data/trainData';
 
 interface BookingCheckoutProps { train: Train; selectedClass: TrainClassInfo; passengerCount: number; selectedSeats: string[]; travelDate: string; quota: string; onClose: () => void; onBookingSuccess: (ticket: BookingTicket) => void; }
@@ -41,89 +41,166 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
     }, 2000);
   };
 
+  const steps = [
+    { n: 1, l: 'Passengers', icon: Icons.users },
+    { n: 2, l: 'Add-ons', icon: Icons.shieldCheck },
+    { n: 3, l: 'Payment', icon: Icons.creditCard },
+  ] as const;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-3xl rounded-3xl border border-slate-200 bg-white shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-emerald-50 px-6 py-4">
-          <div><span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-700">IRCTC Checkout • Step {step}/3</span>
-            <h3 className="font-bold text-slate-900 text-xl">{train.name} (#{train.number})</h3></div>
-          <button onClick={onClose} className="rounded-full bg-white p-2 text-slate-400 hover:text-slate-700 border border-slate-200"><X className="h-5 w-5" /></button>
+    <div className="modal-overlay">
+      <div className="relative w-full max-w-3xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
+        <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">IRCTC Checkout • Step {step}/3</span>
+            </div>
+            <h3 className="font-bold text-stone-900 text-lg">{train.name} <span className="text-stone-400 font-normal">#{train.number}</span></h3>
+          </div>
+          <button onClick={onClose} className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all">
+            <Icons.x className="h-5 w-5" />
+          </button>
         </div>
 
-        {/* Stepper */}
-        <div className="flex border-b border-slate-100 bg-white px-6 py-3">
-          {[{n:1,l:'Passengers'},{n:2,l:'Add-ons'},{n:3,l:'Payment'}].map(({n,l},i) => (
+        <div className="flex items-center justify-center gap-2 border-b border-stone-100 bg-white px-6 py-4">
+          {steps.map(({ n, l, icon: Icon }, i) => (
             <React.Fragment key={n}>
-              {i>0 && <div className="mx-4 flex-1 self-center border-t border-slate-200"></div>}
-              <div className={`flex items-center gap-2 text-xs font-bold ${step>=n?'text-emerald-700':'text-slate-400'}`}>
-                <span className={`grid h-6 w-6 place-items-center rounded-full ${step>=n?'bg-emerald-600 text-white':'bg-slate-200 text-slate-400'}`}>{n}</span><span>{l}</span>
-              </div>
+              {i > 0 && <div className="h-px w-8 bg-stone-200" />}
+              <button onClick={() => setStep(n as any)} className={`flex items-center gap-2 text-xs font-semibold transition-colors ${step >= n ? 'text-orange-700' : 'text-stone-400'}`}>
+                <div className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-bold transition-all ${step >= n ? 'bg-orange-600 text-white shadow-sm shadow-orange-500/20' : 'bg-stone-100 text-stone-400'}`}>
+                  {step > n ? <Icons.sparkles className="h-3.5 w-3.5" /> : n}
+                </div>
+                <span className="hidden sm:inline">{l}</span>
+              </button>
             </React.Fragment>
           ))}
         </div>
 
-        <div className="p-6 max-h-[65vh] overflow-y-auto space-y-6">
-          {step===1 && <div className="space-y-4">
-            <h4 className="font-bold text-slate-900">Passenger Information</h4>
+        <div className="p-6 max-h-[60vh] overflow-y-auto">
+          {step === 1 && <div className="space-y-5">
+            <h4 className="font-bold text-stone-900 text-base">Passenger Information</h4>
             {passengers.map((p, idx) => (
-              <div key={idx} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-                <div className="flex items-center justify-between text-xs font-bold text-emerald-700"><span>Passenger {idx+1}</span><span>{p.seatAssigned}</span></div>
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div><label className="field-label">Full Name</label><input type="text" value={p.name} onChange={(e) => updatePassenger(idx,'name',e.target.value)} className="field-control" /></div>
-                  <div><label className="field-label">Age</label><input type="number" value={p.age} onChange={(e) => updatePassenger(idx,'age',Number(e.target.value))} className="field-control" /></div>
-                  <div><label className="field-label">Gender</label><select value={p.gender} onChange={(e) => updatePassenger(idx,'gender',e.target.value)} className="field-control"><option>Male</option><option>Female</option><option>Transgender</option></select></div>
+              <div key={idx} className="rounded-2xl border border-stone-200 bg-white p-5 space-y-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-orange-600">Passenger {idx + 1}</span>
+                  <span className="text-xs font-mono font-semibold text-stone-500 bg-stone-50 px-2 py-1 rounded-lg">{p.seatAssigned}</span>
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div><label className="field-label">Berth Preference</label><select value={p.berthPreference} onChange={(e) => updatePassenger(idx,'berthPreference',e.target.value)} className="field-control"><option>No Preference</option><option>Lower</option><option>Middle</option><option>Upper</option><option>Side Lower</option><option>Side Upper</option></select></div>
-                  <div><label className="field-label">Meal</label><select value={p.foodPreference} onChange={(e) => updatePassenger(idx,'foodPreference',e.target.value)} className="field-control"><option>Veg</option><option>Non-Veg</option><option>Jain</option><option>No Meal</option></select></div>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div>
+                    <label className="field-label">Full Name</label>
+                    <input type="text" value={p.name} onChange={(e) => updatePassenger(idx,'name',e.target.value)} className="field-control mt-1" />
+                  </div>
+                  <div>
+                    <label className="field-label">Age</label>
+                    <input type="number" value={p.age} onChange={(e) => updatePassenger(idx,'age',Number(e.target.value))} className="field-control mt-1" />
+                  </div>
+                  <div>
+                    <label className="field-label">Gender</label>
+                    <select value={p.gender} onChange={(e) => updatePassenger(idx,'gender',e.target.value)} className="field-control mt-1">
+                      <option>Male</option><option>Female</option><option>Transgender</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="field-label">Berth Preference</label>
+                    <select value={p.berthPreference} onChange={(e) => updatePassenger(idx,'berthPreference',e.target.value)} className="field-control mt-1">
+                      <option>No Preference</option><option>Lower</option><option>Middle</option><option>Upper</option><option>Side Lower</option><option>Side Upper</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="field-label">Meal</label>
+                    <select value={p.foodPreference} onChange={(e) => updatePassenger(idx,'foodPreference',e.target.value)} className="field-control mt-1">
+                      <option>Veg</option><option>Non-Veg</option><option>Jain</option><option>No Meal</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             ))}
-            <div className="flex justify-end pt-4"><button onClick={() => setStep(2)} className="flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-bold text-white hover:bg-emerald-500">Continue <ArrowRight className="h-4 w-4" /></button></div>
+            <div className="flex justify-end pt-2">
+              <button onClick={() => setStep(2)} className="btn-brand flex items-center gap-2">
+                Continue <Icons.arrowRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>}
 
-          {step===2 && <div className="space-y-4">
-            <h4 className="font-bold text-slate-900">Contact & Protection</h4>
+          {step === 2 && <div className="space-y-5">
+            <h4 className="font-bold text-stone-900 text-base">Contact & Protection</h4>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div><label className="field-label">Mobile</label><input type="text" value={mobile} onChange={(e) => setMobile(e.target.value)} className="field-control" /></div>
-              <div><label className="field-label">Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="field-control" /></div>
+              <div>
+                <label className="field-label">Mobile Number</label>
+                <div className="relative mt-1">
+                  <Icons.phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                  <input type="text" value={mobile} onChange={(e) => setMobile(e.target.value)} className="field-control pl-10" />
+                </div>
+              </div>
+              <div>
+                <label className="field-label">Email</label>
+                <div className="relative mt-1">
+                  <Icons.mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="field-control pl-10" />
+                </div>
+              </div>
             </div>
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 hover:border-emerald-300">
-              <input type="checkbox" checked={includeFreeCancellation} onChange={(e) => setIncludeFreeCancellation(e.target.checked)} className="mt-1 h-4 w-4 accent-emerald-600" />
-              <div><div className="flex items-center gap-2"><span className="font-bold text-slate-800 text-sm">Free Cancellation (+₹99)</span><span className="rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">Recommended</span></div>
-                <p className="text-xs text-slate-400 mt-0.5">100% refund before chart preparation.</p></div>
+            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-orange-300 hover:shadow-sm transition-all cursor-pointer">
+              <input type="checkbox" checked={includeFreeCancellation} onChange={(e) => setIncludeFreeCancellation(e.target.checked)} className="mt-1 h-4 w-4 accent-orange-600" />
+              <div className="flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-bold text-stone-800 text-sm">Free Cancellation (+₹99)</span>
+                  <span className="rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-bold text-orange-700 border border-orange-200">Recommended</span>
+                </div>
+                <p className="text-xs text-stone-500 mt-1">100% refund before chart preparation.</p>
+              </div>
             </label>
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 hover:border-emerald-300">
-              <input type="checkbox" checked={includeInsurance} onChange={(e) => setIncludeInsurance(e.target.checked)} className="mt-1 h-4 w-4 accent-emerald-600" />
-              <div><span className="font-bold text-slate-800 text-sm">Travel Insurance (+₹0.45/pax)</span><p className="text-xs text-slate-400 mt-0.5">Coverage up to ₹10,00,000.</p></div>
+            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-orange-300 hover:shadow-sm transition-all cursor-pointer">
+              <input type="checkbox" checked={includeInsurance} onChange={(e) => setIncludeInsurance(e.target.checked)} className="mt-1 h-4 w-4 accent-orange-600" />
+              <div className="flex-1">
+                <span className="font-bold text-stone-800 text-sm">Travel Insurance (+₹0.45/pax)</span>
+                <p className="text-xs text-stone-500 mt-1">Coverage up to ₹10,00,000.</p>
+              </div>
             </label>
-            <div className="flex justify-between pt-4">
-              <button onClick={() => setStep(1)} className="rounded-xl bg-white px-5 py-2.5 text-xs font-bold text-slate-600 border border-slate-200">Back</button>
-              <button onClick={() => setStep(3)} className="flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-bold text-white hover:bg-emerald-500">Payment <ArrowRight className="h-4 w-4" /></button>
+            <div className="flex items-center justify-between pt-2">
+              <button onClick={() => setStep(1)} className="btn-ghost text-xs">Back</button>
+              <button onClick={() => setStep(3)} className="btn-brand flex items-center gap-2">
+                Payment <Icons.arrowRight className="h-4 w-4" />
+              </button>
             </div>
           </div>}
 
-          {step===3 && <div className="space-y-5">
-            <h4 className="font-bold text-slate-900">Payment Method</h4>
+          {step === 3 && <div className="space-y-5">
+            <h4 className="font-bold text-stone-900 text-base">Payment Method</h4>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[{id:'UPI',l:'UPI / GPay',I:Smartphone},{id:'Card',l:'Cards',I:CreditCard},{id:'NetBanking',l:'Net Banking',I:Building2},{id:'Wallet',l:'Wallet',I:Wallet}].map(({id,l,I}) => (
+              {[{id:'UPI',l:'UPI / GPay',i:Icons.smartphone},{id:'Card',l:'Cards',i:Icons.creditCard},{id:'NetBanking',l:'Net Banking',i:Icons.building},{id:'Wallet',l:'Wallet',i:Icons.wallet}].map(({id,l,i:Icon}) => (
                 <button key={id} onClick={() => setPaymentMethod(id as any)}
-                  className={`flex flex-col items-center gap-2 rounded-2xl border p-4 transition ${paymentMethod===id?'border-emerald-500 bg-emerald-50 ring-1 ring-emerald-400':'border-slate-200 hover:border-emerald-300'}`}>
-                  <I className="h-5 w-5 text-emerald-600" /><span className="text-xs font-bold text-slate-700">{l}</span>
+                  className={`flex flex-col items-center gap-3 rounded-2xl border p-5 transition-all ${paymentMethod===id?'border-orange-400 bg-orange-50 shadow-sm shadow-orange-500/10':'border-stone-200 hover:border-orange-300 hover:bg-orange-50/30'}`}>
+                  <Icon className={`h-5 w-5 ${paymentMethod===id?'text-orange-600':'text-stone-400'}`} />
+                  <span className={`text-xs font-semibold ${paymentMethod===id?'text-orange-700':'text-stone-600'}`}>{l}</span>
                 </button>
               ))}
             </div>
-            {paymentMethod==='UPI' && <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><label className="field-label">UPI ID</label><input type="text" value={upiId} onChange={(e) => setUpiId(e.target.value)} className="field-control mt-1" /></div>}
-            <div className="rounded-2xl bg-emerald-50 p-4 border border-emerald-200 space-y-2">
-              <div className="flex justify-between text-xs text-slate-600"><span>Base Fare ({passengerCount} Pax)</span><span>₹{baseFare}</span></div>
-              {includeFreeCancellation && <div className="flex justify-between text-xs text-slate-600"><span>Free Cancellation</span><span>₹99</span></div>}
-              <div className="flex justify-between border-t border-emerald-200 pt-2 font-bold text-slate-900 text-base"><span>Total</span><span className="text-emerald-700">₹{totalFare}</span></div>
+            {paymentMethod==='UPI' && <div className="rounded-2xl border border-stone-200 bg-stone-50/50 p-5">
+              <label className="field-label">UPI ID</label>
+              <input type="text" value={upiId} onChange={(e) => setUpiId(e.target.value)} className="field-control mt-1" />
+            </div>}
+            <div className="rounded-2xl bg-orange-50/80 p-5 border border-orange-200 space-y-3">
+              <div className="flex justify-between text-sm text-stone-600">
+                <span>Base Fare ({passengerCount} Pax)</span>
+                <span className="font-semibold">₹{baseFare}</span>
+              </div>
+              {includeFreeCancellation && <div className="flex justify-between text-sm text-stone-600">
+                <span>Free Cancellation</span>
+                <span className="font-semibold">₹99</span>
+              </div>}
+              <div className="flex justify-between border-t border-orange-200 pt-3 font-bold text-stone-900 text-base">
+                <span>Total</span>
+                <span className="text-orange-700">₹{totalFare}</span>
+              </div>
             </div>
-            <div className="flex justify-between pt-2">
-              <button onClick={() => setStep(2)} disabled={isProcessing} className="rounded-xl bg-white px-5 py-2.5 text-xs font-bold text-slate-600 border border-slate-200">Back</button>
+            <div className="flex items-center justify-between pt-2">
+              <button onClick={() => setStep(2)} disabled={isProcessing} className="btn-ghost text-xs">Back</button>
               <button disabled={isProcessing} onClick={handlePayAndBook}
-                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-8 py-3.5 font-bold text-white shadow-xl shadow-emerald-500/20 hover:brightness-110 disabled:opacity-50">
-                {isProcessing ? <><div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div><span>Processing...</span></> : <><Sparkles className="h-4 w-4" /><span>Pay ₹{totalFare} & Book</span></>}
+                className="btn-brand flex items-center gap-2 px-8 py-3.5">
+                {isProcessing ? <><div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div><span>Processing...</span></> : <><Icons.sparkles className="h-4 w-4" /><span>Pay ₹{totalFare} & Book</span></>}
               </button>
             </div>
           </div>}

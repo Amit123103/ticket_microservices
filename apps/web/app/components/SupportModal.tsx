@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HelpCircle, Clock, ShieldCheck, RefreshCw, Calculator, PhoneCall, Mail, ChevronDown } from 'lucide-react';
+import { Icons } from './Icons';
 
 export const SupportModal: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -34,47 +34,40 @@ export const SupportModal: React.FC = () => {
     if (calcClass === '3A' || calcClass === 'CC') fee = 180;
     if (calcClass === 'SL') fee = 120;
     if (calcClass === '2S') fee = 60;
-
     return Math.max(0, fare - fee);
   };
 
   return (
     <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="text-center max-w-2xl mx-auto mb-8">
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-bold text-indigo-300 mb-3">
-          <HelpCircle className="h-4 w-4 text-indigo-400" />
-          <span>24/7 RailGo Assistance</span>
+        <div className="section-pill mb-3">
+          <Icons.help className="h-3.5 w-3.5" /> 24/7 RailGo Assistance
         </div>
-        <h2 className="text-3xl font-extrabold text-white sm:text-4xl">Help Center & FAQ</h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <h2 className="text-3xl font-bold sm:text-4xl" style={{ fontFamily: 'Outfit, sans-serif' }}>Help Center & FAQ</h2>
+        <p className="mt-2 text-sm text-stone-500">
           Everything you need to know about Indian Railway ticket bookings, Tatkal timings & refunds.
         </p>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-[1.5fr_1fr]">
+      <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr]">
         
-        {/* FAQ Accordion */}
         <div className="space-y-4">
-          <h3 className="text-lg font-bold text-white mb-4">Frequently Asked Questions</h3>
+          <h3 className="text-lg font-bold text-stone-900 mb-4">Frequently Asked Questions</h3>
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden transition"
+              className="rounded-2xl border border-stone-200 bg-white overflow-hidden transition-all hover:shadow-md hover:shadow-stone-200/40"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="w-full flex items-center justify-between p-5 text-left font-bold text-white text-sm"
+                className="w-full flex items-center justify-between p-5 text-left font-bold text-stone-800 text-sm hover:bg-stone-50 transition-colors"
               >
                 <span>{faq.q}</span>
-                <ChevronDown
-                  className={`h-4 w-4 text-indigo-400 transition-transform ${
-                    openFaq === idx ? 'rotate-180' : ''
-                  }`}
-                />
+                <Icons.chevronDown className={`h-4 w-4 text-orange-500 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
               </button>
 
               {openFaq === idx && (
-                <div className="px-5 pb-5 text-xs leading-relaxed text-slate-300 border-t border-slate-800/60 pt-3">
+                <div className="px-5 pb-5 text-xs leading-relaxed text-stone-600 border-t border-stone-100 pt-3">
                   {faq.a}
                 </div>
               )}
@@ -82,11 +75,10 @@ export const SupportModal: React.FC = () => {
           ))}
         </div>
 
-        {/* Instant Refund Estimator Tool & Contact Box */}
         <div className="space-y-6">
-          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 space-y-4">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-              <Calculator className="h-5 w-5" />
+          <div className="rounded-3xl border border-stone-200 bg-white p-6 space-y-4 shadow-sm">
+            <div className="flex items-center gap-2 text-orange-600 font-bold text-sm">
+              <Icons.calculator className="h-5 w-5" />
               <span>Instant Refund Estimator</span>
             </div>
 
@@ -103,7 +95,7 @@ export const SupportModal: React.FC = () => {
             <div>
               <label className="field-label">Travel Class</label>
               <select
-                value={calcCalcClass(calcClass, setCalcClass)}
+                value={calcClass}
                 onChange={(e) => setCalcClass(e.target.value)}
                 className="field-control mt-1"
               >
@@ -115,21 +107,20 @@ export const SupportModal: React.FC = () => {
               </select>
             </div>
 
-            <div className="rounded-2xl bg-slate-950 p-4 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400">Estimated Refundable Amount</span>
-              <p className="text-2xl font-black text-emerald-400">₹{getCalculatedRefund()}</p>
+            <div className="rounded-2xl bg-stone-50 p-4 border border-stone-200 space-y-1">
+              <span className="text-[10px] uppercase font-bold text-stone-400">Estimated Refundable Amount</span>
+              <p className="text-2xl font-black text-orange-700">₹{getCalculatedRefund()}</p>
             </div>
           </div>
 
-          {/* Customer Care Contacts */}
-          <div className="rounded-3xl border border-indigo-500/20 bg-indigo-950/30 p-6 space-y-3">
-            <h4 className="font-bold text-white text-sm">Customer Support Helpline</h4>
-            <div className="flex items-center gap-3 text-xs text-slate-300">
-              <PhoneCall className="h-4 w-4 text-indigo-400" />
-              <span>Toll Free: 1800-111-139 / 139</span>
+          <div className="rounded-3xl border border-orange-200 bg-orange-50/60 p-6 space-y-3">
+            <h4 className="font-bold text-stone-900 text-sm">Customer Support Helpline</h4>
+            <div className="flex items-center gap-3 text-xs text-stone-600">
+              <Icons.phone className="h-4 w-4 text-orange-600" />
+              <span>Toll Free: 1800-111-139</span>
             </div>
-            <div className="flex items-center gap-3 text-xs text-slate-300">
-              <Mail className="h-4 w-4 text-indigo-400" />
+            <div className="flex items-center gap-3 text-xs text-stone-600">
+              <Icons.mail className="h-4 w-4 text-orange-600" />
               <span>Support: care@railgo.in</span>
             </div>
           </div>
@@ -139,7 +130,3 @@ export const SupportModal: React.FC = () => {
     </section>
   );
 };
-
-function calcCalcClass(val: string, setVal: any) {
-  return val;
-}

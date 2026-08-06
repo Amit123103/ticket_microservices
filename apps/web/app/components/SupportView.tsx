@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { HelpCircle, MessageSquare, Phone, Mail, ChevronDown, ChevronUp, Send, FileQuestion, Clock, Headphones } from 'lucide-react';
+import { Icons } from './Icons';
 
 export const SupportView: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -31,67 +31,73 @@ export const SupportView: React.FC = () => {
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="text-center max-w-2xl mx-auto mb-8">
-        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-xs font-bold text-emerald-700 border border-emerald-200 mb-3"><Headphones className="h-4 w-4" /> 24/7 Support</div>
-        <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">Help & Support</h2>
-        <p className="mt-2 text-sm text-slate-500">FAQs, live chat, ticket submission, and helpline — all in one place.</p>
+        <div className="section-pill mb-3">
+          <Icons.headphones className="h-3.5 w-3.5" /> 24/7 Support
+        </div>
+        <h2 className="text-3xl font-bold sm:text-4xl" style={{ fontFamily: 'Outfit, sans-serif' }}>Help & Support</h2>
+        <p className="mt-2 text-sm text-stone-500">FAQs, live chat, ticket submission, and helpline — all in one place.</p>
       </div>
 
-      {/* Contact Cards */}
       <div className="grid gap-4 sm:grid-cols-3 mb-8">
-        {[{Icon:Phone,l:'Helpline',v:'139 / 1800-111-321',d:'24×7'},{Icon:Mail,l:'Email',v:'care@railgo.in',d:'24hr reply'},{Icon:Clock,l:'Hours',v:'24×7 Available',d:'All days'}].map(({Icon,l,v,d}) => (
-          <div key={l} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 hover:border-emerald-200 transition">
-            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-emerald-50 border border-emerald-200"><Icon className="h-5 w-5 text-emerald-600" /></div>
-            <div><p className="text-xs font-bold uppercase text-slate-400">{l}</p><p className="font-bold text-slate-900">{v}</p><p className="text-[11px] text-slate-400">{d}</p></div>
+        {[
+          { l: 'Helpline', v: '139 / 1800-111-321', d: '24×7' },
+          { l: 'Email', v: 'care@railgo.in', d: '24hr reply' },
+          { l: 'Hours', v: '24×7 Available', d: 'All days' }
+        ].map(({ l, v, d }) => (
+          <div key={l} className="flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-orange-200 transition-all">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-orange-50 border border-orange-200">
+              {l === 'Helpline' ? <Icons.phone className="h-5 w-5 text-orange-600" /> : l === 'Email' ? <Icons.mail className="h-5 w-5 text-orange-600" /> : <Icons.clock className="h-5 w-5 text-orange-600" />}
+            </div>
+            <div><p className="text-xs font-bold uppercase text-stone-400">{l}</p><p className="font-bold text-stone-900">{v}</p><p className="text-[11px] text-stone-400">{d}</p></div>
           </div>
         ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* FAQ */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2"><FileQuestion className="h-5 w-5 text-emerald-600" /> Frequently Asked</h3>
+        <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
+          <h3 className="font-bold text-stone-900 text-lg mb-4 flex items-center gap-2"><Icons.fileQuestion className="h-5 w-5 text-orange-600" /> Frequently Asked</h3>
           <div className="space-y-3">
             {faqs.map((faq, idx) => (
-              <div key={idx} className="rounded-xl border border-slate-200 overflow-hidden hover:border-emerald-200 transition">
-                <button onClick={() => setOpenFaq(openFaq === idx ? null : idx)} className="flex w-full items-center justify-between p-4 text-left text-sm font-bold text-slate-800 hover:bg-slate-50">
-                  <span>{faq.q}</span>{openFaq === idx ? <ChevronUp className="h-4 w-4 text-emerald-600" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+              <div key={idx} className="rounded-xl border border-stone-200 overflow-hidden hover:border-orange-200 transition-all">
+                <button onClick={() => setOpenFaq(openFaq === idx ? null : idx)} className="flex w-full items-center justify-between p-4 text-left text-sm font-bold text-stone-800 hover:bg-stone-50">
+                  <span>{faq.q}</span>{openFaq === idx ? <Icons.chevronUp className="h-4 w-4 text-orange-600" /> : <Icons.chevronDown className="h-4 w-4 text-stone-400" />}
                 </button>
-                {openFaq === idx && <div className="border-t border-slate-100 bg-emerald-50 p-4 text-xs text-slate-600 leading-relaxed">{faq.a}</div>}
+                {openFaq === idx && <div className="border-t border-stone-100 bg-orange-50 p-4 text-xs text-stone-600 leading-relaxed">{faq.a}</div>}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Chat */}
-        <div className="rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-sm flex flex-col">
-          <div className="border-b border-slate-100 bg-emerald-50 px-6 py-4 flex items-center gap-2">
-            <MessageSquare className="h-5 w-5 text-emerald-600" /><span className="font-bold text-slate-900">Live Chat</span>
-            <span className="ml-auto flex items-center gap-1 text-[10px] font-bold text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span> Online</span>
+        <div className="rounded-3xl border border-stone-200 bg-white overflow-hidden shadow-sm flex flex-col">
+          <div className="border-b border-stone-100 bg-orange-50/80 px-6 py-4 flex items-center gap-2">
+            <Icons.messageSquare className="h-5 w-5 text-orange-600" /><span className="font-bold text-stone-900">Live Chat</span>
+            <span className="ml-auto flex items-center gap-1 text-[10px] font-bold text-orange-700"><span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse-soft" /> Online</span>
           </div>
           <div className="flex-1 max-h-72 overflow-y-auto p-4 space-y-3">
             {chatMessages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl p-3 text-xs ${m.role === 'user' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200'}`}>{m.text}</div>
+                <div className={`max-w-[85%] rounded-2xl p-3 text-xs ${m.role === 'user' ? 'bg-orange-600 text-white' : 'bg-stone-100 text-stone-700 border border-stone-200'}`}>{m.text}</div>
               </div>
             ))}
           </div>
-          <form onSubmit={handleSendChat} className="border-t border-slate-100 p-3 flex gap-2">
-            <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Ask a question…" className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs focus:outline-none focus:border-emerald-400" />
-            <button type="submit" className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-600 text-white hover:bg-emerald-500"><Send className="h-4 w-4" /></button>
+          <form onSubmit={handleSendChat} className="border-t border-stone-100 p-3 flex gap-2">
+            <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Ask a question…" className="field-control flex-1 text-sm py-3" />
+            <button type="submit" className="grid h-10 w-10 place-items-center rounded-xl bg-orange-600 text-white hover:bg-orange-500 transition-colors">
+              <Icons.send className="h-4 w-4" />
+            </button>
           </form>
         </div>
       </div>
 
-      {/* Ticket Submission */}
-      <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h3 className="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2"><HelpCircle className="h-5 w-5 text-emerald-600" /> Submit Support Ticket</h3>
+      <div className="mt-6 rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
+        <h3 className="font-bold text-stone-900 text-lg mb-4 flex items-center gap-2"><Icons.help className="h-5 w-5 text-orange-600" /> Submit Support Ticket</h3>
         {ticketSubmitted ? (
-          <div className="text-center py-8 text-sm text-emerald-700 font-bold">✓ Ticket submitted! We'll respond within 24 hours.</div>
+          <div className="text-center py-8 text-sm text-orange-700 font-bold">✓ Ticket submitted! We'll respond within 24 hours.</div>
         ) : (
           <div className="space-y-3">
-            <input type="text" value={ticketSubject} onChange={(e) => setTicketSubject(e.target.value)} placeholder="Subject" className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:outline-none focus:border-emerald-400" />
-            <textarea value={ticketBody} onChange={(e) => setTicketBody(e.target.value)} rows={4} placeholder="Describe your issue…" className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm focus:outline-none focus:border-emerald-400 resize-none" />
-            <button onClick={() => { if (ticketSubject && ticketBody) setTicketSubmitted(true); }} className="rounded-xl bg-emerald-600 px-6 py-3 text-xs font-bold text-white hover:bg-emerald-500">Submit Ticket</button>
+            <input type="text" value={ticketSubject} onChange={(e) => setTicketSubject(e.target.value)} placeholder="Subject" className="w-full rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm focus:outline-none focus:border-orange-400" />
+            <textarea value={ticketBody} onChange={(e) => setTicketBody(e.target.value)} rows={4} placeholder="Describe your issue…" className="w-full rounded-xl border border-stone-200 bg-stone-50 p-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+            <button onClick={() => { if (ticketSubject && ticketBody) setTicketSubmitted(true); }} className="rounded-xl bg-orange-600 px-6 py-3 text-xs font-bold text-white hover:bg-orange-500 transition-colors">Submit Ticket</button>
           </div>
         )}
       </div>

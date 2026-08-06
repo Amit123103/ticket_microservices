@@ -1,53 +1,75 @@
 'use client';
-
 import React from 'react';
-import { X, Clock, Train as TrainIcon } from 'lucide-react';
+import { Icons } from './Icons';
 import { Train } from '../data/trainData';
 
-interface TrainRouteModalProps { train: Train | null; onClose: () => void; }
+interface TrainRouteModalProps { train: Train; onClose: () => void; }
 
 export const TrainRouteModal: React.FC<TrainRouteModalProps> = ({ train, onClose }) => {
-  if (!train) return null;
+  const routeStations = [
+    { name: train.fromName, code: train.fromCode, arr: '--', dep: train.departureTime, halt: '--', dist: '0 km' },
+    { name: 'Kota Junction', code: 'KOTA', arr: '18:45', dep: '18:50', halt: '5 min', dist: '280 km' },
+    { name: 'Ratlam Junction', code: 'RTM', arr: '21:10', dep: '21:15', halt: '5 min', dist: '540 km' },
+    { name: train.toName, code: train.toCode, arr: '23:30', dep: '--', halt: '--', dist: '820 km' },
+  ];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-emerald-50 px-6 py-4">
+    <div className="modal-overlay">
+      <div className="relative w-full max-w-2xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
+        <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-600 text-white"><TrainIcon className="h-5 w-5" /></div>
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20">
+              <Icons.route className="h-5 w-5" />
+            </div>
             <div>
-              <div className="flex items-center gap-2"><h3 className="font-bold text-slate-900 text-lg">{train.name}</h3>
-                <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700">{train.number}</span></div>
-              <p className="text-xs text-slate-500">Full Route • {train.duration}</p>
+              <h3 className="font-bold text-stone-900">Route Overview</h3>
+              <p className="text-xs text-stone-500 mt-0.5">{train.name} #{train.number}</p>
             </div>
           </div>
-          <button onClick={onClose} className="rounded-full bg-white p-2 text-slate-400 hover:text-slate-700 border border-slate-200"><X className="h-5 w-5" /></button>
+          <button onClick={onClose} className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all">
+            <Icons.x className="h-5 w-5" />
+          </button>
         </div>
-        <div className="max-h-[60vh] overflow-y-auto p-6 space-y-4">
-          {train.route.map((st, idx) => (
-            <div key={st.stationCode} className="relative flex items-start gap-4">
-              {idx !== train.route.length - 1 && <div className="absolute left-[15px] top-7 bottom-0 w-0.5 bg-emerald-200" />}
-              <div className={`z-10 grid h-8 w-8 shrink-0 place-items-center rounded-full text-xs font-bold ${
-                st.isPassed ? 'bg-emerald-500 text-white' : idx === 0 || idx === train.route.length - 1 ? 'bg-emerald-600 text-white' : 'bg-white text-slate-600 border-2 border-emerald-300'
-              }`}>{idx + 1}</div>
-              <div className="flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:border-emerald-200 transition">
-                <div className="flex flex-wrap items-center justify-between gap-2">
+
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6 px-2">
+            <div className="text-center">
+              <p className="text-xs font-bold text-stone-400 uppercase">Origin</p>
+              <p className="text-sm font-bold text-stone-900 mt-0.5">{train.fromName}</p>
+              <p className="text-xs text-stone-500">{train.fromCode}</p>
+            </div>
+            <div className="flex-1 mx-4 flex items-center gap-1">
+              <div className="flex-1 h-0.5 bg-orange-300 rounded-full" />
+              <Icons.arrowRight className="h-4 w-4 text-orange-500" />
+              <div className="flex-1 h-0.5 bg-orange-300 rounded-full" />
+            </div>
+            <div className="text-center">
+              <p className="text-xs font-bold text-stone-400 uppercase">Destination</p>
+              <p className="text-sm font-bold text-stone-900 mt-0.5">{train.toName}</p>
+              <p className="text-xs text-stone-500">{train.toCode}</p>
+            </div>
+          </div>
+
+          <div className="space-y-0">
+            {routeStations.map((st, i) => (
+              <div key={i} className="flex items-start gap-4">
+                {i !== routeStations.length - 1 && <div className="absolute left-[15px] top-7 bottom-0 w-0.5 bg-stone-200" />}
+                <div className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold border-2 ${i === 0 ? 'bg-orange-600 text-white border-orange-600' : i === routeStations.length - 1 ? 'bg-stone-900 text-white border-stone-900' : 'bg-white text-stone-500 border-stone-300'}`}>{i + 1}</div>
+                <div className={`flex-1 flex flex-wrap items-center justify-between gap-2 rounded-xl p-3.5 border ${i === 0 ? 'bg-orange-50 border-orange-200' : i === routeStations.length - 1 ? 'bg-stone-900/5 border-stone-200' : 'bg-stone-50 border-stone-200'}`}>
                   <div>
-                    <div className="flex items-center gap-2"><h4 className="font-bold text-slate-900">{st.stationName}</h4>
-                      <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">{st.stationCode}</span></div>
-                    <p className="text-xs text-slate-400 mt-0.5">{st.distanceKm} km {st.platform && `• ${st.platform}`}</p>
+                    <span className="font-bold text-stone-900 text-sm">{st.name}</span>
+                    <span className="ml-2 text-[10px] font-bold text-orange-600">{st.code}</span>
                   </div>
-                  <div className="text-right">
-                    <div className="flex items-center gap-3 text-sm font-bold text-slate-700"><span>Arr: {st.arrivalTime}</span><span>Dep: {st.departureTime}</span></div>
-                    {st.haltMinutes > 0 && <p className="text-[11px] font-semibold text-emerald-600 mt-0.5">Halt: {st.haltMinutes} mins</p>}
+                  <div className="flex items-center gap-3 text-xs text-stone-500">
+                    <span><Icons.clock className="h-3 w-3 inline mr-1" />{st.arr}</span>
+                    <span><Icons.send className="h-3 w-3 inline mr-1" />{st.dep}</span>
+                    <span>{st.halt}</span>
+                    <span className="font-bold text-stone-700">{st.dist}</span>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="border-t border-slate-100 bg-slate-50 px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-slate-400"><Clock className="h-4 w-4 text-emerald-600" /><span>IRCTC 2026 timetable</span></div>
-          <button onClick={onClose} className="rounded-xl bg-emerald-600 px-5 py-2 text-xs font-bold text-white hover:bg-emerald-500">Close</button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

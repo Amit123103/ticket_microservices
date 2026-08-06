@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, FormEvent } from 'react';
-import { Navbar, NavTab } from './components/Navbar';
+import { PageNavbar } from './components/Navbar';
 import { LandingPage } from './components/LandingPage';
 import { AuthModal } from './components/AuthModal';
 import { HeroSearch } from './components/HeroSearch';
@@ -136,7 +136,7 @@ export default function Page() {
   // IF NOT LOGGED IN OR LANDING PAGE IS ACTIVE -> RENDER LANDING PAGE FIRST!
   if (showLandingPage || !isLoggedIn) {
     return (
-      <main className="min-h-screen bg-white text-slate-900" style={{ background: '#ffffff' }}>
+      <main className="min-h-screen bg-white text-stone-900">
         <LandingPage
           onLogin={() => setShowAuthModal(true)}
         />
@@ -153,24 +153,17 @@ export default function Page() {
 
   // ONCE LOGGED IN -> RENDER FULL APP & TICKET BOOKING DASHBOARD
   return (
-    <main className="min-h-screen antialiased selection:bg-orange-500 selection:text-white bg-white text-slate-900" style={{ background: '#ffffff', color: '#0f172a' }}>
-      {/* Top Navbar Header */}
-      <Navbar
+    <main className="min-h-screen antialiased selection:bg-purple-500 selection:text-white bg-purple-900/10 text-white">
+      {/* Navigation Options */}
+      <PageNavbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         tripCount={userTrips.filter((t) => t.status === 'CONFIRMED').length}
-        isLoggedIn={isLoggedIn}
-        user={user}
-        onOpenAuth={() => setShowAuthModal(true)}
-        onLogout={handleLogout}
-        onOpenWallet={() => setShowWalletModal(true)}
-        onOpenNotifications={() => setShowNotificationsDrawer(true)}
-        onOpenAiAssistant={() => setShowAiAssistantModal((prev) => !prev)}
       />
 
       {/* AI Assistant Drawer Header */}
       {showAiAssistantModal && (
-        <div className="border-b py-4 glass-brand animate-fade-in" style={{ borderColor: 'rgba(99,102,241,0.25)' }}>
+        <div className="border-b border-stone-200 bg-white/90 backdrop-blur-xl">
           <AITravelAssistant />
         </div>
       )}
@@ -240,7 +233,7 @@ export default function Page() {
       {activeTab === 'station' && <StationExplorer />}
 
       {/* VIEW 9: REVIEWS */}
-      {activeTab === 'reviews' && <TrainReviews />}
+      {activeTab === 'reviews' && <TrainReviews train={displayTrains[0] || TRAINS_DATA[0]} onClose={() => {}} />}
 
       {/* VIEW 10: 28 MICROSERVICES DASHBOARD */}
       {activeTab === 'microservices' && <MicroservicesDashboard />}
@@ -297,30 +290,30 @@ export default function Page() {
       )}
 
       {/* Global Footer */}
-      <footer className="mt-20 border-t py-12 text-xs" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(15,23,36,0.6)' }}>
+      <footer className="mt-16 border-t border-stone-200 bg-white py-12">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center sm:flex-row sm:text-left sm:px-6 lg:px-8">
           <div>
-            <p className="font-bold text-slate-200" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <p className="font-bold text-stone-800" style={{ fontFamily: 'Outfit, sans-serif' }}>
               © 2026 RailGo IRCTC Express Services Inc.
             </p>
-            <p className="text-[11px] mt-0.5" style={{ color: '#64748b' }}>
+            <p className="text-xs text-stone-400 mt-1">
               Official 28 microservices train ticket booking & status platform.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-6 font-semibold" style={{ color: '#94a3b8' }}>
-            <button onClick={() => setShowLandingPage(true)} className="hover:text-indigo-400 transition">
+          <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-stone-500">
+            <button onClick={() => setShowLandingPage(true)} className="hover:text-orange-600 transition-colors">
               Landing Overview
             </button>
-            <button onClick={() => setActiveTab('microservices')} className="hover:text-indigo-400 transition">
+            <button onClick={() => setActiveTab('microservices')} className="hover:text-orange-600 transition-colors">
               Microservices Mesh (28)
             </button>
-            <button onClick={() => setActiveTab('payments')} className="hover:text-indigo-400 transition">
+            <button onClick={() => setActiveTab('payments')} className="hover:text-orange-600 transition-colors">
               Payments
             </button>
-            <button onClick={() => setActiveTab('refunds')} className="hover:text-indigo-400 transition">
+            <button onClick={() => setActiveTab('refunds')} className="hover:text-orange-600 transition-colors">
               Refunds
             </button>
-            <button onClick={() => setActiveTab('help')} className="hover:text-indigo-400 transition">
+            <button onClick={() => setActiveTab('help')} className="hover:text-orange-600 transition-colors">
               Help & Chat
             </button>
           </div>
