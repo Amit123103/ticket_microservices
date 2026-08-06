@@ -22,7 +22,7 @@ interface PageNavProps {
 }
 
 export const PageNavbar: React.FC<PageNavProps> = ({ activeTab, setActiveTab, tripCount }) => {
-  const NAV_OPTIONS = [
+  const NAV_OPTIONS: Array<{ id: NavTab; label: string; icon: string; badge?: number }> = [
     { id: 'search', label: 'Search', icon: 'search' },
     { id: 'pnr', label: 'PNR', icon: 'ticket' },
     { id: 'live', label: 'Live', icon: 'live' },

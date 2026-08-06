@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, FormEvent } from 'react';
-import { PageNavbar } from './components/Navbar';
+import { PageNavbar, NavTab } from './components/Navbar';
 import { LandingPage } from './components/LandingPage';
 import { AuthModal } from './components/AuthModal';
 import { HeroSearch } from './components/HeroSearch';
