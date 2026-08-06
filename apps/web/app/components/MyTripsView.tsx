@@ -48,8 +48,8 @@ export const MyTripsView: React.FC<MyTripsViewProps> = ({ trips, onOpenETicket, 
             onClick={() => setFilter(f)}
             className={`rounded-xl px-5 py-2.5 text-sm font-semibold capitalize transition-all ${
               filter === f
-                ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20'
-                : 'bg-white text-stone-500 border border-stone-200 hover:border-orange-300 hover:text-orange-700'
+                ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/20'
+                : 'bg-white text-stone-500 border border-stone-200 hover:border-purple-300 hover:text-purple-700'
             }`}
           >
             {f}
@@ -65,7 +65,7 @@ export const MyTripsView: React.FC<MyTripsViewProps> = ({ trips, onOpenETicket, 
             className={`rounded-2xl border bg-white overflow-hidden transition-all duration-300 ${
               trip.status === 'CANCELLED'
                 ? 'border-red-200 bg-red-50/30'
-                : 'border-stone-200 hover:border-orange-200 hover:shadow-lg hover:shadow-stone-200/40'
+                : 'border-stone-200 hover:border-purple-200 hover:shadow-lg hover:shadow-stone-200/40'
             }`}
           >
             {/* Trip Header Status */}
@@ -88,7 +88,7 @@ export const MyTripsView: React.FC<MyTripsViewProps> = ({ trips, onOpenETicket, 
                 )}
                 <span className="text-stone-400 font-mono text-[11px]">Chart: {trip.chartStatus}</span>
               </div>
-              <span className="font-mono text-orange-600 text-xs">PNR: {trip.pnr}</span>
+              <span className="font-mono text-purple-600 text-xs">PNR: {trip.pnr}</span>
             </div>
 
             {/* Content */}
@@ -103,7 +103,7 @@ export const MyTripsView: React.FC<MyTripsViewProps> = ({ trips, onOpenETicket, 
                   </p>
                   <p className="mt-2.5 text-sm font-semibold text-stone-700 flex items-center gap-2">
                     <span>{trip.fromCity} ({trip.fromCode})</span>
-                    <Icons.arrowRight className="h-4 w-4 text-orange-500" />
+                    <Icons.arrowRight className="h-4 w-4 text-purple-600" />
                     <span>{trip.toCity} ({trip.toCode})</span>
                   </p>
                 </div>
