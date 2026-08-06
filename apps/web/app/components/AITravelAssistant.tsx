@@ -3,7 +3,11 @@
 import React, { useState } from 'react';
 import { Icons } from './Icons';
 
-export const AITravelAssistant: React.FC = () => {
+interface AITravelAssistantProps {
+  onClose?: () => void;
+}
+
+export const AITravelAssistant: React.FC<AITravelAssistantProps> = ({ onClose }) => {
   const [messages, setMessages] = useState<Array<{ role: 'ai' | 'user'; text: string }>>([
     {
       role: 'ai',

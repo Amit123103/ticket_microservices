@@ -17,16 +17,15 @@ import { PaymentHistoryView } from './components/PaymentHistoryView';
 import { RefundHistoryView } from './components/RefundHistoryView';
 import { HelpChatView } from './components/HelpChatView';
 import { MicroservicesDashboard } from './components/MicroservicesDashboard';
-import { AITravelAssistant } from './components/AITravelAssistant';
 import { StationExplorer } from './components/StationExplorer';
 import { TrainReviews } from './components/TrainReviews';
 import { ECateringModal } from './components/ECateringModal';
 import { WalletModal } from './components/WalletModal';
 import { NotificationsDrawer } from './components/NotificationsDrawer';
+import { AITravelAssistant } from './components/AITravelAssistant';
 
 import {
   TRAINS_DATA,
-  STATIONS,
   INITIAL_USER_TRIPS,
   getTrainsForRoute,
   Train,
@@ -50,8 +49,8 @@ export default function Page() {
   const [showLandingPage, setShowLandingPage] = useState(true);
   const [sessionExpiredNotice, setSessionExpiredNotice] = useState(false);
 
-  // Navigation Tab State with URL query sync
-  const [activeTab, setActiveTabState] = useState<NavTab>('search');
+  // Navigation Tab State (Default to 'microservices' grid dashboard upon login)
+  const [activeTab, setActiveTabState] = useState<NavTab>('microservices');
 
   const setActiveTab = (tab: NavTab) => {
     setActiveTabState(tab);
@@ -62,10 +61,43 @@ export default function Page() {
     }
   };
 
-  // 1. PERSISTENT AUTH SESSION CHECK (24-Hour Auto Logout)
+  // 1. PERSISTENT AUTH SESSION & GOOGLE OAUTH URL PARAMETER DETECTOR
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authStatus = urlParams.get('auth');
+        const urlEmail = urlParams.get('email');
+        const urlName = urlParams.get('name');
+
+        // Handle Google OAuth return redirect ?auth=success
+        if (authStatus === 'success' && urlEmail) {
+          const formattedName = urlName || urlEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+          const loggedUser = {
+            name: formattedName,
+            email: urlEmail,
+            avatar: (formattedName[0] || 'U').toUpperCase(),
+          };
+
+          const sessionData: SavedUserSession = {
+            user: loggedUser,
+            loginTime: Date.now(),
+          };
+
+          localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionData));
+          setUser(loggedUser);
+          setIsLoggedIn(true);
+          setShowLandingPage(false);
+          setShowAuthModal(false);
+          setActiveTabState('search');
+
+          // Redirect URL to ?tab=search#special-panel
+          const targetUrl = `${window.location.pathname}?tab=search#special-panel`;
+          window.history.replaceState(null, '', targetUrl);
+          return;
+        }
+
+        // Check active localStorage session
         const rawSession = localStorage.getItem(SESSION_STORAGE_KEY);
         if (rawSession) {
           const session: SavedUserSession = JSON.parse(rawSession);
@@ -73,12 +105,11 @@ export default function Page() {
           const elapsed = now - session.loginTime;
 
           if (elapsed < TWENTY_FOUR_HOURS_MS) {
-            // Valid session (<24 hours) -> Keep logged in!
             setUser(session.user);
             setIsLoggedIn(true);
             setShowLandingPage(false);
+            setActiveTabState('microservices');
           } else {
-            // Expired (>= 24 hours) -> Auto logout!
             localStorage.removeItem(SESSION_STORAGE_KEY);
             setIsLoggedIn(false);
             setUser(null);
@@ -92,7 +123,7 @@ export default function Page() {
     }
   }, []);
 
-  // 2. BROWSER HISTORY & BACK/FORWARD BUTTON POPSTATE EVENT
+  // 2. BROWSER HISTORY POPSTATE LISTENER
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const validTabs: NavTab[] = [
@@ -162,12 +193,12 @@ export default function Page() {
     }, 100);
   };
 
-  const handleSelectTrain = (train: Train, travelClass: TrainClassInfo) => {
+  const handleSelectTrain = (train: Train, selectedClass: TrainClassInfo) => {
     if (!isLoggedIn) {
       setShowAuthModal(true);
       return;
     }
-    setSeatTrainInfo({ train, travelClass });
+    setSeatTrainInfo({ train, travelClass: selectedClass });
   };
 
   const handleConfirmSeats = (seats: string[]) => {
@@ -197,62 +228,69 @@ export default function Page() {
     setShowAuthModal(false);
     setShowLandingPage(false);
     setSessionExpiredNotice(false);
-
-    // Save session to localStorage for 24-hour persistence across page refresh
+    setActiveTabState('search');
     if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', `${window.location.pathname}?tab=search#special-panel`);
+    }
+
+    try {
       const sessionData: SavedUserSession = {
         user: loggedInUser,
         loginTime: Date.now(),
       };
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionData));
+    } catch (err) {
+      console.error('Session saving error:', err);
     }
   };
 
   const handleLogout = () => {
-    setUser(null);
+    localStorage.removeItem(SESSION_STORAGE_KEY);
     setIsLoggedIn(false);
+    setUser(null);
     setShowLandingPage(true);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(SESSION_STORAGE_KEY);
-    }
+    setActiveTabState('search');
   };
 
-  const getStationCity = (code: string) => {
-    return STATIONS.find((s) => s.code === code)?.city || code;
-  };
-
-  // IF NOT LOGGED IN OR LANDING PAGE IS ACTIVE -> RENDER LANDING PAGE FIRST!
-  if (showLandingPage || !isLoggedIn) {
+  // Render Public Landing Page ONLY when not logged in
+  if (showLandingPage && !isLoggedIn) {
     return (
-      <main className="min-h-screen bg-white text-stone-900">
-        {sessionExpiredNotice && (
-          <div className="bg-amber-500 text-white text-xs font-bold text-center py-2 px-4 sticky top-0 z-50">
-            Your session expired after 24 hours. Please log in again to continue.
-          </div>
-        )}
-
+      <>
         <LandingPage
           onLogin={() => setShowAuthModal(true)}
         />
 
+        {/* Auth Modal Overlay */}
         {showAuthModal && (
           <AuthModal
             onClose={() => setShowAuthModal(false)}
             onSuccess={handleLoginSuccess}
           />
         )}
-      </main>
+      </>
     );
   }
 
-  // ONCE LOGGED IN -> RENDER FULL APP & TICKET BOOKING DASHBOARD
   return (
-    <main className="min-h-screen antialiased selection:bg-purple-500 selection:text-white bg-purple-900/10 text-white">
-      {/* Top Header & Navigation Options */}
+    <div className="min-h-screen bg-stone-50 text-stone-900 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+      {/* Session Expired Banner Notification */}
+      {sessionExpiredNotice && (
+        <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 px-4 py-2.5 text-center text-xs font-bold text-white shadow-sm flex items-center justify-center gap-2 animate-fade-in">
+          <span>Your 24-hour session expired for security reasons. Please sign in again.</span>
+          <button
+            onClick={() => setSessionExpiredNotice(false)}
+            className="rounded bg-white/20 px-2 py-0.5 hover:bg-white/30 text-white font-black"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Primary Top Header Navigation Bar */}
       <PageNavbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        tripCount={userTrips.filter((t) => t.status === 'CONFIRMED').length}
+        tripCount={userTrips.length}
         user={user}
         onOpenWallet={() => setShowWalletModal(true)}
         onOpenNotifications={() => setShowNotificationsDrawer(true)}
@@ -262,93 +300,74 @@ export default function Page() {
         onGoHome={() => setActiveTab('search')}
       />
 
-      {/* AI Assistant Drawer Header */}
-      {showAiAssistantModal && (
-        <div className="border-b border-stone-200 bg-white/90 backdrop-blur-xl">
-          <AITravelAssistant />
-        </div>
-      )}
-
-      {/* VIEW 1: SEARCH & TRAIN LISTING */}
-      {activeTab === 'search' && (
-        <>
-          <HeroSearch
-            fromCode={fromCode}
-            setFromCode={setFromCode}
-            toCode={toCode}
-            setToCode={setToCode}
-            travelDate={travelDate}
-            setTravelDate={setTravelDate}
-            passengerCount={passengerCount}
-            setPassengerCount={setPassengerCount}
-            quota={quota}
-            setQuota={setQuota}
-            classFilter={classFilter}
-            setClassFilter={setClassFilter}
-            onSearch={handleSearchSubmit}
-          />
-
-          {hasSearched && (
-            <TrainList
-              trains={displayTrains}
-              fromCity={getStationCity(fromCode)}
-              toCity={getStationCity(toCode)}
+      {/* Main Content Router */}
+      <main className="flex-1 pb-16">
+        {activeTab === 'search' && (
+          <div>
+            <HeroSearch
+              fromCode={fromCode}
+              setFromCode={setFromCode}
+              toCode={toCode}
+              setToCode={setToCode}
               travelDate={travelDate}
-              quota={quota}
+              setTravelDate={setTravelDate}
               passengerCount={passengerCount}
-              onSelectTrain={handleSelectTrain}
-              onViewRoute={(t) => setRouteTrain(t)}
-              onOpenECatering={() => setShowECateringModal(true)}
+              setPassengerCount={setPassengerCount}
+              quota={quota}
+              setQuota={setQuota}
+              classFilter={classFilter}
+              setClassFilter={setClassFilter}
+              onSearch={handleSearchSubmit}
             />
-          )}
-        </>
-      )}
 
-      {/* VIEW 2: PNR STATUS */}
-      {activeTab === 'pnr' && (
-        <PNRStatusView onOpenETicket={(t) => setViewTicket(t)} />
-      )}
+            {hasSearched && (
+              <TrainList
+                trains={displayTrains}
+                fromCity={fromCode}
+                toCity={toCode}
+                travelDate={travelDate}
+                quota={quota}
+                passengerCount={passengerCount}
+                onSelectTrain={handleSelectTrain}
+                onViewRoute={(train) => setRouteTrain(train)}
+                onOpenECatering={() => setShowECateringModal(true)}
+              />
+            )}
+          </div>
+        )}
 
-      {/* VIEW 3: LIVE TRAIN TRACKING */}
-      {activeTab === 'live' && <LiveStatusView />}
+        {activeTab === 'microservices' && (
+          <MicroservicesDashboard />
+        )}
+        {activeTab === 'pnr' && (
+          <PNRStatusView onOpenETicket={(t) => setViewTicket(t)} />
+        )}
+        {activeTab === 'live' && <LiveStatusView />}
+        {activeTab === 'trips' && (
+          <MyTripsView
+            trips={userTrips}
+            onOpenETicket={(t) => setViewTicket(t)}
+            onCancelTicket={handleCancelTicket}
+          />
+        )}
+        {activeTab === 'payments' && <PaymentHistoryView />}
+        {activeTab === 'refunds' && <RefundHistoryView />}
+        {activeTab === 'help' && <HelpChatView />}
+        {activeTab === 'station' && <StationExplorer />}
+        {activeTab === 'reviews' && (
+          <TrainReviews
+            train={TRAINS_DATA[0]}
+            onClose={() => setActiveTab('search')}
+          />
+        )}
+      </main>
 
-      {/* VIEW 4: MY TRIPS & BOOKING MANAGER */}
-      {activeTab === 'trips' && (
-        <MyTripsView
-          trips={userTrips}
-          onOpenETicket={(t) => setViewTicket(t)}
-          onCancelTicket={handleCancelTicket}
-        />
-      )}
-
-      {/* VIEW 5: PAYMENT HISTORY */}
-      {activeTab === 'payments' && <PaymentHistoryView />}
-
-      {/* VIEW 6: REFUND HISTORY */}
-      {activeTab === 'refunds' && <RefundHistoryView />}
-
-      {/* VIEW 7: HELP & LIVE CHAT */}
-      {activeTab === 'help' && <HelpChatView />}
-
-      {/* VIEW 8: STATIONS EXPLORER */}
-      {activeTab === 'station' && <StationExplorer />}
-
-      {/* VIEW 9: REVIEWS */}
-      {activeTab === 'reviews' && <TrainReviews train={displayTrains[0] || TRAINS_DATA[0]} onClose={() => {}} />}
-
-      {/* VIEW 10: 28 MICROSERVICES DASHBOARD */}
-      {activeTab === 'microservices' && <MicroservicesDashboard />}
-
-      {/* MODALS */}
-      {showAuthModal && (
-        <AuthModal
-          onClose={() => setShowAuthModal(false)}
-          onSuccess={handleLoginSuccess}
-        />
-      )}
-
+      {/* Global Modals */}
       {routeTrain && (
-        <TrainRouteModal train={routeTrain} onClose={() => setRouteTrain(null)} />
+        <TrainRouteModal
+          train={routeTrain}
+          onClose={() => setRouteTrain(null)}
+        />
       )}
 
       {seatTrainInfo && (
@@ -375,7 +394,17 @@ export default function Page() {
       )}
 
       {viewTicket && (
-        <ETicketModal ticket={viewTicket} onClose={() => setViewTicket(null)} />
+        <ETicketModal
+          ticket={viewTicket}
+          onClose={() => setViewTicket(null)}
+        />
+      )}
+
+      {showAuthModal && (
+        <AuthModal
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={handleLoginSuccess}
+        />
       )}
 
       {showWalletModal && (
@@ -390,36 +419,9 @@ export default function Page() {
         <ECateringModal onClose={() => setShowECateringModal(false)} />
       )}
 
-      {/* Global Footer */}
-      <footer className="mt-16 border-t border-stone-200 bg-white py-12">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center sm:flex-row sm:text-left sm:px-6 lg:px-8">
-          <div>
-            <p className="font-bold text-stone-800" style={{ fontFamily: 'Outfit, sans-serif' }}>
-              © 2026 RailGo IRCTC Express Services Inc.
-            </p>
-            <p className="text-xs text-stone-400 mt-1">
-              Official 28 microservices train ticket booking & status platform.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-stone-500">
-            <button onClick={() => setShowLandingPage(true)} className="hover:text-purple-600 transition-colors">
-              Landing Overview
-            </button>
-            <button onClick={() => setActiveTab('microservices')} className="hover:text-purple-600 transition-colors">
-              Microservices Mesh (28)
-            </button>
-            <button onClick={() => setActiveTab('payments')} className="hover:text-purple-600 transition-colors">
-              Payments
-            </button>
-            <button onClick={() => setActiveTab('refunds')} className="hover:text-purple-600 transition-colors">
-              Refunds
-            </button>
-            <button onClick={() => setActiveTab('help')} className="hover:text-purple-600 transition-colors">
-              Help & Chat
-            </button>
-          </div>
-        </div>
-      </footer>
-    </main>
+      {showAiAssistantModal && (
+        <AITravelAssistant onClose={() => setShowAiAssistantModal(false)} />
+      )}
+    </div>
   );
 }
