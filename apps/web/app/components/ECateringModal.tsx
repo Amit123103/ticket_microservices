@@ -36,7 +36,7 @@ export const ECateringModal: React.FC<ECateringModalProps> = ({ onClose }) => {
       <div className="relative w-full max-w-3xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
         <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
           <div className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-orange-100 text-orange-600">
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-purple-100 text-purple-600">
               <Icons.utensils className="h-5 w-5" />
             </div>
             <h3 className="font-bold text-stone-900 text-lg">E-Catering</h3>
@@ -58,8 +58,8 @@ export const ECateringModal: React.FC<ECateringModalProps> = ({ onClose }) => {
           ) : (
             <>
               {restaurants.map((r, ri) => (
-                <div key={ri} className="rounded-2xl border border-stone-200 overflow-hidden">
-                  <div className="flex items-center justify-between bg-stone-50/80 px-5 py-4 border-b border-stone-100">
+                <div key={ri} className="rounded-2xl border border-purple-100 overflow-hidden">
+                  <div className="flex items-center justify-between bg-stone-50/80 px-5 py-4 border-b border-purple-50">
                     <div>
                       <h4 className="font-bold text-stone-900">{r.name}</h4>
                       <div className="flex items-center gap-1.5 mt-1">
@@ -69,25 +69,25 @@ export const ECateringModal: React.FC<ECateringModalProps> = ({ onClose }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="divide-y divide-stone-100">
+                  <div className="divide-y divide-purple-50">
                     {r.items.map((item, ii) => (
-                      <div key={ii} className="flex items-center justify-between px-5 py-4 hover:bg-stone-50/50 transition-colors">
+                      <div key={ii} className="flex items-center justify-between px-5 py-4 hover:bg-purple-50/30 transition-colors">
                         <div className="flex items-center gap-3">
                           <div className={`h-3.5 w-3.5 rounded-md border-2 ${item.veg ? 'border-emerald-500 bg-emerald-500' : 'border-rose-500 bg-rose-500'}`}></div>
                           <div>
                             <p className="text-sm font-bold text-stone-800">{item.name}</p>
-                            <p className="text-xs font-bold text-orange-600 mt-0.5">₹{item.price}</p>
+                            <p className="text-xs font-bold text-purple-600 mt-0.5">₹{item.price}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           {cart[item.name] ? (
-                            <div className="flex items-center gap-2 rounded-xl border border-orange-200 bg-orange-50 px-1.5">
-                              <button onClick={() => removeItem(item.name)} className="p-1.5 text-orange-600 hover:bg-orange-100 rounded-lg transition-colors"><Icons.minus className="h-3.5 w-3.5" /></button>
-                              <span className="text-sm font-bold text-orange-700 w-6 text-center">{cart[item.name]}</span>
-                              <button onClick={() => addItem(item.name)} className="p-1.5 text-orange-600 hover:bg-orange-100 rounded-lg transition-colors"><Icons.plus className="h-3.5 w-3.5" /></button>
+                            <div className="flex items-center gap-2 rounded-xl border border-purple-200 bg-purple-50 px-1.5">
+                              <button onClick={() => removeItem(item.name)} className="p-1.5 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors"><Icons.minus className="h-3.5 w-3.5" /></button>
+                              <span className="text-sm font-bold text-purple-700 w-6 text-center">{cart[item.name]}</span>
+                              <button onClick={() => addItem(item.name)} className="p-1.5 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors"><Icons.plus className="h-3.5 w-3.5" /></button>
                             </div>
                           ) : (
-                            <button onClick={() => addItem(item.name)} className="rounded-xl border border-orange-200 bg-orange-50 px-4 py-2 text-xs font-bold text-orange-700 hover:bg-orange-100 transition-all">ADD</button>
+                            <button onClick={() => addItem(item.name)} className="rounded-xl border border-purple-200 bg-purple-50 px-4 py-2 text-xs font-bold text-purple-700 hover:bg-purple-100 transition-all">ADD</button>
                           )}
                         </div>
                       </div>
@@ -96,15 +96,15 @@ export const ECateringModal: React.FC<ECateringModalProps> = ({ onClose }) => {
                 </div>
               ))}
               {Object.keys(cart).length > 0 && (
-                <div className="sticky bottom-0 rounded-2xl bg-gradient-to-r from-orange-600 to-orange-700 p-5 flex items-center justify-between shadow-xl shadow-orange-500/20 border border-orange-500">
+                <div className="sticky bottom-0 rounded-2xl bg-gradient-to-r from-purple-600 to-violet-600 p-5 flex items-center justify-between shadow-xl shadow-purple-500/20 border border-purple-500">
                   <div className="flex items-center gap-3 text-white">
                     <Icons.shoppingCart className="h-5 w-5" />
                     <div>
-                      <span className="text-xs text-orange-100">{Object.values(cart).reduce((a, b) => a + b, 0)} items</span>
+                      <span className="text-xs text-purple-100">{Object.values(cart).reduce((a, b) => a + b, 0)} items</span>
                       <p className="font-bold text-lg">₹{cartTotal}</p>
                     </div>
                   </div>
-                  <button onClick={() => setOrderPlaced(true)} className="rounded-xl bg-white px-6 py-2.5 text-sm font-bold text-orange-700 hover:bg-orange-50 transition-colors shadow-sm">Place Order</button>
+                  <button onClick={() => setOrderPlaced(true)} className="rounded-xl bg-white px-6 py-2.5 text-sm font-bold text-purple-700 hover:bg-purple-50 transition-colors shadow-sm">Place Order</button>
                 </div>
               )}
             </>
