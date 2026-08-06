@@ -301,19 +301,19 @@ export default function Page() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-6 text-sm font-medium text-stone-500">
-            <button onClick={() => setShowLandingPage(true)} className="hover:text-orange-600 transition-colors">
+            <button onClick={() => setShowLandingPage(true)} className="hover:text-purple-600 transition-colors">
               Landing Overview
             </button>
-            <button onClick={() => setActiveTab('microservices')} className="hover:text-orange-600 transition-colors">
+            <button onClick={() => setActiveTab('microservices')} className="hover:text-purple-600 transition-colors">
               Microservices Mesh (28)
             </button>
-            <button onClick={() => setActiveTab('payments')} className="hover:text-orange-600 transition-colors">
+            <button onClick={() => setActiveTab('payments')} className="hover:text-purple-600 transition-colors">
               Payments
             </button>
-            <button onClick={() => setActiveTab('refunds')} className="hover:text-orange-600 transition-colors">
+            <button onClick={() => setActiveTab('refunds')} className="hover:text-purple-600 transition-colors">
               Refunds
             </button>
-            <button onClick={() => setActiveTab('help')} className="hover:text-orange-600 transition-colors">
+            <button onClick={() => setActiveTab('help')} className="hover:text-purple-600 transition-colors">
               Help & Chat
             </button>
           </div>
