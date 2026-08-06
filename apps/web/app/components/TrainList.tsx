@@ -48,7 +48,7 @@ export const TrainList: React.FC<TrainListProps> = ({
           <div className="flex rounded-xl bg-stone-100 p-1">
             {(['departure', 'duration', 'price'] as const).map((s) => (
               <button key={s} onClick={() => setSortBy(s)}
-                className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all capitalize ${sortBy === s ? 'bg-orange-600 text-white shadow-sm' : 'text-stone-500 hover:text-stone-700 hover:bg-white'}`}>
+                className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all capitalize ${sortBy === s ? 'bg-purple-600 text-white shadow-sm' : 'text-stone-500 hover:text-stone-700 hover:bg-white'}`}>
                 {s}
               </button>
             ))}
@@ -64,17 +64,17 @@ export const TrainList: React.FC<TrainListProps> = ({
 
           return (
             <article key={train.id}
-              className="rounded-2xl border border-stone-200 bg-white overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-stone-200/60 hover:border-orange-200">
+              className="rounded-2xl border border-purple-100 bg-white overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-purple-200/60 hover:border-purple-300">
               {/* Top Banner */}
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-stone-50/80 px-5 sm:px-6 py-3.5 border-b border-stone-100">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-stone-50/80 px-5 sm:px-6 py-3.5 border-b border-purple-50">
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-orange-100 text-orange-600">
+                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-purple-100 text-purple-600">
                     <Icons.train className="h-4 w-4" />
                   </div>
                   <h3 className="font-bold text-stone-900 text-base">{train.name}</h3>
                   <span className="rounded-lg bg-white px-2 py-1 text-xs font-semibold text-stone-500 border border-stone-200">#{train.number}</span>
                   {train.badge && (
-                    <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[11px] font-bold text-orange-700 border border-orange-200">{train.badge}</span>
+                    <span className="rounded-full bg-purple-50 px-2.5 py-1 text-[11px] font-bold text-purple-700 border border-purple-200">{train.badge}</span>
                   )}
                 </div>
                 <div className="flex items-center gap-4 text-xs font-medium text-stone-400">
@@ -82,10 +82,10 @@ export const TrainList: React.FC<TrainListProps> = ({
                     <Icons.star className="h-3.5 w-3.5 fill-amber-400" />
                     <span className="font-bold text-stone-700">{train.rating}</span>
                   </div>
-                  <button onClick={onOpenECatering} className="flex items-center gap-1.5 text-orange-600 hover:text-orange-700 font-semibold transition-colors">
+                  <button onClick={onOpenECatering} className="flex items-center gap-1.5 text-purple-600 hover:text-purple-700 font-semibold transition-colors">
                     <Icons.utensils className="h-3.5 w-3.5" /> E-Catering
                   </button>
-                  <button onClick={() => onViewRoute(train)} className="flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
+                  <button onClick={() => onViewRoute(train)} className="flex items-center gap-1.5 text-purple-600 hover:text-purple-700 font-semibold transition-colors">
                     <Icons.eye className="h-3.5 w-3.5" /> Timetable
                   </button>
                 </div>
@@ -94,21 +94,21 @@ export const TrainList: React.FC<TrainListProps> = ({
               <div className="p-5 sm:p-6">
                 <div className="grid gap-6 lg:grid-cols-[1.2fr_1.6fr_1fr] lg:items-center">
                   {/* Times */}
-                  <div className="flex items-center justify-between gap-3 rounded-2xl bg-orange-50/60 p-5 border border-orange-100">
+                  <div className="flex items-center justify-between gap-3 rounded-2xl bg-purple-50/60 p-5 border border-purple-100">
                     <div className="text-center">
                       <strong className="block text-2xl font-bold text-stone-900">{train.departureTime}</strong>
-                      <span className="text-xs font-semibold text-orange-700">{train.fromName}</span>
+                      <span className="text-xs font-semibold text-purple-700">{train.fromName}</span>
                     </div>
                     <div className="flex flex-col items-center gap-1">
                       <span className="text-xs font-semibold text-stone-400">{train.duration}</span>
                       <div className="relative flex items-center w-20">
-                        <div className="h-0.5 w-full bg-gradient-to-r from-orange-300 to-orange-500 rounded-full"></div>
-                        <Icons.arrowRight className="absolute right-0 h-3.5 w-3.5 text-orange-500" />
+                        <div className="h-0.5 w-full bg-gradient-to-r from-purple-300 to-purple-600 rounded-full"></div>
+                        <Icons.arrowRight className="absolute right-0 h-3.5 w-3.5 text-purple-600" />
                       </div>
                     </div>
                     <div className="text-center">
                       <strong className="block text-2xl font-bold text-stone-900">{train.arrivalTime}</strong>
-                      <span className="text-xs font-semibold text-orange-700">{train.toName}</span>
+                      <span className="text-xs font-semibold text-purple-700">{train.toName}</span>
                     </div>
                   </div>
 
@@ -121,12 +121,12 @@ export const TrainList: React.FC<TrainListProps> = ({
                           onClick={() => setSelectedClassMap((p) => ({ ...p, [train.id]: cls.code }))}
                           className={`flex flex-col justify-between rounded-xl border p-3 text-left transition-all ${
                             ccCode === cls.code
-                              ? 'border-orange-400 bg-orange-50 shadow-sm shadow-orange-500/10'
-                              : 'border-stone-200 hover:border-orange-300 hover:bg-orange-50/30'
+                              ? 'border-purple-400 bg-purple-50 shadow-sm shadow-purple-500/10'
+                              : 'border-stone-200 hover:border-purple-300 hover:bg-purple-50/30'
                           }`}>
                           <div className="flex items-center justify-between">
                             <span className="text-xs font-bold text-stone-700">{cls.code}</span>
-                            <strong className="text-sm font-bold text-orange-700">₹{cls.price}</strong>
+                            <strong className="text-sm font-bold text-purple-700">₹{cls.price}</strong>
                           </div>
                           <div className="mt-2">
                             <span className={`block text-[10px] font-bold ${cls.status === 'AVAILABLE' ? 'text-emerald-600' : cls.status === 'RAC' ? 'text-amber-600' : 'text-rose-600'}`}>
@@ -147,7 +147,7 @@ export const TrainList: React.FC<TrainListProps> = ({
                       <span className="text-[10px] font-bold text-emerald-600">Includes GST</span>
                     </div>
                     <button onClick={() => onSelectTrain(train, ccInfo)}
-                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:from-orange-600 hover:to-orange-700 transition-all">
+                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 hover:from-purple-700 hover:to-violet-700 transition-all">
                       <Icons.sparkles className="h-4 w-4 text-white/90" /> Select & Choose Seat
                     </button>
                   </div>
