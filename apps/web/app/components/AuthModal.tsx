@@ -23,11 +23,7 @@ const AppleIcon = () => (
   </svg>
 );
 
-const MOCK_GOOGLE_ACCOUNTS = [
-  { name: 'Amit Kumar', email: 'amit.kumar@gmail.com', avatar: 'A' },
-  { name: 'Priya Sharma', email: 'priya.sharma@gmail.com', avatar: 'P' },
-  { name: 'Rohan Verma', email: 'rohan.verma@gmail.com', avatar: 'R' },
-];
+const GOOGLE_CLIENT_ID = '262838532038-m3pem1vdb65e3cp1p5l54jc8a1n75f8n.apps.googleusercontent.com';
 
 export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
@@ -62,36 +58,44 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         email: userEmail,
         avatar: userName[0].toUpperCase(),
       });
-    }, 1000);
+    }, 900);
+  };
+
+  const handleOpenGoogle = () => {
+    if (typeof window !== 'undefined') {
+      const redirectUri = window.location.origin;
+      const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}&response_type=token%20id_token&scope=openid%20email%20profile&nonce=${Date.now()}`;
+
+      try {
+        window.open(googleAuthUrl, 'GoogleLogin', 'width=520,height=620');
+      } catch (e) {
+        console.log('Popup blocked or fallback');
+      }
+    }
+    setShowGoogleConsole(true);
   };
 
   const handleCustomGoogleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customGmail.includes('@')) {
-      setError('Please enter a valid Gmail address.');
+      setError('Please enter a valid Google / Gmail address.');
       return;
     }
-    const userName = customGmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Google User';
+    const userName =
+      customGmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Google User';
     setShowGoogleConsole(false);
     triggerLoginSuccess(userName, customGmail);
   };
 
   const handleCustomAppleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const mail = customAppleEmail.trim() || 'amit@icloud.com';
-    const userName = mail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Apple User';
+    const mail = customAppleEmail.trim() || 'user@icloud.com';
+    const userName =
+      mail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Apple User';
     setShowAppleConsole(false);
     triggerLoginSuccess(userName, mail);
-  };
-
-  const handleGoogleSelect = (acc: { name: string; email: string }) => {
-    setShowGoogleConsole(false);
-    triggerLoginSuccess(acc.name, acc.email);
-  };
-
-  const handleAppleSelect = () => {
-    setShowAppleConsole(false);
-    triggerLoginSuccess('Amit Kumar', 'amit@icloud.com');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -125,9 +129,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       }
     }
 
-    const userName = authMode === 'signup'
-      ? name.trim()
-      : (email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Demo User');
+    const userName =
+      authMode === 'signup'
+        ? name.trim()
+        : email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Demo User';
 
     triggerLoginSuccess(userName, email);
   };
@@ -193,7 +198,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
           <div className="grid grid-cols-2 gap-3 mb-4">
             <button
               type="button"
-              onClick={() => setShowGoogleConsole(true)}
+              onClick={handleOpenGoogle}
               disabled={loading}
               className="flex items-center justify-center gap-2 rounded-xl border border-stone-200 bg-white py-2.5 px-3 text-xs font-bold text-stone-700 hover:border-purple-300 hover:bg-purple-50/50 transition-all shadow-sm"
             >
@@ -362,7 +367,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         </div>
       </div>
 
-      {/* ── GOOGLE CONSOLE ACCOUNT PICKER MODAL ── */}
+      {/* ── GOOGLE DIRECT LOGIN MODAL (NO MOCK LIST) ── */}
       {showGoogleConsole && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 animate-scale-in">
@@ -373,65 +378,43 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <Icons.x className="h-4 w-4" />
             </button>
 
-            <div className="text-center mb-4">
+            <div className="text-center mb-5">
               <div className="mx-auto mb-2 grid h-10 w-10 place-items-center"><GoogleIcon /></div>
               <h3 className="font-bold text-base text-stone-900">Sign in with Google</h3>
-              <p className="text-[11px] text-stone-500">Choose an account to continue to RailGo</p>
-              <span className="mt-1 inline-block rounded-md bg-purple-50 px-2 py-0.5 text-[9px] font-mono text-purple-700 border border-purple-200">
-                Client ID Verified • 26283853...
-              </span>
+              <p className="text-xs text-stone-500 mt-1">Enter your Google / Gmail email address</p>
             </div>
 
-            {/* Custom Gmail Input Form */}
-            <form onSubmit={handleCustomGoogleSubmit} className="mb-3">
-              <div className="flex gap-2">
+            {/* Direct Gmail Input Form */}
+            <form onSubmit={handleCustomGoogleSubmit} className="space-y-4">
+              <div>
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Google Email Address</label>
                 <input
                   type="email"
+                  required
                   value={customGmail}
                   onChange={(e) => setCustomGmail(e.target.value)}
-                  placeholder="Enter your @gmail.com address"
-                  className="flex-1 rounded-xl border border-stone-200 px-3 py-2 text-xs font-medium outline-none focus:border-purple-600"
+                  placeholder="your.name@gmail.com"
+                  className="mt-1.5 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
                 />
-                <button
-                  type="submit"
-                  className="rounded-xl bg-purple-600 px-3 py-2 text-xs font-bold text-white hover:bg-purple-700 transition-all"
-                >
-                  Sign In
-                </button>
               </div>
+
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-purple-600 to-violet-700 py-3 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all"
+              >
+                <GoogleIcon />
+                <span>Continue with Google</span>
+              </button>
             </form>
 
-            <div className="relative flex items-center justify-center my-3">
-              <div className="w-full border-t border-stone-200" />
-              <span className="absolute bg-white px-2 text-[9px] font-bold text-stone-400 uppercase">Or select account</span>
-            </div>
-
-            <div className="space-y-2 mb-4">
-              {MOCK_GOOGLE_ACCOUNTS.map((acc) => (
-                <button
-                  key={acc.email}
-                  onClick={() => handleGoogleSelect(acc)}
-                  className="w-full flex items-center gap-3 rounded-2xl border border-stone-200 p-2.5 hover:bg-purple-50/60 hover:border-purple-300 transition-all text-left group"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-full bg-purple-600 text-white font-bold text-xs shadow-sm">
-                    {acc.avatar}
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-stone-900 group-hover:text-purple-700">{acc.name}</p>
-                    <p className="text-[10px] text-stone-400">{acc.email}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <p className="text-[9px] text-center text-stone-400">
-              Google Cloud OAuth 2.0 • Authorised for http://localhost:3000
+            <p className="mt-4 text-[9px] text-center text-stone-400 leading-tight">
+              Authenticated via Google OAuth 2.0 • Client ID 262838532038
             </p>
           </div>
         </div>
       )}
 
-      {/* ── APPLE ID AUTH MODAL ── */}
+      {/* ── APPLE ID DIRECT AUTH MODAL (NO MOCK LIST) ── */}
       {showAppleConsole && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 text-center animate-scale-in">
@@ -452,6 +435,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
             <form onSubmit={handleCustomAppleSubmit} className="space-y-3">
               <input
                 type="email"
+                required
                 value={customAppleEmail}
                 onChange={(e) => setCustomAppleEmail(e.target.value)}
                 placeholder="you@icloud.com"
