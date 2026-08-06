@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState } from 'react';
 import { Icons } from './Icons';
 
@@ -22,173 +23,392 @@ const AppleIcon = () => (
   </svg>
 );
 
-type AuthView = 'choose' | 'email';
+const MOCK_GOOGLE_ACCOUNTS = [
+  { name: 'Amit Kumar', email: 'amit.kumar@gmail.com', avatar: 'A' },
+  { name: 'Priya Sharma', email: 'priya.sharma@gmail.com', avatar: 'P' },
+  { name: 'Rohan Verma', email: 'rohan.verma@gmail.com', avatar: 'R' },
+];
 
 export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
-  const [view, setView] = useState<AuthView>('choose');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPass, setShowPass] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [showGoogleConsole, setShowGoogleConsole] = useState(false);
+  const [showAppleConsole, setShowAppleConsole] = useState(false);
+
+  // Form state
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(true);
+  const [rememberMe, setRememberMe] = useState(true);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
-  const mockLogin = (userName: string, userEmail: string) => {
+  const triggerLoginSuccess = (userName: string, userEmail: string) => {
     setLoading(true);
+    setError('');
+    setSuccessMsg(`Welcome, ${userName}! Signing in...`);
+
     setTimeout(() => {
       onSuccess({
         name: userName,
         email: userEmail,
         avatar: userName[0].toUpperCase(),
       });
-    }, 1200);
+    }, 1000);
   };
 
-  const handleGoogle = () => mockLogin('Amit Kumar', 'amit.kumar@gmail.com');
-  const handleApple  = () => mockLogin('Amit Kumar', 'amit@icloud.com');
+  const handleGoogleSelect = (acc: { name: string; email: string }) => {
+    setShowGoogleConsole(false);
+    triggerLoginSuccess(acc.name, acc.email);
+  };
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleAppleSelect = () => {
+    setShowAppleConsole(false);
+    triggerLoginSuccess('Amit Kumar', 'amit@icloud.com');
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!email.includes('@')) { setError('Enter a valid email.'); return; }
-    if (password.length < 6)  { setError('Password must be at least 6 characters.'); return; }
-    if (isSignUp && !name.trim()) { setError('Enter your name.'); return; }
-    const userName = isSignUp
+
+    if (!email.includes('@')) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      return;
+    }
+
+    if (authMode === 'signup') {
+      if (!name.trim()) {
+        setError('Please enter your full name.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setError('Passwords do not match.');
+        return;
+      }
+
+      if (!agreeTerms) {
+        setError('You must agree to the Terms of Service to create an account.');
+        return;
+      }
+    }
+
+    const userName = authMode === 'signup'
       ? name.trim()
       : (email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Demo User');
-    mockLogin(userName, email);
+
+    triggerLoginSuccess(userName, email);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(28,25,23,0.4)', backdropFilter: 'blur(8px)' }}>
-      <div className="relative w-full max-w-md rounded-3xl border border-stone-200 bg-white shadow-2xl shadow-stone-300/30 animate-scale-in overflow-hidden">
-
-        {/* Close */}
-        <button onClick={onClose} className="absolute right-4 top-4 rounded-xl p-2 transition-colors text-stone-400 hover:text-stone-700 hover:bg-stone-100">
-          <Icons.x className="h-5 w-5" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(8px)' }}>
+      {/* ── MAIN AUTH DIALOG ── */}
+      <div className="relative w-full max-w-md rounded-3xl border border-purple-100 bg-white shadow-2xl shadow-purple-950/20 overflow-hidden animate-scale-in">
+        
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 z-10 grid h-8 w-8 place-items-center rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors"
+        >
+          <Icons.x className="h-4 w-4" />
         </button>
 
-        {/* Header */}
-        <div className="px-8 pt-10 pb-6 text-center">
-          <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25">
-            <Icons.train className="h-8 w-8" />
+        {/* Modal Top Header */}
+        <div className="px-6 pt-7 pb-4 text-center border-b border-purple-50">
+          <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-md shadow-purple-500/25">
+            <span className="font-extrabold text-base tracking-tight">RG</span>
           </div>
-          <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: 'Outfit, sans-serif' }}>
-            {view === 'choose' ? 'Welcome to RailGo' : (isSignUp ? 'Create Account' : 'Sign In')}
+          <h2 className="text-xl font-bold text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            {authMode === 'signin' ? 'Sign In to RailGo' : 'Create RailGo Account'}
           </h2>
-          <p className="text-sm text-stone-500">
-            {view === 'choose' ? 'Choose how you\'d like to continue' : (isSignUp ? 'Start booking in seconds' : 'Good to see you again')}
+          <p className="text-xs text-stone-500 mt-1">
+            {authMode === 'signin'
+              ? 'Access 28 microservices train booking & live status'
+              : 'Join 10 Million+ travelers with instant IRCTC ticket booking'}
           </p>
+
+          {/* Mode Switcher Tabs */}
+          <div className="mt-4 flex rounded-2xl bg-stone-100 p-1 border border-stone-200/80">
+            <button
+              type="button"
+              onClick={() => { setAuthMode('signin'); setError(''); }}
+              className={`flex-1 rounded-xl py-2 text-xs font-bold transition-all ${
+                authMode === 'signin'
+                  ? 'bg-white text-purple-700 shadow-sm'
+                  : 'text-stone-500 hover:text-stone-800'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={() => { setAuthMode('signup'); setError(''); }}
+              className={`flex-1 rounded-xl py-2 text-xs font-bold transition-all ${
+                authMode === 'signup'
+                  ? 'bg-white text-purple-700 shadow-sm'
+                  : 'text-stone-500 hover:text-stone-800'
+              }`}
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
 
-        <div className="px-8 pb-8">
-          {view === 'choose' ? (
-            <div className="space-y-3">
-              {/* Google */}
-              <button onClick={handleGoogle} disabled={loading} className="group flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-stone-200 hover:border-purple-300 hover:shadow-sm">
-                {loading ? <Icons.arrowRight className="h-5 w-5 animate-spin mx-auto text-purple-600" /> : (
-                  <>
-                    <div className="grid h-9 w-9 place-items-center rounded-lg border border-stone-200"><GoogleIcon /></div>
-                    <span className="text-stone-700">Continue with Google</span>
-                    <Icons.arrowRight className="h-4 w-4 ml-auto text-stone-400 group-hover:text-purple-600 transition-colors" />
-                  </>
-                )}
-              </button>
+        {/* Form Body */}
+        <div className="px-6 py-5 max-h-[75vh] overflow-y-auto">
+          
+          {/* Social OAuth Buttons */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <button
+              type="button"
+              onClick={() => setShowGoogleConsole(true)}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 rounded-xl border border-stone-200 bg-white py-2.5 px-3 text-xs font-bold text-stone-700 hover:border-purple-300 hover:bg-purple-50/50 transition-all shadow-sm"
+            >
+              <GoogleIcon />
+              <span>Google</span>
+            </button>
 
-              {/* Apple */}
-              <button onClick={handleApple} disabled={loading} className="flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-stone-200 hover:border-stone-300 hover:shadow-sm">
-                <div className="grid h-9 w-9 place-items-center rounded-lg border border-stone-200 text-stone-700"><AppleIcon /></div>
-                <span className="text-stone-700">Continue with Apple</span>
-                <Icons.arrowRight className="h-4 w-4 ml-auto text-stone-400" />
-              </button>
+            <button
+              type="button"
+              onClick={() => setShowAppleConsole(true)}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 rounded-xl border border-stone-200 bg-white py-2.5 px-3 text-xs font-bold text-stone-700 hover:border-stone-400 hover:bg-stone-50 transition-all shadow-sm"
+            >
+              <AppleIcon />
+              <span>Apple ID</span>
+            </button>
+          </div>
 
-              {/* Divider */}
-              <div className="flex items-center gap-4 py-3">
-                <div className="flex-1 h-px bg-stone-200" />
-                <span className="text-xs font-semibold text-stone-400">or</span>
-                <div className="flex-1 h-px bg-stone-200" />
+          <div className="relative flex items-center justify-center mb-4">
+            <div className="w-full border-t border-stone-200" />
+            <span className="absolute bg-white px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
+              or continue with email
+            </span>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-3.5">
+            {/* Full Name (Sign Up only) */}
+            {authMode === 'signup' && (
+              <div>
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Amit Kumar"
+                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+                />
               </div>
+            )}
 
-              {/* Email */}
-              <button onClick={() => setView('email')} className="flex w-full items-center gap-4 rounded-xl px-5 py-3.5 text-sm font-semibold transition-all border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700">
-                <div className="grid h-9 w-9 place-items-center rounded-lg bg-purple-100 text-purple-600">
-                  <Icons.mail className="h-4 w-4" />
-                </div>
-                <span>Continue with Email</span>
-                <Icons.arrowRight className="h-4 w-4 ml-auto" />
-              </button>
-
-              <p className="text-center text-xs pt-2 text-stone-400">
-                By continuing, you agree to our <span className="cursor-pointer text-purple-600 font-medium">Terms</span> & <span className="cursor-pointer text-purple-600 font-medium">Privacy Policy</span>
-              </p>
+            {/* Email Address */}
+            <div>
+              <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+              />
             </div>
-          ) : (
-            <form onSubmit={handleEmailSubmit} className="space-y-4">
-              {/* Name (sign up only) */}
-              {isSignUp && (
-                <div>
-                  <label className="field-label">Full Name</label>
-                  <input value={name} onChange={e => setName(e.target.value)} type="text" placeholder="Amit Kumar" className="field-control mt-1" />
-                </div>
-              )}
 
-              {/* Email */}
+            {/* Mobile Number (Sign Up only) */}
+            {authMode === 'signup' && (
               <div>
-                <label className="field-label">Email Address</label>
-                <input value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="you@example.com" className="field-control mt-1" />
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Mobile Number (Optional)</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+91 98765 43210"
+                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+                />
               </div>
+            )}
 
-              {/* Password */}
-              <div>
-                <label className="field-label">Password</label>
-                <div className="relative mt-1">
-                  <input value={password} onChange={e => setPassword(e.target.value)}
-                    type={showPass ? 'text' : 'password'} placeholder="••••••••" className="field-control pr-10" />
-                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600">
-                    {showPass ? <Icons.x className="h-4 w-4" /> : <Icons.arrowRight className="h-4 w-4" />}
+            {/* Password */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Password</label>
+                {authMode === 'signin' && (
+                  <button type="button" className="text-[11px] font-bold text-purple-600 hover:underline">
+                    Forgot Password?
                   </button>
-                </div>
+                )}
               </div>
-
-              {!isSignUp && (
-                <div className="flex justify-end">
-                  <button type="button" className="text-xs font-semibold text-purple-600 hover:text-purple-700">Forgot password?</button>
-                </div>
-              )}
-
-              {error && (
-                <div className="rounded-xl px-4 py-3 text-sm font-semibold bg-red-50 border border-red-200 text-red-700">
-                  {error}
-                </div>
-              )}
-
-              <button type="submit" disabled={loading} className="btn-brand w-full py-3.5 justify-center">
-                {loading ? <Icons.arrowRight className="h-5 w-5 animate-spin" /> : (isSignUp ? 'Create Account' : 'Sign In')}
-              </button>
-
-              <div className="flex items-center gap-4">
-                <div className="flex-1 h-px bg-stone-200" />
-                <button type="button" onClick={() => { setView('choose'); setError(''); }} className="text-xs font-semibold text-stone-400 hover:text-stone-600">Back</button>
-                <div className="flex-1 h-px bg-stone-200" />
-              </div>
-
-              <p className="text-center text-sm text-stone-500">
-                {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-                <button type="button" onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="font-bold text-purple-600 hover:text-purple-700">
-                  {isSignUp ? 'Sign In' : 'Sign Up'}
+              <div className="relative mt-1">
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(!showPass)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 text-xs font-semibold"
+                >
+                  {showPass ? 'Hide' : 'Show'}
                 </button>
-              </p>
-            </form>
-          )}
+              </div>
+            </div>
+
+            {/* Confirm Password (Sign Up only) */}
+            {authMode === 'signup' && (
+              <div>
+                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Confirm Password</label>
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+                />
+              </div>
+            )}
+
+            {/* Checkboxes */}
+            {authMode === 'signin' ? (
+              <label className="flex items-center gap-2 cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-3.5 w-3.5 accent-purple-600 rounded"
+                />
+                <span className="text-xs text-stone-600 font-medium">Keep me signed in on this device</span>
+              </label>
+            ) : (
+              <label className="flex items-start gap-2 cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  className="h-3.5 w-3.5 accent-purple-600 rounded mt-0.5"
+                />
+                <span className="text-[11px] text-stone-500 leading-tight">
+                  I agree to the RailGo Terms of Service, IRCTC Partner User Guidelines & Privacy Policy.
+                </span>
+              </label>
+            )}
+
+            {/* Alerts */}
+            {error && (
+              <div className="rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-semibold text-red-700 animate-fade-in">
+                {error}
+              </div>
+            )}
+
+            {successMsg && (
+              <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-semibold text-emerald-700 animate-fade-in">
+                {successMsg}
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-xl bg-gradient-to-br from-purple-600 via-purple-700 to-violet-700 py-3 text-xs font-bold text-white shadow-md shadow-purple-600/30 hover:shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <span>{authMode === 'signin' ? 'Sign In to RailGo' : 'Create Free Account'}</span>
+              )}
+            </button>
+          </form>
         </div>
 
-        {/* Security badge */}
-        <div className="px-8 pb-6 flex items-center justify-center gap-2 text-xs text-stone-400">
-          <Icons.shield className="h-3.5 w-3.5 text-purple-600" />
-          <span>256-bit SSL encryption • Your data is safe</span>
+        {/* Footer Security Badge */}
+        <div className="px-6 py-3 bg-stone-50 border-t border-stone-100 text-center text-[10px] text-stone-400 font-medium">
+          256-bit SSL Encrypted • Official IRCTC Partner OAuth Security
         </div>
       </div>
+
+      {/* ── GOOGLE CONSOLE ACCOUNT PICKER MODAL ── */}
+      {showGoogleConsole && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 animate-scale-in">
+            <button
+              onClick={() => setShowGoogleConsole(false)}
+              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-stone-400 hover:text-stone-700"
+            >
+              <Icons.x className="h-4 w-4" />
+            </button>
+
+            <div className="text-center mb-5">
+              <div className="mx-auto mb-2 grid h-10 w-10 place-items-center"><GoogleIcon /></div>
+              <h3 className="font-bold text-base text-stone-900">Sign in with Google</h3>
+              <p className="text-xs text-stone-500">Choose an account to continue to RailGo</p>
+            </div>
+
+            <div className="space-y-2 mb-4">
+              {MOCK_GOOGLE_ACCOUNTS.map((acc) => (
+                <button
+                  key={acc.email}
+                  onClick={() => handleGoogleSelect(acc)}
+                  className="w-full flex items-center gap-3 rounded-2xl border border-stone-200 p-3 hover:bg-purple-50/60 hover:border-purple-300 transition-all text-left group"
+                >
+                  <div className="grid h-9 w-9 place-items-center rounded-full bg-purple-600 text-white font-bold text-sm shadow-sm">
+                    {acc.avatar}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-stone-900 group-hover:text-purple-700">{acc.name}</p>
+                    <p className="text-[10px] text-stone-400">{acc.email}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <p className="text-[10px] text-center text-stone-400">
+              To continue, Google will share your name, email address, and profile picture with RailGo.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── APPLE ID AUTH MODAL ── */}
+      {showAppleConsole && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 text-center animate-scale-in">
+            <button
+              onClick={() => setShowAppleConsole(false)}
+              className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-stone-400 hover:text-stone-700"
+            >
+              <Icons.x className="h-4 w-4" />
+            </button>
+
+            <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-stone-900 text-white">
+              <AppleIcon />
+            </div>
+
+            <h3 className="font-bold text-base text-stone-900 mb-1">Sign in with Apple ID</h3>
+            <p className="text-xs text-stone-500 mb-5">Use Face ID / Passcode to authenticate with RailGo</p>
+
+            <button
+              onClick={handleAppleSelect}
+              className="w-full rounded-2xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
+            >
+              Confirm Apple Sign In
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
