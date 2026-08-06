@@ -41,7 +41,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [agreeTerms, setAgreeTerms] = useState(true);
   const [rememberMe, setRememberMe] = useState(true);
 
-  // Social Auth Email inputs
+  // Social Custom Email Mode
+  const [customEmailMode, setCustomEmailMode] = useState(false);
   const [socialEmail, setSocialEmail] = useState('');
   const [socialName, setSocialName] = useState('');
   const [socialError, setSocialError] = useState('');
@@ -75,6 +76,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       return;
     }
 
+    setCustomEmailMode(false);
     setSocialEmail('');
     setSocialName('');
     setShowGoogleModal(true);
@@ -91,9 +93,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
       return;
     }
 
+    setCustomEmailMode(false);
     setSocialEmail('');
     setSocialName('');
     setShowAppleModal(true);
+  };
+
+  const handleSelectGoogleAccount = (userEmail: string, userName: string) => {
+    setShowGoogleModal(false);
+    triggerLoginSuccess(userName, userEmail);
   };
 
   const handleConfirmGoogleAuth = (e: React.FormEvent) => {
@@ -399,7 +407,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         </div>
       </div>
 
-      {/* ── GOOGLE OAUTH EMAIL PROMPT MODAL ── */}
+      {/* ── GOOGLE ACCOUNT CHOOSER OVERLAY ── */}
       {showGoogleModal && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 animate-scale-in">
@@ -410,55 +418,87 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <Icons.x className="h-4 w-4" />
             </button>
 
-            <div className="text-center mb-4">
+            <div className="text-center mb-5">
               <div className="mx-auto mb-2 grid h-10 w-10 place-items-center"><GoogleIcon /></div>
-              <h3 className="font-bold text-base text-stone-900">Sign in with Google</h3>
-              <p className="text-xs text-stone-500 mt-1">Enter your Google Account email to sign in or sign up</p>
+              <h3 className="font-bold text-base text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Choose an account</h3>
+              <p className="text-xs text-stone-500 mt-1">to continue to <span className="font-bold text-purple-700">RailGo Express</span></p>
             </div>
 
-            <form onSubmit={handleConfirmGoogleAuth} className="space-y-3.5">
-              <div>
-                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Google Email Address</label>
-                <input
-                  type="email"
-                  required
-                  value={socialEmail}
-                  onChange={(e) => setSocialEmail(e.target.value)}
-                  placeholder="your.email@gmail.com"
-                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
-                />
-              </div>
+            {!customEmailMode ? (
+              <div className="space-y-3">
+                {/* Option 1: Quick Account Chooser Card */}
+                <button
+                  type="button"
+                  onClick={() => handleSelectGoogleAccount('user@gmail.com', 'Google User')}
+                  className="w-full flex items-center gap-3.5 rounded-2xl border border-stone-200 p-3.5 text-left hover:border-purple-300 hover:bg-purple-50/50 transition-all group"
+                >
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-600 text-white font-bold text-sm shadow-sm">
+                    G
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-stone-900 truncate">Google User</p>
+                    <p className="text-[11px] text-stone-500 truncate">Sign in with Google Account</p>
+                  </div>
+                  <Icons.arrowRight className="h-4 w-4 text-stone-400 group-hover:text-purple-600 transition-colors" />
+                </button>
 
-              <div>
-                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
-                <input
-                  type="text"
-                  value={socialName}
-                  onChange={(e) => setSocialName(e.target.value)}
-                  placeholder="Your Name"
-                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
-                />
+                {/* Option 2: Enter specific email */}
+                <button
+                  type="button"
+                  onClick={() => setCustomEmailMode(true)}
+                  className="w-full flex items-center gap-3.5 rounded-2xl border border-dashed border-purple-200 p-3.5 text-left hover:border-purple-400 hover:bg-purple-50/60 transition-all text-xs font-bold text-purple-700"
+                >
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-100 text-purple-700">
+                    +
+                  </div>
+                  <span>Use another Google / Gmail email address</span>
+                </button>
               </div>
-
-              {socialError && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
-                  {socialError}
+            ) : (
+              <form onSubmit={handleConfirmGoogleAuth} className="space-y-3.5">
+                <div>
+                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Google Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={socialEmail}
+                    onChange={(e) => setSocialEmail(e.target.value)}
+                    placeholder="enter your gmail (e.g. name@gmail.com)"
+                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+                  />
                 </div>
-              )}
 
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-purple-600 to-violet-700 py-3 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all"
-              >
-                <GoogleIcon />
-                <span>Continue with Google Account</span>
-              </button>
-            </form>
+                <div>
+                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
+                  <input
+                    type="text"
+                    value={socialName}
+                    onChange={(e) => setSocialName(e.target.value)}
+                    placeholder="Your Name"
+                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-100 transition-all"
+                  />
+                </div>
+
+                {socialError && (
+                  <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
+                    {socialError}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-purple-600 to-violet-700 py-3 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all"
+                >
+                  <GoogleIcon />
+                  <span>Continue with Google</span>
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}
 
-      {/* ── APPLE ID OAUTH EMAIL PROMPT MODAL ── */}
+      {/* ── APPLE ID ACCOUNT CHOOSER OVERLAY ── */}
       {showAppleModal && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-stone-200 animate-scale-in">
@@ -469,52 +509,82 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <Icons.x className="h-4 w-4" />
             </button>
 
-            <div className="text-center mb-4">
+            <div className="text-center mb-5">
               <div className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-full bg-stone-900 text-white">
                 <AppleIcon />
               </div>
-              <h3 className="font-bold text-base text-stone-900">Sign in with Apple ID</h3>
-              <p className="text-xs text-stone-500 mt-1">Enter your Apple ID email address to sign in or sign up</p>
+              <h3 className="font-bold text-base text-stone-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Sign in with Apple ID</h3>
+              <p className="text-xs text-stone-500 mt-1">to continue to <span className="font-bold text-stone-900">RailGo Express</span></p>
             </div>
 
-            <form onSubmit={handleConfirmAppleAuth} className="space-y-3.5">
-              <div>
-                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Apple ID Email Address</label>
-                <input
-                  type="email"
-                  required
-                  value={socialEmail}
-                  onChange={(e) => setSocialEmail(e.target.value)}
-                  placeholder="your.email@icloud.com"
-                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-stone-900 transition-all"
-                />
-              </div>
+            {!customEmailMode ? (
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => handleSelectGoogleAccount('user@icloud.com', 'Apple User')}
+                  className="w-full flex items-center gap-3.5 rounded-2xl border border-stone-200 p-3.5 text-left hover:border-stone-400 hover:bg-stone-50 transition-all group"
+                >
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stone-900 text-white font-bold text-sm shadow-sm">
+                    <AppleIcon />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-stone-900 truncate">Apple ID User</p>
+                    <p className="text-[11px] text-stone-500 truncate">Sign in with Apple Account</p>
+                  </div>
+                  <Icons.arrowRight className="h-4 w-4 text-stone-400 group-hover:text-stone-900 transition-colors" />
+                </button>
 
-              <div>
-                <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
-                <input
-                  type="text"
-                  value={socialName}
-                  onChange={(e) => setSocialName(e.target.value)}
-                  placeholder="Your Name"
-                  className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-stone-900 transition-all"
-                />
+                <button
+                  type="button"
+                  onClick={() => setCustomEmailMode(true)}
+                  className="w-full flex items-center gap-3.5 rounded-2xl border border-dashed border-stone-300 p-3.5 text-left hover:border-stone-600 hover:bg-stone-50 transition-all text-xs font-bold text-stone-900"
+                >
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stone-100 text-stone-900 font-bold">
+                    +
+                  </div>
+                  <span>Use another Apple ID email address</span>
+                </button>
               </div>
-
-              {socialError && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
-                  {socialError}
+            ) : (
+              <form onSubmit={handleConfirmAppleAuth} className="space-y-3.5">
+                <div>
+                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Apple ID Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={socialEmail}
+                    onChange={(e) => setSocialEmail(e.target.value)}
+                    placeholder="enter your icloud (e.g. name@icloud.com)"
+                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-semibold text-stone-900 outline-none focus:border-stone-900 transition-all"
+                  />
                 </div>
-              )}
 
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
-              >
-                <AppleIcon />
-                <span>Continue with Apple ID</span>
-              </button>
-            </form>
+                <div>
+                  <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Full Name (Optional)</label>
+                  <input
+                    type="text"
+                    value={socialName}
+                    onChange={(e) => setSocialName(e.target.value)}
+                    placeholder="Your Name"
+                    className="mt-1 w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-stone-900 transition-all"
+                  />
+                </div>
+
+                {socialError && (
+                  <div className="rounded-xl bg-red-50 border border-red-200 p-2.5 text-xs font-semibold text-red-700">
+                    {socialError}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
+                >
+                  <AppleIcon />
+                  <span>Continue with Apple ID</span>
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}

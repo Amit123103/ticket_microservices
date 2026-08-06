@@ -143,29 +143,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin }) => {
     <div className="min-h-screen bg-white text-stone-900 selection:bg-purple-600 selection:text-white">
 
       {/* ── Sticky Navigation Header ── */}
-      <header className="sticky top-0 z-50 border-b border-purple-800/40 bg-gradient-to-r from-purple-950 via-slate-950 to-purple-950 text-white shadow-xl shadow-purple-950/30 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-purple-100 bg-white/95 backdrop-blur-xl text-stone-900 shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6">
           <div className="cursor-pointer">
             <Logo className="h-10 w-auto" />
           </div>
 
-          <nav className="hidden items-center gap-2 md:flex text-xs font-bold text-purple-100">
-            <a href="#special-panel" className="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition-all">Special Trains</a>
-            <a href="#features" className="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition-all">Features</a>
-            <a href="#how-it-works" className="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition-all">How It Works</a>
-            <a href="#reviews" className="px-3.5 py-1.5 rounded-xl hover:bg-white/10 hover:text-white transition-all">Reviews</a>
+          <nav className="hidden items-center gap-7 md:flex text-xs font-bold text-stone-600">
+            <a href="#special-panel" className="hover:text-purple-600 transition-colors">Special Trains</a>
+            <a href="#features" className="hover:text-purple-600 transition-colors">Features</a>
+            <a href="#how-it-works" className="hover:text-purple-600 transition-colors">How It Works</a>
+            <a href="#reviews" className="hover:text-purple-600 transition-colors">Reviews</a>
           </nav>
 
           <div className="flex items-center gap-3">
             <button
               onClick={onLogin}
-              className="text-xs font-bold text-purple-200 hover:text-white px-4 py-2 rounded-xl border border-purple-700/50 hover:bg-white/10 transition-all"
+              className="text-xs font-bold text-stone-700 hover:text-purple-700 px-4 py-2 rounded-xl border border-stone-200 hover:border-purple-300 hover:bg-purple-50 transition-all"
             >
               Log in
             </button>
             <button
               onClick={onLogin}
-              className="rounded-xl bg-gradient-to-r from-purple-600 via-purple-500 to-violet-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple-600/40 hover:scale-105 active:scale-95 transition-all"
+              className="rounded-xl bg-gradient-to-r from-purple-600 via-purple-700 to-violet-700 px-4 py-2 text-xs font-bold text-white shadow-md shadow-purple-600/30 hover:scale-105 active:scale-95 transition-all"
             >
               Get Started
             </button>

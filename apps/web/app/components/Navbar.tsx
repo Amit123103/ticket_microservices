@@ -63,7 +63,7 @@ export const PageNavbar: React.FC<PageNavProps> = ({
   return (
     <div className="w-full">
       {/* ── Top Header Bar Above Navigation ── */}
-      <header className="sticky top-0 z-40 border-b border-purple-800/40 bg-gradient-to-r from-purple-950 via-slate-950 to-purple-950 text-white shadow-xl shadow-purple-950/30 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-purple-100 bg-white/95 backdrop-blur-xl text-stone-900 shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           {/* Brand Logo */}
           <div
@@ -79,11 +79,11 @@ export const PageNavbar: React.FC<PageNavProps> = ({
             {onOpenWallet && (
               <button
                 onClick={onOpenWallet}
-                className="flex items-center gap-2 rounded-xl border border-purple-500/40 bg-purple-900/60 px-3 py-1.5 text-xs font-bold text-purple-200 hover:bg-purple-800/80 hover:text-white transition-all shadow-sm"
+                className="flex items-center gap-2 rounded-xl border border-purple-200 bg-purple-50/80 px-3 py-1.5 text-xs font-bold text-purple-700 hover:bg-purple-100 hover:border-purple-300 transition-all shadow-sm"
               >
-                <Icons.wallet className="h-4 w-4 text-purple-400" />
+                <Icons.wallet className="h-4 w-4 text-purple-600" />
                 <span className="hidden sm:inline">Wallet:</span>
-                <span className="font-black text-white">₹8,450</span>
+                <span className="font-black">₹8,450</span>
               </button>
             )}
 
@@ -91,10 +91,10 @@ export const PageNavbar: React.FC<PageNavProps> = ({
             {onOpenECatering && (
               <button
                 onClick={onOpenECatering}
-                className="flex items-center gap-1.5 rounded-xl border border-purple-700/50 bg-white/10 px-3 py-1.5 text-xs font-semibold text-purple-100 hover:bg-white/20 hover:text-white transition-all"
+                className="flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-700 hover:border-purple-300 hover:text-purple-700 hover:bg-purple-50 transition-all"
                 title="Order Food on Train"
               >
-                <Icons.utensils className="h-4 w-4 text-purple-300" />
+                <Icons.utensils className="h-4 w-4 text-purple-600" />
                 <span className="hidden md:inline">E-Catering</span>
               </button>
             )}
@@ -103,10 +103,10 @@ export const PageNavbar: React.FC<PageNavProps> = ({
             {onOpenAiAssistant && (
               <button
                 onClick={onOpenAiAssistant}
-                className="flex items-center gap-1.5 rounded-xl border border-purple-400/50 bg-gradient-to-r from-purple-600 to-violet-600 px-3 py-1.5 text-xs font-bold text-white shadow-md shadow-purple-600/30 hover:scale-105 transition-all"
+                className="flex items-center gap-1.5 rounded-xl border border-purple-200 bg-purple-50 px-3 py-1.5 text-xs font-bold text-purple-700 hover:bg-purple-100 transition-all"
                 title="RailAI Assistant"
               >
-                <Icons.sparkles className="h-4 w-4 text-purple-200" />
+                <Icons.sparkles className="h-4 w-4 text-purple-600" />
                 <span className="hidden md:inline">RailAI</span>
               </button>
             )}
@@ -115,11 +115,11 @@ export const PageNavbar: React.FC<PageNavProps> = ({
             {onOpenNotifications && (
               <button
                 onClick={onOpenNotifications}
-                className="relative rounded-xl border border-purple-700/50 bg-white/10 p-2 text-purple-200 hover:bg-white/20 hover:text-white transition-all"
+                className="relative rounded-xl border border-stone-200 bg-white p-2 text-stone-600 hover:border-purple-300 hover:text-purple-700 hover:bg-purple-50 transition-all"
                 title="Notifications"
               >
-                <Icons.bell className="h-4 w-4 text-purple-300" />
-                <span className="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-purple-500 text-[9px] font-bold text-white shadow-sm">
+                <Icons.bell className="h-4 w-4 text-purple-600" />
+                <span className="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-purple-600 text-[9px] font-bold text-white shadow-sm">
                   5
                 </span>
               </button>
@@ -127,17 +127,17 @@ export const PageNavbar: React.FC<PageNavProps> = ({
 
             {/* User Profile & Logout */}
             {onLogout && (
-              <div className="ml-1 sm:ml-2 flex items-center gap-2 border-l border-purple-800/60 pl-3">
-                <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-purple-500 to-violet-700 text-white font-bold text-xs shadow-md shadow-purple-600/30">
+              <div className="ml-1 sm:ml-2 flex items-center gap-2 border-l border-stone-200 pl-3">
+                <div className="grid h-8 w-8 place-items-center rounded-full bg-purple-600 text-white font-bold text-xs shadow-sm">
                   {user?.name ? user.name[0].toUpperCase() : 'A'}
                 </div>
                 <div className="hidden lg:block text-left">
-                  <p className="text-xs font-bold text-white leading-none">{user?.name || 'Amit Kumar'}</p>
-                  <p className="text-[10px] text-purple-300 mt-0.5 leading-none">{user?.email || 'amit@railgo.in'}</p>
+                  <p className="text-xs font-bold text-stone-900 leading-none">{user?.name || 'Amit Kumar'}</p>
+                  <p className="text-[10px] text-stone-500 mt-0.5 leading-none">{user?.email || 'amit@railgo.in'}</p>
                 </div>
                 <button
                   onClick={onLogout}
-                  className="rounded-xl bg-white/10 p-2 text-purple-300 hover:bg-red-500/20 hover:text-red-300 transition-colors"
+                  className="rounded-xl bg-stone-100 p-2 text-stone-500 hover:bg-red-50 hover:text-red-600 transition-colors"
                   title="Log out"
                 >
                   <Icons.logout className="h-4 w-4" />
