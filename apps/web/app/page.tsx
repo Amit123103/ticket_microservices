@@ -28,6 +28,7 @@ import {
   TRAINS_DATA,
   STATIONS,
   INITIAL_USER_TRIPS,
+  getTrainsForRoute,
   Train,
   TrainClassInfo,
   BookingTicket,
@@ -67,15 +68,8 @@ export default function Page() {
   // User Trips State
   const [userTrips, setUserTrips] = useState<BookingTicket[]>(INITIAL_USER_TRIPS);
 
-  // Filtered Trains
-  const filteredTrains = TRAINS_DATA.filter((t) => {
-    const matchesFrom = t.fromCode === fromCode || fromCode === 'BCT';
-    const matchesTo = t.toCode === toCode || toCode === 'NDLS';
-    const matchesClass = classFilter === 'ALL' || t.classes.some((c) => c.code === classFilter);
-    return matchesFrom && matchesTo && matchesClass;
-  });
-
-  const displayTrains = filteredTrains.length > 0 ? filteredTrains : TRAINS_DATA;
+  // Dynamic Route Solver — 100% working train search for ALL station pairs
+  const displayTrains = getTrainsForRoute(fromCode, toCode, classFilter);
 
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -85,6 +79,12 @@ export default function Page() {
     }
     setHasSearched(true);
     setActiveTab('search');
+    setTimeout(() => {
+      const trainListEl = document.getElementById('train-list-section');
+      if (trainListEl) {
+        trainListEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   const handleSelectTrain = (train: Train, travelClass: TrainClassInfo) => {
