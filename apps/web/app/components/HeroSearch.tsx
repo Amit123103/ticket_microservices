@@ -128,8 +128,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
             </div>
           </div>
 
-          {/* Form Fields Grid with Compact Square Search Button */}
-          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-12 items-center">
+          {/* Form Fields Grid with Responsive Swap & Search Button */}
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 items-center">
             {/* From Station */}
             <div className="lg:col-span-3 rounded-2xl border border-purple-100 bg-white p-3.5 transition-all hover:border-purple-300 hover:shadow-sm">
               <div className="flex items-center gap-1.5 text-purple-600 mb-1">
@@ -150,13 +150,13 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
               <p className="text-[10px] font-medium text-purple-600 mt-1 leading-none">{getStation(fromCode)?.state}</p>
             </div>
 
-            {/* Swap Button */}
-            <div className="hidden lg:flex lg:col-span-1 items-center justify-center">
+            {/* Swap Button (Responsive - works on both mobile & desktop) */}
+            <div className="flex lg:col-span-1 items-center justify-center -my-1 lg:my-0 z-10">
               <button
                 type="button"
                 onClick={switchRoute}
                 title="Swap stations"
-                className="grid h-10 w-10 place-items-center rounded-xl border border-purple-200 bg-purple-50 text-purple-600 transition-all hover:bg-purple-600 hover:text-white hover:rotate-180 shadow-sm"
+                className="grid h-9 w-9 lg:h-10 lg:w-10 place-items-center rounded-xl border border-purple-200 bg-purple-50 text-purple-600 transition-all hover:bg-purple-600 hover:text-white hover:rotate-180 shadow-sm"
               >
                 <Icons.swap className="h-4 w-4" />
               </button>
@@ -213,51 +213,54 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
               </div>
             </div>
 
-            {/* Travellers */}
-            <div className="lg:col-span-1 rounded-2xl border border-purple-100 bg-white p-3.5 transition-all hover:border-purple-300 hover:shadow-sm">
-              <div className="flex items-center gap-1 text-purple-600 mb-1">
-                <Icons.users className="h-3 w-3" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Adults</span>
+            {/* Side-by-side Adults & Class selection on Mobile */}
+            <div className="grid grid-cols-2 gap-3 lg:contents sm:col-span-2 lg:col-span-2">
+              {/* Travellers */}
+              <div className="lg:col-span-1 rounded-2xl border border-purple-100 bg-white p-3.5 transition-all hover:border-purple-300 hover:shadow-sm">
+                <div className="flex items-center gap-1 text-purple-600 mb-1">
+                  <Icons.users className="h-3 w-3" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Adults</span>
+                </div>
+                <select
+                  value={passengerCount}
+                  onChange={(e) => setPassengerCount(Number(e.target.value))}
+                  className="mt-0.5 w-full font-bold focus:outline-none text-xs text-stone-900 bg-transparent cursor-pointer"
+                >
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <select
-                value={passengerCount}
-                onChange={(e) => setPassengerCount(Number(e.target.value))}
-                className="mt-0.5 w-full font-bold focus:outline-none text-xs text-stone-900 bg-transparent cursor-pointer"
-              >
-                {[1, 2, 3, 4, 5, 6].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
+
+              {/* Class */}
+              <div className="lg:col-span-1 rounded-2xl border border-purple-100 bg-white p-3.5 transition-all hover:border-purple-300 hover:shadow-sm">
+                <div className="flex items-center gap-1 text-purple-600 mb-1">
+                  <Icons.filter className="h-3 w-3" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Class</span>
+                </div>
+                <select
+                  value={classFilter}
+                  onChange={(e) => setClassFilter(e.target.value)}
+                  className="mt-0.5 w-full font-bold focus:outline-none text-xs text-stone-900 bg-transparent cursor-pointer"
+                >
+                  <option value="ALL">ALL</option>
+                  <option value="1A">1A</option>
+                  <option value="2A">2A</option>
+                  <option value="3A">3A</option>
+                  <option value="SL">SL</option>
+                  <option value="CC">CC</option>
+                  <option value="EC">EC</option>
+                </select>
+              </div>
             </div>
 
-            {/* Class */}
-            <div className="lg:col-span-1 rounded-2xl border border-purple-100 bg-white p-3.5 transition-all hover:border-purple-300 hover:shadow-sm">
-              <div className="flex items-center gap-1 text-purple-600 mb-1">
-                <Icons.filter className="h-3 w-3" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Class</span>
-              </div>
-              <select
-                value={classFilter}
-                onChange={(e) => setClassFilter(e.target.value)}
-                className="mt-0.5 w-full font-bold focus:outline-none text-xs text-stone-900 bg-transparent cursor-pointer"
-              >
-                <option value="ALL">ALL</option>
-                <option value="1A">1A</option>
-                <option value="2A">2A</option>
-                <option value="3A">3A</option>
-                <option value="SL">SL</option>
-                <option value="CC">CC</option>
-                <option value="EC">EC</option>
-              </select>
-            </div>
-
-            {/* Small Square Search Button WITHOUT ICON */}
-            <div className="flex items-center justify-center lg:col-span-1">
+            {/* Responsive Search Button (Full-width on mobile, compact square on desktop/laptop) */}
+            <div className="flex items-center justify-center sm:col-span-2 lg:col-span-1">
               <button
                 type="submit"
-                className="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-600 via-purple-700 to-violet-700 text-white font-black text-xs uppercase shadow-md shadow-purple-600/30 hover:shadow-lg hover:shadow-purple-600/50 hover:scale-105 active:scale-95 transition-all flex items-center justify-center text-center leading-tight p-2 border border-purple-400/30 tracking-tight"
+                className="w-full lg:w-14 h-12 lg:h-14 rounded-2xl bg-gradient-to-br from-purple-600 via-purple-700 to-violet-700 text-white font-black text-xs uppercase shadow-md shadow-purple-600/30 hover:shadow-lg hover:shadow-purple-600/50 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center text-center leading-tight p-2 border border-purple-400/30 tracking-tight"
                 title="Search Trains"
               >
                 Search

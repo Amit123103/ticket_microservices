@@ -91,48 +91,48 @@ export const TrainList: React.FC<TrainListProps> = ({
                 </div>
               </div>
 
-              <div className="p-5 sm:p-6">
-                <div className="grid gap-6 lg:grid-cols-[1.2fr_1.6fr_1fr] lg:items-center">
+              <div className="p-4 sm:p-6">
+                <div className="grid gap-5 lg:gap-6 lg:grid-cols-[1.2fr_1.6fr_1fr] lg:items-center">
                   {/* Times */}
-                  <div className="flex items-center justify-between gap-3 rounded-2xl bg-purple-50/60 p-5 border border-purple-100">
-                    <div className="text-center">
-                      <strong className="block text-2xl font-bold text-stone-900">{train.departureTime}</strong>
-                      <span className="text-xs font-semibold text-purple-700">{train.fromName}</span>
+                  <div className="flex items-center justify-between gap-2 sm:gap-3 rounded-2xl bg-purple-50/60 p-3.5 sm:p-5 border border-purple-100">
+                    <div className="text-center min-w-[70px]">
+                      <strong className="block text-xl sm:text-2xl font-bold text-stone-900">{train.departureTime}</strong>
+                      <span className="text-[11px] sm:text-xs font-semibold text-purple-700">{train.fromName}</span>
                     </div>
                     <div className="flex flex-col items-center gap-1">
-                      <span className="text-xs font-semibold text-stone-400">{train.duration}</span>
-                      <div className="relative flex items-center w-20">
+                      <span className="text-[10px] sm:text-xs font-semibold text-stone-400">{train.duration}</span>
+                      <div className="relative flex items-center w-14 sm:w-20">
                         <div className="h-0.5 w-full bg-gradient-to-r from-purple-300 to-purple-600 rounded-full"></div>
-                        <Icons.arrowRight className="absolute right-0 h-3.5 w-3.5 text-purple-600" />
+                        <Icons.arrowRight className="absolute right-0 h-3 sm:h-3.5 w-3 sm:w-3.5 text-purple-600" />
                       </div>
                     </div>
-                    <div className="text-center">
-                      <strong className="block text-2xl font-bold text-stone-900">{train.arrivalTime}</strong>
-                      <span className="text-xs font-semibold text-purple-700">{train.toName}</span>
+                    <div className="text-center min-w-[70px]">
+                      <strong className="block text-xl sm:text-2xl font-bold text-stone-900">{train.arrivalTime}</strong>
+                      <span className="text-[11px] sm:text-xs font-semibold text-purple-700">{train.toName}</span>
                     </div>
                   </div>
 
                   {/* Class Pills */}
                   <div>
-                    <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-stone-400">Travel Class & Availability:</p>
-                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-3">
+                    <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-stone-400">Travel Class & Availability:</p>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-2.5 sm:grid-cols-3 lg:grid-cols-3">
                       {train.classes.map((cls) => (
                         <button key={cls.code} type="button"
                           onClick={() => setSelectedClassMap((p) => ({ ...p, [train.id]: cls.code }))}
-                          className={`flex flex-col justify-between rounded-xl border p-3 text-left transition-all ${
+                          className={`flex flex-col justify-between rounded-xl border p-2.5 sm:p-3 text-left transition-all ${
                             ccCode === cls.code
                               ? 'border-purple-400 bg-purple-50 shadow-sm shadow-purple-500/10'
                               : 'border-stone-200 hover:border-purple-300 hover:bg-purple-50/30'
                           }`}>
                           <div className="flex items-center justify-between">
                             <span className="text-xs font-bold text-stone-700">{cls.code}</span>
-                            <strong className="text-sm font-bold text-purple-700">₹{cls.price}</strong>
+                            <strong className="text-xs sm:text-sm font-bold text-purple-700">₹{cls.price}</strong>
                           </div>
-                          <div className="mt-2">
-                            <span className={`block text-[10px] font-bold ${cls.status === 'AVAILABLE' ? 'text-emerald-600' : cls.status === 'RAC' ? 'text-amber-600' : 'text-rose-600'}`}>
-                              {cls.status === 'AVAILABLE' ? `AVAILABLE-${cls.available.toString().padStart(4,'0')}` : `${cls.status} ${cls.statusNumber}`}
+                          <div className="mt-1.5">
+                            <span className={`block text-[9px] sm:text-[10px] font-bold ${cls.status === 'AVAILABLE' ? 'text-emerald-600' : cls.status === 'RAC' ? 'text-amber-600' : 'text-rose-600'}`}>
+                              {cls.status === 'AVAILABLE' ? `AVL-${cls.available.toString().padStart(3,'0')}` : `${cls.status} ${cls.statusNumber}`}
                             </span>
-                            <span className="block text-[10px] text-stone-400">{cls.name}</span>
+                            <span className="block text-[9px] sm:text-[10px] text-stone-400 truncate">{cls.name}</span>
                           </div>
                         </button>
                       ))}
@@ -140,15 +140,15 @@ export const TrainList: React.FC<TrainListProps> = ({
                   </div>
 
                   {/* Price & Book */}
-                  <div className="flex flex-col items-end justify-between gap-4">
-                    <div className="text-right w-full">
-                      <span className="text-xs text-stone-400">Total ({passengerCount} Pax)</span>
-                      <strong className="block text-2xl font-bold text-stone-900">₹{(ccInfo.price * passengerCount).toLocaleString('en-IN')}</strong>
-                      <span className="text-[10px] font-bold text-emerald-600">Includes GST</span>
+                  <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-purple-50">
+                    <div className="text-left lg:text-right">
+                      <span className="text-[10px] sm:text-xs text-stone-400">Total ({passengerCount} Pax)</span>
+                      <strong className="block text-xl sm:text-2xl font-bold text-stone-900">₹{(ccInfo.price * passengerCount).toLocaleString('en-IN')}</strong>
+                      <span className="text-[9px] sm:text-[10px] font-bold text-emerald-600">Includes GST</span>
                     </div>
                     <button onClick={() => onSelectTrain(train, ccInfo)}
-                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 hover:from-purple-700 hover:to-violet-700 transition-all">
-                      <Icons.sparkles className="h-4 w-4 text-white/90" /> Select & Choose Seat
+                      className="flex-1 lg:w-full flex items-center justify-center gap-1.5 sm:gap-2 bg-gradient-to-r from-purple-600 to-violet-600 text-white font-semibold px-4 sm:px-6 py-3 rounded-xl shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 hover:from-purple-700 hover:to-violet-700 transition-all text-xs sm:text-sm">
+                      <Icons.sparkles className="h-4 w-4 text-white/90 flex-shrink-0" /> <span className="whitespace-nowrap">Select & Book</span>
                     </button>
                   </div>
                 </div>

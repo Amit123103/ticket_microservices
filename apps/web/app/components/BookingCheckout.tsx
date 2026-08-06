@@ -49,43 +49,43 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
 
   return (
     <div className="modal-overlay">
-      <div className="relative w-full max-w-3xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden">
-        <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-6 py-5">
+      <div className="relative w-full max-w-3xl rounded-3xl border border-stone-200 bg-white shadow-2xl animate-scale-in overflow-hidden max-h-[92vh] flex flex-col">
+        <div className="flex items-center justify-between border-b border-stone-100 bg-stone-50/50 px-4 py-3.5 sm:px-6 sm:py-5 flex-shrink-0">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-0.5">
               <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">IRCTC Checkout • Step {step}/3</span>
             </div>
-            <h3 className="font-bold text-stone-900 text-lg">{train.name} <span className="text-stone-400 font-normal">#{train.number}</span></h3>
+            <h3 className="font-bold text-stone-900 text-base sm:text-lg truncate max-w-[240px] sm:max-w-none">{train.name} <span className="text-stone-400 font-normal">#{train.number}</span></h3>
           </div>
-          <button onClick={onClose} className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all">
-            <Icons.x className="h-5 w-5" />
+          <button onClick={onClose} className="rounded-xl bg-white p-2 text-stone-400 hover:text-stone-700 border border-stone-200 hover:border-stone-300 transition-all flex-shrink-0">
+            <Icons.x className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
 
-        <div className="flex items-center justify-center gap-2 border-b border-stone-100 bg-white px-6 py-4">
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2 border-b border-stone-100 bg-white px-3 py-3 sm:px-6 sm:py-4 flex-shrink-0">
           {steps.map(({ n, l, icon: Icon }, i) => (
             <React.Fragment key={n}>
-              {i > 0 && <div className="h-px w-8 bg-stone-200" />}
-              <button onClick={() => setStep(n as any)} className={`flex items-center gap-2 text-xs font-semibold transition-colors ${step >= n ? 'text-purple-700' : 'text-stone-400'}`}>
-                <div className={`grid h-7 w-7 place-items-center rounded-full text-[11px] font-bold transition-all ${step >= n ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/20' : 'bg-stone-100 text-stone-400'}`}>
-                  {step > n ? <Icons.sparkles className="h-3.5 w-3.5" /> : n}
+              {i > 0 && <div className="h-px w-4 sm:w-8 bg-stone-200" />}
+              <button onClick={() => setStep(n as any)} className={`flex items-center gap-1.5 text-xs font-semibold transition-colors ${step >= n ? 'text-purple-700' : 'text-stone-400'}`}>
+                <div className={`grid h-6 w-6 sm:h-7 sm:w-7 place-items-center rounded-full text-[10px] sm:text-[11px] font-bold transition-all ${step >= n ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/20' : 'bg-stone-100 text-stone-400'}`}>
+                  {step > n ? <Icons.sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> : n}
                 </div>
-                <span className="hidden sm:inline">{l}</span>
+                <span className="text-[11px] sm:text-xs font-bold">{l}</span>
               </button>
             </React.Fragment>
           ))}
         </div>
 
-        <div className="p-6 max-h-[60vh] overflow-y-auto">
-          {step === 1 && <div className="space-y-5">
-            <h4 className="font-bold text-stone-900 text-base">Passenger Information</h4>
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4 sm:space-y-5">
+          {step === 1 && <div className="space-y-4 sm:space-y-5">
+            <h4 className="font-bold text-stone-900 text-sm sm:text-base">Passenger Information</h4>
             {passengers.map((p, idx) => (
-              <div key={idx} className="rounded-2xl border border-purple-100 bg-white p-5 space-y-4 shadow-sm">
+              <div key={idx} className="rounded-2xl border border-purple-100 bg-white p-4 sm:p-5 space-y-3 sm:space-y-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-purple-600">Passenger {idx + 1}</span>
-                  <span className="text-xs font-mono font-semibold text-stone-500 bg-stone-50 px-2 py-1 rounded-lg">{p.seatAssigned}</span>
+                  <span className="text-[11px] font-mono font-semibold text-stone-500 bg-stone-50 px-2 py-1 rounded-lg">{p.seatAssigned}</span>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-3">
+                <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
                   <div>
                     <label className="field-label">Full Name</label>
                     <input type="text" value={p.name} onChange={(e) => updatePassenger(idx,'name',e.target.value)} className="field-control mt-1" />
@@ -101,7 +101,7 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
                     </select>
                   </div>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
                   <div>
                     <label className="field-label">Berth Preference</label>
                     <select value={p.berthPreference} onChange={(e) => updatePassenger(idx,'berthPreference',e.target.value)} className="field-control mt-1">
@@ -118,15 +118,15 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
               </div>
             ))}
             <div className="flex justify-end pt-2">
-              <button onClick={() => setStep(2)} className="btn-brand flex items-center gap-2">
+              <button onClick={() => setStep(2)} className="w-full sm:w-auto btn-brand flex items-center justify-center gap-2">
                 Continue <Icons.arrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>}
 
-          {step === 2 && <div className="space-y-5">
-            <h4 className="font-bold text-stone-900 text-base">Contact & Protection</h4>
-            <div className="grid gap-4 sm:grid-cols-2">
+          {step === 2 && <div className="space-y-4 sm:space-y-5">
+            <h4 className="font-bold text-stone-900 text-sm sm:text-base">Contact & Protection</h4>
+            <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
               <div>
                 <label className="field-label">Mobile Number</label>
                 <div className="relative mt-1">
@@ -142,8 +142,8 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
                 </div>
               </div>
             </div>
-            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-purple-300 hover:shadow-sm transition-all cursor-pointer">
-              <input type="checkbox" checked={includeFreeCancellation} onChange={(e) => setIncludeFreeCancellation(e.target.checked)} className="mt-1 h-4 w-4 accent-purple-600" />
+            <label className="flex cursor-pointer items-start gap-3 sm:gap-4 rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 hover:border-purple-300 hover:shadow-sm transition-all cursor-pointer">
+              <input type="checkbox" checked={includeFreeCancellation} onChange={(e) => setIncludeFreeCancellation(e.target.checked)} className="mt-1 h-4 w-4 accent-purple-600 flex-shrink-0" />
               <div className="flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-bold text-stone-800 text-sm">Free Cancellation (+₹99)</span>
@@ -152,8 +152,8 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
                 <p className="text-xs text-stone-500 mt-1">100% refund before chart preparation.</p>
               </div>
             </label>
-            <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-stone-200 bg-white p-5 hover:border-purple-300 hover:shadow-sm transition-all cursor-pointer">
-              <input type="checkbox" checked={includeInsurance} onChange={(e) => setIncludeInsurance(e.target.checked)} className="mt-1 h-4 w-4 accent-purple-600" />
+            <label className="flex cursor-pointer items-start gap-3 sm:gap-4 rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 hover:border-purple-300 hover:shadow-sm transition-all cursor-pointer">
+              <input type="checkbox" checked={includeInsurance} onChange={(e) => setIncludeInsurance(e.target.checked)} className="mt-1 h-4 w-4 accent-purple-600 flex-shrink-0" />
               <div className="flex-1">
                 <span className="font-bold text-stone-800 text-sm">Travel Insurance (+₹0.45/pax)</span>
                 <p className="text-xs text-stone-500 mt-1">Coverage up to ₹10,00,000.</p>
@@ -167,31 +167,31 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
             </div>
           </div>}
 
-          {step === 3 && <div className="space-y-5">
-            <h4 className="font-bold text-stone-900 text-base">Payment Method</h4>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {step === 3 && <div className="space-y-4 sm:space-y-5">
+            <h4 className="font-bold text-stone-900 text-sm sm:text-base">Payment Method</h4>
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3 sm:grid-cols-4">
               {[{id:'UPI',l:'UPI / GPay',i:Icons.smartphone},{id:'Card',l:'Cards',i:Icons.creditCard},{id:'NetBanking',l:'Net Banking',i:Icons.building},{id:'Wallet',l:'Wallet',i:Icons.wallet}].map(({id,l,i:Icon}) => (
                 <button key={id} onClick={() => setPaymentMethod(id as any)}
-                  className={`flex flex-col items-center gap-3 rounded-2xl border p-5 transition-all ${paymentMethod===id?'border-purple-400 bg-purple-50 shadow-sm shadow-purple-500/10':'border-stone-200 hover:border-purple-300 hover:bg-purple-50/30'}`}>
+                  className={`flex flex-col items-center gap-2 sm:gap-3 rounded-2xl border p-3.5 sm:p-5 transition-all ${paymentMethod===id?'border-purple-400 bg-purple-50 shadow-sm shadow-purple-500/10':'border-stone-200 hover:border-purple-300 hover:bg-purple-50/30'}`}>
                   <Icon className={`h-5 w-5 ${paymentMethod===id?'text-purple-600':'text-stone-400'}`} />
                   <span className={`text-xs font-semibold ${paymentMethod===id?'text-purple-700':'text-stone-600'}`}>{l}</span>
                 </button>
               ))}
             </div>
-            {paymentMethod==='UPI' && <div className="rounded-2xl border border-stone-200 bg-stone-50/50 p-5">
+            {paymentMethod==='UPI' && <div className="rounded-2xl border border-stone-200 bg-stone-50/50 p-4 sm:p-5">
               <label className="field-label">UPI ID</label>
               <input type="text" value={upiId} onChange={(e) => setUpiId(e.target.value)} className="field-control mt-1" />
             </div>}
-            <div className="rounded-2xl bg-purple-50/80 p-5 border border-purple-200 space-y-3">
-              <div className="flex justify-between text-sm text-stone-600">
+            <div className="rounded-2xl bg-purple-50/80 p-4 sm:p-5 border border-purple-200 space-y-2.5 sm:space-y-3">
+              <div className="flex justify-between text-xs sm:text-sm text-stone-600">
                 <span>Base Fare ({passengerCount} Pax)</span>
                 <span className="font-semibold">₹{baseFare}</span>
               </div>
-              {includeFreeCancellation && <div className="flex justify-between text-sm text-stone-600">
+              {includeFreeCancellation && <div className="flex justify-between text-xs sm:text-sm text-stone-600">
                 <span>Free Cancellation</span>
                 <span className="font-semibold">₹99</span>
               </div>}
-              <div className="flex justify-between border-t border-purple-200 pt-3 font-bold text-stone-900 text-base">
+              <div className="flex justify-between border-t border-purple-200 pt-2.5 sm:pt-3 font-bold text-stone-900 text-sm sm:text-base">
                 <span>Total</span>
                 <span className="text-purple-700">₹{totalFare}</span>
               </div>
@@ -199,7 +199,7 @@ export const BookingCheckout: React.FC<BookingCheckoutProps> = ({ train, selecte
             <div className="flex items-center justify-between pt-2">
               <button onClick={() => setStep(2)} disabled={isProcessing} className="btn-ghost text-xs">Back</button>
               <button disabled={isProcessing} onClick={handlePayAndBook}
-                className="btn-brand flex items-center gap-2 px-8 py-3.5">
+                className="btn-brand flex items-center justify-center gap-2 px-6 sm:px-8 py-3">
                 {isProcessing ? <><div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div><span>Processing...</span></> : <><Icons.sparkles className="h-4 w-4" /><span>Pay ₹{totalFare} & Book</span></>}
               </button>
             </div>
