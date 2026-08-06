@@ -67,12 +67,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
 
   const handleOpenGoogle = () => {
     setError('');
-    setSocialEmail(email.trim() || 'amitakhil001@gmail.com');
+    setSocialEmail(email.trim());
     setShowGoogleModal(true);
   };
 
   const handleOpenApple = () => {
-    setSocialEmail(email);
+    setError('');
+    setSocialEmail(email.trim());
     setShowAppleModal(true);
   };
 
