@@ -33,9 +33,9 @@ export const RefundHistoryView: React.FC = () => {
         <p className="mt-2 text-sm text-stone-500">Real-time tracking of cancellation refunds according to IRCTC official refund rules.</p>
       </div>
 
-      <div className="rounded-2xl border border-orange-200 bg-orange-50/60 p-6 mb-8">
+      <div className="rounded-2xl border border-purple-200 bg-purple-50/60 p-6 mb-8">
         <div className="flex items-start gap-4">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-orange-100 text-orange-600 border border-orange-200">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-purple-100 text-purple-600 border border-purple-200">
             <Icons.shield className="h-5 w-5" />
           </div>
           <div>
@@ -47,7 +47,7 @@ export const RefundHistoryView: React.FC = () => {
 
       <div className="space-y-6">
         {MOCK_REFUNDS.map((rf) => (
-          <div key={rf.id} className="rounded-2xl border border-stone-200 bg-white p-6 transition-all hover:shadow-lg hover:shadow-stone-200/40 hover:border-orange-200">
+          <div key={rf.id} className="rounded-2xl border border-stone-200 bg-white p-6 transition-all hover:shadow-lg hover:shadow-stone-200/40 hover:border-purple-200">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-stone-100 pb-4">
               <div>
                 <span className="text-xs font-mono font-bold text-stone-400">Refund Ref: {rf.referenceNo}</span>
