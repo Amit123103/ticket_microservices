@@ -63,7 +63,7 @@ export const SupportModal: React.FC = () => {
                 className="w-full flex items-center justify-between p-5 text-left font-bold text-stone-800 text-sm hover:bg-stone-50 transition-colors"
               >
                 <span>{faq.q}</span>
-                <Icons.chevronDown className={`h-4 w-4 text-orange-500 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
+                <Icons.chevronDown className={`h-4 w-4 text-purple-600 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
               </button>
 
               {openFaq === idx && (
@@ -77,7 +77,7 @@ export const SupportModal: React.FC = () => {
 
         <div className="space-y-6">
           <div className="rounded-3xl border border-stone-200 bg-white p-6 space-y-4 shadow-sm">
-            <div className="flex items-center gap-2 text-orange-600 font-bold text-sm">
+            <div className="flex items-center gap-2 text-purple-600 font-bold text-sm">
               <Icons.calculator className="h-5 w-5" />
               <span>Instant Refund Estimator</span>
             </div>
@@ -107,20 +107,20 @@ export const SupportModal: React.FC = () => {
               </select>
             </div>
 
-            <div className="rounded-2xl bg-stone-50 p-4 border border-stone-200 space-y-1">
+            <div className="rounded-2xl bg-purple-50 p-4 border border-purple-200 space-y-1">
               <span className="text-[10px] uppercase font-bold text-stone-400">Estimated Refundable Amount</span>
-              <p className="text-2xl font-black text-orange-700">₹{getCalculatedRefund()}</p>
+              <p className="text-2xl font-black text-purple-700">₹{getCalculatedRefund()}</p>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-orange-200 bg-orange-50/60 p-6 space-y-3">
+          <div className="rounded-3xl border border-purple-200 bg-purple-50/60 p-6 space-y-3">
             <h4 className="font-bold text-stone-900 text-sm">Customer Support Helpline</h4>
             <div className="flex items-center gap-3 text-xs text-stone-600">
-              <Icons.phone className="h-4 w-4 text-orange-600" />
+              <Icons.phone className="h-4 w-4 text-purple-600" />
               <span>Toll Free: 1800-111-139</span>
             </div>
             <div className="flex items-center gap-3 text-xs text-stone-600">
-              <Icons.mail className="h-4 w-4 text-orange-600" />
+              <Icons.mail className="h-4 w-4 text-purple-600" />
               <span>Support: care@railgo.in</span>
             </div>
           </div>
