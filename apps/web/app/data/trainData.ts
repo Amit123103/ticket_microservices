@@ -512,33 +512,39 @@ export const LIVE_TRAINS: Record<string, LiveTrainStatus> = {
 export function getTrainsForRoute(fromCode: string, toCode: string, classFilter: string = 'ALL'): Train[] {
   if (fromCode === toCode) return [];
 
-  // 1. Direct match
+  const fromSt = STATIONS.find((s) => s.code === fromCode) || { name: fromCode, city: fromCode, code: fromCode, state: '' };
+  const toSt = STATIONS.find((s) => s.code === toCode) || { name: toCode, city: toCode, code: toCode, state: '' };
+
+  // 1. Direct matches
   let matches = TRAINS_DATA.filter((t) => t.fromCode === fromCode && t.toCode === toCode);
 
-  // 2. Intermediate stop match
+  // 2. Route stop matches
   if (matches.length === 0) {
-    matches = TRAINS_DATA.filter((t) => {
+    const routeMatches = TRAINS_DATA.filter((t) => {
       const fIdx = t.route.findIndex((r) => r.stationCode === fromCode);
       const tIdx = t.route.findIndex((r) => r.stationCode === toCode);
       return fIdx !== -1 && tIdx !== -1 && fIdx < tIdx;
     });
+
+    if (routeMatches.length > 0) {
+      matches = routeMatches.map((t) => {
+        const fStop = t.route.find((r) => r.stationCode === fromCode)!;
+        const tStop = t.route.find((r) => r.stationCode === toCode)!;
+        return {
+          ...t,
+          fromCode: fromSt.code,
+          fromName: fromSt.name,
+          toCode: toSt.code,
+          toName: toSt.name,
+          departureTime: fStop.departureTime !== '--' ? fStop.departureTime : t.departureTime,
+          arrivalTime: tStop.arrivalTime !== '--' ? tStop.arrivalTime : t.arrivalTime,
+        };
+      });
+    }
   }
 
-  // 3. Partial match (matches origin or destination)
+  // 3. Dedicated trains tailored strictly for this selected station pair
   if (matches.length === 0) {
-    matches = TRAINS_DATA.filter(
-      (t) =>
-        t.fromCode === fromCode ||
-        t.toCode === toCode ||
-        t.route.some((r) => r.stationCode === fromCode || r.stationCode === toCode)
-    );
-  }
-
-  // 4. Dynamic train generator for any unlisted custom route combination
-  if (matches.length === 0) {
-    const fromSt = STATIONS.find((s) => s.code === fromCode) || { name: fromCode, city: fromCode, code: fromCode };
-    const toSt = STATIONS.find((s) => s.code === toCode) || { name: toCode, city: toCode, code: toCode };
-
     matches = [
       {
         id: `express-${fromCode}-${toCode}-1`,
@@ -550,18 +556,18 @@ export function getTrainsForRoute(fromCode: string, toCode: string, classFilter:
         toCode: toSt.code,
         toName: toSt.name,
         departureTime: '06:15',
-        arrivalTime: '12:45',
-        duration: '6h 30m',
+        arrivalTime: '11:45',
+        duration: '5h 30m',
         runsOn: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         rating: 4.9,
-        badge: 'Fastest 160 km/h',
+        badge: 'Fastest Vande Bharat (160 km/h)',
         classes: [
           { code: 'CC', name: 'AC Chair Car', price: 1450, available: 64, status: 'AVAILABLE' },
           { code: 'EC', name: 'Executive Chair Car', price: 2680, available: 14, status: 'AVAILABLE' },
         ],
         route: [
           { stationCode: fromSt.code, stationName: fromSt.name, arrivalTime: '--', departureTime: '06:15', haltMinutes: 0, distanceKm: 0, day: 1, platform: 'PF 1', isPassed: true },
-          { stationCode: toSt.code, stationName: toSt.name, arrivalTime: '12:45', departureTime: '--', haltMinutes: 0, distanceKm: 580, day: 1, platform: 'PF 2', isPassed: false },
+          { stationCode: toSt.code, stationName: toSt.name, arrivalTime: '11:45', departureTime: '--', haltMinutes: 0, distanceKm: 450, day: 1, platform: 'PF 2', isPassed: false },
         ],
       },
       {
@@ -574,8 +580,8 @@ export function getTrainsForRoute(fromCode: string, toCode: string, classFilter:
         toCode: toSt.code,
         toName: toSt.name,
         departureTime: '16:30',
-        arrivalTime: '23:55',
-        duration: '7h 25m',
+        arrivalTime: '23:20',
+        duration: '6h 50m',
         runsOn: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         rating: 4.7,
         badge: 'Popular Choice',
@@ -586,7 +592,7 @@ export function getTrainsForRoute(fromCode: string, toCode: string, classFilter:
         ],
         route: [
           { stationCode: fromSt.code, stationName: fromSt.name, arrivalTime: '--', departureTime: '16:30', haltMinutes: 0, distanceKm: 0, day: 1, platform: 'PF 3' },
-          { stationCode: toSt.code, stationName: toSt.name, arrivalTime: '23:55', departureTime: '--', haltMinutes: 0, distanceKm: 580, day: 1, platform: 'PF 1' },
+          { stationCode: toSt.code, stationName: toSt.name, arrivalTime: '23:20', departureTime: '--', haltMinutes: 0, distanceKm: 450, day: 1, platform: 'PF 1' },
         ],
       },
       {
@@ -603,7 +609,7 @@ export function getTrainsForRoute(fromCode: string, toCode: string, classFilter:
         duration: '9h 15m',
         runsOn: ['Mon', 'Wed', 'Fri', 'Sun'],
         rating: 4.8,
-        badge: 'Overnight Express',
+        badge: 'Premier Express',
         classes: [
           { code: '1A', name: 'First AC', price: 3850, available: 4, status: 'AVAILABLE' },
           { code: '2A', name: '2 Tier AC', price: 2450, available: 18, status: 'AVAILABLE' },
@@ -611,7 +617,7 @@ export function getTrainsForRoute(fromCode: string, toCode: string, classFilter:
         ],
         route: [
           { stationCode: fromSt.code, stationName: fromSt.name, arrivalTime: '--', departureTime: '21:00', haltMinutes: 0, distanceKm: 0, day: 1, platform: 'PF 1' },
-          { stationCode: toSt.code, stationName: toSt.name, arrivalTime: '06:15', departureTime: '--', haltMinutes: 0, distanceKm: 720, day: 2, platform: 'PF 4' },
+          { stationCode: toSt.code, stationName: toSt.name, arrivalTime: '06:15', departureTime: '--', haltMinutes: 0, distanceKm: 650, day: 2, platform: 'PF 4' },
         ],
       },
     ];
