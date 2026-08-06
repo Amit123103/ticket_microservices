@@ -28,6 +28,7 @@ const GOOGLE_CLIENT_ID = '262838532038-m3pem1vdb65e3cp1p5l54jc8a1n75f8n.apps.goo
 
 export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const emailInputRef = React.useRef<HTMLInputElement>(null);
 
   // Form state
   const [name, setName] = useState('');
@@ -60,7 +61,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const handleGoogleLogin = () => {
     const cleanEmail = email.trim();
     if (!cleanEmail || !cleanEmail.includes('@')) {
-      setError('Please enter your Google / Gmail address in the email field to sign in.');
+      setError('Please enter your Google / Gmail address in the email field below.');
+      emailInputRef.current?.focus();
       return;
     }
 
@@ -87,7 +89,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const handleAppleLogin = () => {
     const cleanEmail = email.trim();
     if (!cleanEmail || !cleanEmail.includes('@')) {
-      setError('Please enter your Apple ID email address in the email field to sign in.');
+      setError('Please enter your Apple ID email address in the email field below.');
+      emailInputRef.current?.focus();
       return;
     }
 
@@ -244,6 +247,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
             <div>
               <label className="text-[11px] font-bold text-stone-700 uppercase tracking-wider">Email Address</label>
               <input
+                ref={emailInputRef}
                 type="email"
                 required
                 value={email}
