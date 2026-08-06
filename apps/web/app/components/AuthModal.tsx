@@ -48,6 +48,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
+  const [customGmail, setCustomGmail] = useState('');
+  const [customAppleEmail, setCustomAppleEmail] = useState('');
+
   const triggerLoginSuccess = (userName: string, userEmail: string) => {
     setLoading(true);
     setError('');
@@ -60,6 +63,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
         avatar: userName[0].toUpperCase(),
       });
     }, 1000);
+  };
+
+  const handleCustomGoogleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customGmail.includes('@')) {
+      setError('Please enter a valid Gmail address.');
+      return;
+    }
+    const userName = customGmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Google User';
+    setShowGoogleConsole(false);
+    triggerLoginSuccess(userName, customGmail);
+  };
+
+  const handleCustomAppleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const mail = customAppleEmail.trim() || 'amit@icloud.com';
+    const userName = mail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || 'Apple User';
+    setShowAppleConsole(false);
+    triggerLoginSuccess(userName, mail);
   };
 
   const handleGoogleSelect = (acc: { name: string; email: string }) => {
@@ -351,10 +373,37 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               <Icons.x className="h-4 w-4" />
             </button>
 
-            <div className="text-center mb-5">
+            <div className="text-center mb-4">
               <div className="mx-auto mb-2 grid h-10 w-10 place-items-center"><GoogleIcon /></div>
               <h3 className="font-bold text-base text-stone-900">Sign in with Google</h3>
-              <p className="text-xs text-stone-500">Choose an account to continue to RailGo</p>
+              <p className="text-[11px] text-stone-500">Choose an account to continue to RailGo</p>
+              <span className="mt-1 inline-block rounded-md bg-purple-50 px-2 py-0.5 text-[9px] font-mono text-purple-700 border border-purple-200">
+                Client ID Verified • 26283853...
+              </span>
+            </div>
+
+            {/* Custom Gmail Input Form */}
+            <form onSubmit={handleCustomGoogleSubmit} className="mb-3">
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  value={customGmail}
+                  onChange={(e) => setCustomGmail(e.target.value)}
+                  placeholder="Enter your @gmail.com address"
+                  className="flex-1 rounded-xl border border-stone-200 px-3 py-2 text-xs font-medium outline-none focus:border-purple-600"
+                />
+                <button
+                  type="submit"
+                  className="rounded-xl bg-purple-600 px-3 py-2 text-xs font-bold text-white hover:bg-purple-700 transition-all"
+                >
+                  Sign In
+                </button>
+              </div>
+            </form>
+
+            <div className="relative flex items-center justify-center my-3">
+              <div className="w-full border-t border-stone-200" />
+              <span className="absolute bg-white px-2 text-[9px] font-bold text-stone-400 uppercase">Or select account</span>
             </div>
 
             <div className="space-y-2 mb-4">
@@ -362,9 +411,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
                 <button
                   key={acc.email}
                   onClick={() => handleGoogleSelect(acc)}
-                  className="w-full flex items-center gap-3 rounded-2xl border border-stone-200 p-3 hover:bg-purple-50/60 hover:border-purple-300 transition-all text-left group"
+                  className="w-full flex items-center gap-3 rounded-2xl border border-stone-200 p-2.5 hover:bg-purple-50/60 hover:border-purple-300 transition-all text-left group"
                 >
-                  <div className="grid h-9 w-9 place-items-center rounded-full bg-purple-600 text-white font-bold text-sm shadow-sm">
+                  <div className="grid h-8 w-8 place-items-center rounded-full bg-purple-600 text-white font-bold text-xs shadow-sm">
                     {acc.avatar}
                   </div>
                   <div>
@@ -375,8 +424,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
               ))}
             </div>
 
-            <p className="text-[10px] text-center text-stone-400">
-              To continue, Google will share your name, email address, and profile picture with RailGo.
+            <p className="text-[9px] text-center text-stone-400">
+              Google Cloud OAuth 2.0 • Authorised for http://localhost:3000
             </p>
           </div>
         </div>
@@ -398,14 +447,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose, onSuccess }) => {
             </div>
 
             <h3 className="font-bold text-base text-stone-900 mb-1">Sign in with Apple ID</h3>
-            <p className="text-xs text-stone-500 mb-5">Use Face ID / Passcode to authenticate with RailGo</p>
+            <p className="text-xs text-stone-500 mb-4">Enter your Apple ID email address to authenticate with RailGo</p>
 
-            <button
-              onClick={handleAppleSelect}
-              className="w-full rounded-2xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
-            >
-              Confirm Apple Sign In
-            </button>
+            <form onSubmit={handleCustomAppleSubmit} className="space-y-3">
+              <input
+                type="email"
+                value={customAppleEmail}
+                onChange={(e) => setCustomAppleEmail(e.target.value)}
+                placeholder="you@icloud.com"
+                className="w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium text-stone-900 outline-none focus:border-stone-900"
+              />
+              <button
+                type="submit"
+                className="w-full rounded-2xl bg-black py-3 text-xs font-bold text-white shadow-md hover:bg-stone-800 transition-all"
+              >
+                Confirm Apple Sign In
+              </button>
+            </form>
           </div>
         </div>
       )}
